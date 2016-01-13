@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.beluga.belugakeys.Keys;
 import com.beluga.loginpage.datacontrol.Saveaccountandpassword;
 import com.beluga.loginpage.datacontrol.UsedString;
+import com.facebook.FacebookSdk;
 import com.beluga.R;
 
 /**
@@ -61,6 +62,7 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FacebookSdk.sdkInitialize(getApplicationContext()); 
         this.setContentView(R.layout.login_page);
         GetDataSetting();
 
