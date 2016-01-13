@@ -1,4 +1,4 @@
-package com.beluga.LoginPage;
+package com.beluga.loginpage;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -13,9 +13,9 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.beluga.LoginPage.AuthHttpClient.OnAuthEventListener;
-import com.beluga.LoginPage.datacontrol.Saveaccountandpassword;
-import com.beluga.LoginPage.datacontrol.UsedString;
+import com.beluga.loginpage.AuthHttpClient.OnAuthEventListener;
+import com.beluga.loginpage.datacontrol.Saveaccountandpassword;
+import com.beluga.loginpage.datacontrol.UsedString;
 import com.beluga.R;
 /**
  * Created by Leo on 2015/10/5.
@@ -23,7 +23,7 @@ import com.beluga.R;
 public class Registration extends Activity implements OnClickListener {
 
     EditText inputaccount,inputpassword,inputdeterminepassword;
-    // 連結SERVER用
+    // ���SERVER��
     AuthHttpClient authhttpclient;
     public Button signUpComfirmBtn, signUpReturnBtn;
     public CheckBox checkBox;
@@ -65,7 +65,7 @@ public class Registration extends Activity implements OnClickListener {
         } else if (i == R.id.signupcomfirmbtn) {/* Changed by Leo Ling */
             if (inputaccount.getText().toString().compareTo("") == 0) {
 
-                //Toast.makeText(Registration.this, "請輸入帳號", Toast.LENGTH_LONG).show();
+                //Toast.makeText(Registration.this, "隢撓�亙董��, Toast.LENGTH_LONG).show();
                 Toast.makeText(Registration.this,
                         this.getString(R.string.Enter_Ac_Type),
                         Toast.LENGTH_LONG).show();
@@ -73,11 +73,11 @@ public class Registration extends Activity implements OnClickListener {
                 return;
             }
             if (inputpassword.getText().toString().equals(inputdeterminepassword.getText().toString())) {
-                //一樣的話就直接註冊
+                //銝�見�店撠梁�亥酉��
                 authhttpclient.Auth_RegisterAccount(inputaccount.getText().toString(),
                         inputpassword.getText().toString());
             } else {
-                //Toast.makeText(Registration.this, "密碼與確認密碼不相同", Toast.LENGTH_LONG)
+                //Toast.makeText(Registration.this, "撖Ⅳ�Ⅱ隤�蝣潔��詨�", Toast.LENGTH_LONG)
                 Toast.makeText(Registration.this,
                         this.getString(R.string.Pwd_Not_Match_Type),
                         Toast.LENGTH_LONG).show();
@@ -88,11 +88,11 @@ public class Registration extends Activity implements OnClickListener {
     }
 
     private void CreateHttpClient() {
-        // 建立監聽事件
-        // 網路處理_自已寫的類別 __手術用 "吁叫點 按下按鈕吁叫到"
+        // 撱箇���鈭辣
+        // 蝬脰楝��_�芸歇撖怎�憿 __����"�暺��������
         authhttpclient = new AuthHttpClient(this);
-        // 接收到網路回來資料 ----- "吁叫監聽事件放的地方"
-        // 當按下按鈕時 吁叫到它 "SERVER傳回資料時會吁叫到它---------"
+        // �交�啁雯頝臬�靘���----- "���鈭辣�曄��唳"
+        // �嗆�銝��� ��啣� "SERVER�喳�鞈�����啣�---------"
         authhttpclient.AuthEventListener(new OnAuthEventListener() {
             public void onProcessDoneEvent(int Code, String Message, Long uid,
                                            String Account, String Pwd) {
@@ -122,7 +122,7 @@ public class Registration extends Activity implements OnClickListener {
         bundle.putString("userid", thisuserid);
         bundle.putString("userpwd", thisuid);
         resultdata.putExtras(bundle);
-        // this.setResult(Activity.RESULT_OK, resultdata); //回傳RESULT_OK
+        // this.setResult(Activity.RESULT_OK, resultdata); //�RESULT_OK
         // this.finish();
         if (getParent() == null) {
             setResult(Activity.RESULT_OK, resultdata);

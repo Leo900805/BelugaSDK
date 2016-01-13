@@ -1,4 +1,4 @@
-package com.beluga.LoginPage;
+package com.beluga.loginpage;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -13,9 +13,9 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.beluga.LoginPage.AuthHttpClient.OnAuthEventListener;
-import com.beluga.LoginPage.datacontrol.Saveaccountandpassword;
-import com.beluga.LoginPage.datacontrol.UsedString;
+import com.beluga.loginpage.AuthHttpClient.OnAuthEventListener;
+import com.beluga.loginpage.datacontrol.Saveaccountandpassword;
+import com.beluga.loginpage.datacontrol.UsedString;
 import com.beluga.R;
 /**
  * Created by Leo on 2015/10/5.
@@ -47,17 +47,17 @@ public class Fastregistration extends Activity implements OnClickListener{
         checkBox.setText(Html.fromHtml(source));
         checkBox.setOnClickListener(this);
         CreateHttpClient();
-        //傳送資料到SERVER 帳號/密碼
+        //�喲�鞈��訕ERVER 撣唾�/撖Ⅳ
         authhttpclient.Auth_QuickAccount();
     }
 
     private void CreateHttpClient(){
 
-        //建立監聽事件
-        //網路處理_自已寫的類別 __手術用    "吁叫點 按下按鈕吁叫到"
+        //撱箇���鈭辣
+        //蝬脰楝��_�芸歇撖怎�憿 __����   "�暺��������
         authhttpclient = new AuthHttpClient(this);
-        //接收到網路回來資料  ----- "吁叫監聽事件放的地方"
-        //當按下按鈕時  吁叫到它   "SERVER傳回資料時會吁叫到它---------"
+        //�交�啁雯頝臬�靘��� ----- "���鈭辣�曄��唳"
+        //�嗆�銝���  ��啣�   "SERVER�喳�鞈�����啣�---------"
         authhttpclient.AuthEventListener(new OnAuthEventListener() {
             public void onProcessDoneEvent(int Code, String Message, Long uid, String Account, String Pwd) {
                 String CodeStr = UsedString.getFastRegistrationGenerateString(getApplicationContext(), Code);
@@ -74,7 +74,7 @@ public class Fastregistration extends Activity implements OnClickListener{
                     Toast.makeText(Fastregistration.this, CodeStr, Toast.LENGTH_LONG).show();
                 }
 
-                //接收回來的訊息_處理它
+                //�交�����珞��摰�
                 System.out.println("Code " + Code + "  message   " + Message + "  uid " + uid + "  Account " + Account + " pwd  " + Pwd);
             }
 
@@ -89,11 +89,11 @@ public class Fastregistration extends Activity implements OnClickListener{
 
     private void CreateHttpClientConfirm()
     {
-        //建立監聽事件
-        //網路處理_自已寫的類別 __手術用    "吁叫點 按下按鈕吁叫到"
+        //撱箇���鈭辣
+        //蝬脰楝��_�芸歇撖怎�憿 __����   "�暺��������
         authhttpclient_confirm = new AuthHttpClient(this);
-        //接收到網路回來資料  ----- "吁叫監聽事件放的地方"
-        //當按下按鈕時  吁叫到它   "SERVER傳回資料時會吁叫到它---------"
+        //�交�啁雯頝臬�靘��� ----- "���鈭辣�曄��唳"
+        //�嗆�銝���  ��啣�   "SERVER�喳�鞈�����啣�---------"
         authhttpclient_confirm.AuthEventListener(new OnAuthEventListener() {
             public void onProcessDoneEvent(int Code, String Message, Long uid, String Account, String Pwd) {
                 String CodeStr = UsedString.getFastRegistrationGenerateString(getApplicationContext(), Code);
@@ -103,7 +103,7 @@ public class Fastregistration extends Activity implements OnClickListener{
                     //Looper.loop();
                 } else if (Code == 1) {
                     Toast.makeText(Fastregistration.this, CodeStr, Toast.LENGTH_LONG).show();
-                    //成功 就將帳/密存起來
+                    //�� 撠勗�撣�撖�韏瑚�
                     Saveaccountandpassword.saveUserUid(Long.toString(uid), Fastregistration.this);
                     SetFinish(inputaccount.getText().toString(), inputpassword.getText().toString());
                 } else {
@@ -145,7 +145,7 @@ public class Fastregistration extends Activity implements OnClickListener{
         bundle.putString("userid", thisuserid);
         bundle.putString("userpwd", thisuid);
         resultdata.putExtras(bundle);
-        //this.setResult(Activity.RESULT_OK, resultdata); //回傳RESULT_OK
+        //this.setResult(Activity.RESULT_OK, resultdata); //�RESULT_OK
         //this.finish();
         if (getParent() == null) {
             setResult(Activity.RESULT_OK, resultdata);

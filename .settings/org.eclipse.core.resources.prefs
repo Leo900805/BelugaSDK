@@ -1,3 +1,8 @@
 eclipse.preferences.version=1
-encoding//src/com/beluga/LoginPage/AuthClientActivity.java=UTF-8
-encoding//src/com/beluga/LoginPage/AuthHttpClient.java=UTF-8
+encoding//src/com/beluga/loginpage/AuthClientActivity.java=UTF-8
+encoding//src/com/beluga/loginpage/AuthHttpClient.java=UTF-8
+encoding//src/com/beluga/loginpage/Changepassword.java=UTF-8
+encoding//src/com/beluga/loginpage/Fastregistration.java=UTF-8
+encoding//src/com/beluga/loginpage/Registration.java=UTF-8
+encoding//src/com/beluga/loginpage/datacontrol/Saveaccountandpassword.java=UTF-8
+encoding//src/com/beluga/loginpage/datacontrol/UsedString.java=UTF-8

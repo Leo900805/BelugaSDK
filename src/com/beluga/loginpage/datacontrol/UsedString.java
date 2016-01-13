@@ -1,4 +1,4 @@
-package com.beluga.LoginPage.datacontrol;
+package com.beluga.loginpage.datacontrol;
 
 import android.content.Context;
 
@@ -10,112 +10,112 @@ import com.beluga.R;
  */
 public class UsedString {
     /**
-     * 登入後的回傳訊息
+     * �餃敺��閮
      * */
     public static String getLoginstring(Context context, int id){
         String LoginReturn = "";
         switch(id){
             case -1:
                 LoginReturn = context.getResources().getString(R.string.Wrong_AppID_Type);
-                //LoginReturn = "appid錯誤";
+                //LoginReturn = "appid�航炊";
                 break;
             case -2:
                 LoginReturn = context.getResources().getString(R.string.Ac_Or_Pwd_Length_Err_Type);
-                //LoginReturn = "帳號或密碼長度錯誤";
+                //LoginReturn = "撣唾���蝣潮摨阡隤�;
                 break;
             case -4:
                 LoginReturn = context.getResources().getString(R.string.Ac_Or_Pwd_Err_Type);
-                //LoginReturn = "帳號或密碼錯誤";
+                //LoginReturn = "撣唾���蝣潮隤�;
                 break;
             case -10:
                 LoginReturn = context.getResources().getString(R.string.Ac_Has_Been_Baned_Type);
-                //LoginReturn = "帳號已被停權(違反遊戲規章)";
+                //LoginReturn = "撣唾�撌脰◤��(���閬�)";
                 break;
             case -11:
                 LoginReturn = context.getResources().getString(R.string.Ac_Has_Been_Disabled_Type);
-                //LoginReturn = "帳號已經停用";
+                //LoginReturn = "撣唾�撌脩��";
                 break;
             case 1:
-                //LoginReturn = "登入成功";
+                //LoginReturn = "�餃��";
                 LoginReturn = context.getResources().getString(R.string.Success_Login_Type);
                 break;
             case -97:
                 LoginReturn = context.getResources().getString(R.string.Checksum_Err_Type);
-                //LoginReturn = "檢查碼錯誤";
+                //LoginReturn = "瑼Ｘ蝣潮隤�;
                 break;
             case -98:
                 LoginReturn = context.getResources().getString(R.string.System_Err_Type);
-                //LoginReturn = "系統錯誤";
+                //LoginReturn = "蝟餌絞�航炊";
                 break;
             case -99:
                 LoginReturn = context.getResources().getString(R.string.Program_Err_Type);
-                //LoginReturn = "程式錯誤";
+                //LoginReturn = "蝔��航炊";
                 break;
         }
         return LoginReturn;
     }
     /**
-     * 取得快速註冊時的帳密後回傳訊息
+     * ��敹恍�閮餃���撣喳�敺��唾���
      * */
     public static String getFastRegistrationGenerateString(Context context, int id){
         String FastRegisGenString = "";
         switch(id){
             case -1:
                 FastRegisGenString = context.getResources().getString(R.string.Wrong_AppID_Type);
-                //FastRegisGenString =  "appid錯誤";
+                //FastRegisGenString =  "appid�航炊";
                 break;
             case -2:
                 FastRegisGenString =  context.getResources().getString(R.string.Write_DB_failed_Type);
-                //FastRegisGenString =  "系統錯誤，DB寫入失敗";
+                //FastRegisGenString =  "蝟餌絞�航炊嚗B撖怠憭望�";
                 break;
             case -97:
                 FastRegisGenString = context.getResources().getString(R.string.Checksum_Err_Type);
-                //FastRegisGenString =  "檢查碼錯誤";
+                //FastRegisGenString =  "瑼Ｘ蝣潮隤�;
                 break;
             case -98://
                 FastRegisGenString = context.getResources().getString(R.string.System_Err_Type);
-                //FastRegisGenString =  "系統錯誤";
+                //FastRegisGenString =  "蝟餌絞�航炊";
                 break;
             case -99://
                 FastRegisGenString = context.getResources().getString(R.string.Program_Err_Type);
-                //FastRegisGenString =  "程式錯誤";
+                //FastRegisGenString =  "蝔��航炊";
                 break;
             case 1:
                 FastRegisGenString = context.getResources().getString(R.string.Success_Quick_Reg_Type);
-                //FastRegisString = "快速註冊成功";
+                //FastRegisString = "敹恍�閮餃���";
                 break;
 
         }
         return FastRegisGenString;
     }
     /**
-     * 進行快速註冊後回傳訊息
+     * �脰�敹恍�閮餃�敺��唾���
      * */
     public static String getFastRegistrationString(Context context, int id){
         String FastRegisString = "";
         switch(id){
             case 1:
                 FastRegisString = context.getResources().getString(R.string.Success_Quick_Reg_Type);
-                //FastRegisString = "快速註冊成功";
+                //FastRegisString = "敹恍�閮餃���";
                 break;
             case -1:
-                //FastRegisString = "appid錯誤" ;
+                //FastRegisString = "appid�航炊" ;
                 FastRegisString = context.getResources().getString(R.string.Wrong_AppID_Type);
                 break;
             case -2:
                 FastRegisString = context.getResources().getString(R.string.Pwd_Length_Err_Type);
-                //FastRegisString = "密碼長度錯誤,請設定6位數以上英文數字" ;
+                //FastRegisString = "撖Ⅳ�瑕漲�航炊,隢身摰�雿隞乩��望��詨�" ;
                 break;
             case -97://
-                //FastRegisString = "檢查碼錯誤";
+                //FastRegisString = "瑼Ｘ蝣潮隤�;
                 FastRegisString = context.getResources().getString(R.string.Checksum_Err_Type);
                 break;
             case -98://
-                //FastRegisString = "系統錯誤";
+                //FastRegisString = "蝟餌絞�航炊";
                 FastRegisString = context.getResources().getString(R.string.System_Err_Type);
                 break;
             case -99://
-                //FastRegisString = "程式錯誤";
+                //FastRegisString = "蝔��航炊";
                 FastRegisString = context.getResources().getString(R.string.Program_Err_Type);
                 break;
 
@@ -123,54 +123,54 @@ public class UsedString {
         return FastRegisString;
     }
     /**
-     * 進行註冊後回傳訊息
+     * �脰�閮餃�敺��唾���
      * */
     public static String getRegisterString(Context context, int id){
         String RegisString = "";
         switch (id) {
             case -1:
                 RegisString = context.getResources().getString(R.string.Wrong_AppID_Type);
-                //RegisString = "appid錯誤";
+                //RegisString = "appid�航炊";
                 break;
             case -2:
                 RegisString = context.getResources().getString(R.string.Ac_Or_Pwd_Length_Err_Type);
-                //RegisString = "帳號長度錯誤或密碼長度錯誤";
+                //RegisString = "撣唾��瑕漲�航炊��蝣潮摨阡隤�;
                 break;
             case -3:
                 RegisString = context.getResources().getString(R.string.Pwd_Length_Err_Type);
-                //RegisString = "密碼長度錯誤";
+                //RegisString = "撖Ⅳ�瑕漲�航炊";
                 break;
             case -4://
                 RegisString = context.getResources().getString(R.string.Ac_Has_Been_Used_Type);
-                //RegisString = "帳號已經使用過";
+                //RegisString = "撣唾�撌脩�雿輻��;
                 break;
             case -6://
                 RegisString = context.getResources().getString(R.string.Ac_With_Illegal_Char_Type);
-                //RegisString = "帳號有非法字元";
+                //RegisString = "撣唾���瘜���;
                 break;
             case -7://
                 RegisString = context.getResources().getString(R.string.Pwd_With_Illegal_Char_Type);
-                //RegisString = "密碼有非法字元";
+                //RegisString = "撖Ⅳ��瘜���;
                 break;
             case 1:
                 RegisString = context.getResources().getString(R.string.Success_Register_Type);
-                //RegisString = "註冊成功";
+                //RegisString = "閮餃���";
                 break;
             case -97://
                 RegisString = context.getResources().getString(R.string.Checksum_Err_Type);
-                //RegisString = "檢查碼錯誤";
+                //RegisString = "瑼Ｘ蝣潮隤�;
                 break;
             case -98://
                 RegisString = context.getResources().getString(R.string.System_Err_Type);
-                //RegisString = "系統錯誤";
+                //RegisString = "蝟餌絞�航炊";
                 break;
             case -99://
                 RegisString = context.getResources().getString(R.string.Program_Err_Type);
-                //RegisString = "程式錯誤";
+                //RegisString = "蝔��航炊";
                 break;
             case -102:
                 RegisString = context.getResources().getString(R.string.Data_Analysis_Err_Type);
-                //RegisString = "資料分析錯誤";
+                //RegisString = "鞈����航炊";
                 break;
         }
 
@@ -182,47 +182,47 @@ public class UsedString {
         {
             case -1:
                 Changepwdstr = context.getResources().getString(R.string.Wrong_AppID_Type);
-                //Changepwdstr = "appid錯誤";
+                //Changepwdstr = "appid�航炊";
                 break;
             case -2:
                 Changepwdstr = context.getResources().getString(R.string.Ac_Or_Pwd_Length_Err_Type);
-                //Changepwdstr =  "帳號或舊密碼或新密碼長度錯誤";
+                //Changepwdstr =  "撣唾���撖Ⅳ�撖Ⅳ�瑕漲�航炊";
                 break;
             case -3:
                 Changepwdstr = context.getResources().getString(R.string.Ac_Or_Pwd_Err_Type);
-                //Changepwdstr = "帳號或密碼錯誤";
+                //Changepwdstr = "撣唾���蝣潮隤�;
                 break;
             case -4:
                 Changepwdstr = context.getResources().getString(R.string.New_Pwd_Length_Err_Type);
-                //Changepwdstr = "新密碼長度錯誤";
+                //Changepwdstr = "�啣�蝣潮摨阡隤�;
                 break;
             case -5:
                 Changepwdstr = context.getResources().getString(R.string.Change_Pwd_Or_Contact_Customer_Service_Type);
-                //Changepwdstr =  "密碼錯誤,請成功登入一次以後再修改密碼或洽客服專員";
+                //Changepwdstr =  "撖Ⅳ�航炊,隢���乩�甈∩誑敺�靽格撖Ⅳ�晾摰Ｘ�撠";
                 break;
             case -6:
                 Changepwdstr = context.getResources().getString(R.string.Ac_With_Illegal_Char_Type);
-                //Changepwdstr = "帳號有非法字元";
+                //Changepwdstr = "撣唾���瘜���;
                 break;
             case -7:
                 Changepwdstr = context.getResources().getString(R.string.Pwd_With_Illegal_Char_Type);
-                //Changepwdstr = "密碼有非法字元";
+                //Changepwdstr = "撖Ⅳ��瘜���;
                 break;
             case -8:
                 Changepwdstr = context.getResources().getString(R.string.New_Pwd_With_Illegal_Char_Type);
-                //Changepwdstr =  "新密碼有非法字元";
+                //Changepwdstr =  "�啣�蝣潭���摮�";
                 break;
             case 1:
                 Changepwdstr = context.getResources().getString(R.string.Success_Change_Pwd_Type);
-                //Changepwdstr =  "修改成功";
+                //Changepwdstr =  "靽格��";
                 break;
             case -97:
                 Changepwdstr = context.getResources().getString(R.string.Checksum_Err_Type);
-                //Changepwdstr =  "檢查碼錯誤";
+                //Changepwdstr =  "瑼Ｘ蝣潮隤�;
                 break;
             case -98:
                 Changepwdstr = context.getResources().getString(R.string.System_Err_Type);
-                //Changepwdstr =  "系統錯誤";
+                //Changepwdstr =  "蝟餌絞�航炊";
                 break;
         }
         return Changepwdstr;

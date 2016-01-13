@@ -1,4 +1,4 @@
-package com.beluga.LoginPage;
+package com.beluga.loginpage;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -18,9 +18,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.beluga.BelugaKeys.Keys;
-import com.beluga.LoginPage.datacontrol.Saveaccountandpassword;
-import com.beluga.LoginPage.datacontrol.UsedString;
+import com.beluga.belugakeys.Keys;
+import com.beluga.loginpage.datacontrol.Saveaccountandpassword;
+import com.beluga.loginpage.datacontrol.UsedString;
 import com.beluga.R;
 
 /**

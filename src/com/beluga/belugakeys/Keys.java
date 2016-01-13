@@ -1,4 +1,4 @@
-package com.beluga.BelugaKeys;
+package com.beluga.belugakeys;
 
 /**
  * Created by Leo on 2015/12/10.

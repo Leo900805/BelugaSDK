@@ -1,4 +1,4 @@
-package com.beluga.LoginPage.datacontrol;
+package com.beluga.loginpage.datacontrol;
 
 /**
  * Created by deskuser on 2015/10/6.
@@ -27,9 +27,9 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 public class Saveaccountandpassword {
-    //帳號
+    //撣唾�
     private static final String  successaccount= "hsaccount";
-    //密碼
+    //撖Ⅳ
     private static final String  successpassword = "hspassword";
     //Uid
     private static final String successUid = "hsUserUid";
@@ -37,7 +37,7 @@ public class Saveaccountandpassword {
     public static boolean ok;
 
 
-    //存傳進來字串
+    //摮�脖�摮葡
     public static void saveaccountpassword(String account,String password,Activity act)
     {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(act);
@@ -45,7 +45,7 @@ public class Saveaccountandpassword {
 
         //key,value
         try {
-            //存入資料
+            //摮鞈�
             String encacc = encrypt(account, "9@a8i7Az");
             String enpwd = encrypt(password, "9@a8i7Az");
             editor.putString(successaccount,URLEncoder.encode(encacc, "utf-8"));
@@ -59,7 +59,7 @@ public class Saveaccountandpassword {
 
     }
 
-    // 存Uid
+    // 摮id
     public static void saveUserUid(String uid, Activity act) {
         if (uid.equalsIgnoreCase("") || uid.equalsIgnoreCase("0") || uid == null ) {
             return;
@@ -80,13 +80,13 @@ public class Saveaccountandpassword {
         }
     }
 
-    //取出帳號
+    //�撣唾�
     public static String GetaccountString(Activity act)
     {
-        //取得資料
+        //��鞈�
         String getaccountString ;
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(act);
-        getaccountString = preferences.getString(successaccount, "");//settings.getInt(所對應的key,如果抓不到對應的值要給什麼預設值)
+        getaccountString = preferences.getString(successaccount, "");//settings.getInt(�����key,憒����啣����潸�蝯虫�暻潮�閮剖�)
 
         try {
             if(getaccountString.compareTo("")==0){
@@ -104,13 +104,13 @@ public class Saveaccountandpassword {
         return "";
     }
 
-    //取出密碼
+    //�撖Ⅳ
     public static String GetpasswordString(Activity act)
     {
-        //取得資料
+        //��鞈�
         String getpasswordString ;
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(act);
-        getpasswordString = preferences.getString(successpassword, "");//settings.getInt(所對應的key,如果抓不到對應的值要給什麼預設值)
+        getpasswordString = preferences.getString(successpassword, "");//settings.getInt(�����key,憒����啣����潸�蝯虫�暻潮�閮剖�)
         try {
             if(getpasswordString.compareTo("")==0){
                 getpasswordString = Settings.System.getString(act.getContentResolver(), successpassword);
@@ -126,7 +126,7 @@ public class Saveaccountandpassword {
         return "";
     }
 
-    // 取出Uid
+    // �Uid
     public static String getUserUid(Context context) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         String userUid = preferences.getString(successUid, "");
