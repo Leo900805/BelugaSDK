@@ -75,6 +75,9 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
     CallbackManager callbackManager;
     private AccessToken accessToken;
     boolean pressFbButton = false;
+    private String fbAcc;
+    private String fbPwd;
+    
     
     
     @Override
@@ -153,6 +156,14 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
             CreateHttpClient(); //設定http連接物件
             SetDefaultText(); //設定text box預設值
         }
+        
+        if(accessToken != null){
+    		Toast.makeText(AuthClientActivity.this, "FB already Login", Toast.LENGTH_LONG).show();
+    	}else{
+    		//Log.i("call Auth_QuickAccount()", "Start");
+        	//authhttpclient.Auth_QuickAccount();
+        	//Log.i("call Auth_QuickAccount()", "Success");
+    	}
 
     }
     private void showDialog(){
@@ -232,7 +243,7 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
                     SaveAccountPassword(inputaccount.getText().toString(), inputpassword.getText().toString());
                     Saveaccountandpassword.saveUserUid(Long.toString(uid), AuthClientActivity.this);
                     SetFinish(inputaccount.getText().toString(), uid.toString(), token, inputpassword.getText().toString());
-
+                    Log.i("FB acc and pwd", "fb acc:"+ Account +"fb pwd:"+ token);
                 } else {
                     Toast.makeText(AuthClientActivity.this, CodeStr, Toast.LENGTH_LONG).show();
                 }
@@ -481,6 +492,7 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
             Registrationintent.setClass(this, Registration.class);
             startActivityForResult(Registrationintent, 1);
         }else if (i == R.id.fblogin_button){
+        	
         	loginFB(fbLoginButton);
 			this.pressFbButton = true;
         }
@@ -496,18 +508,13 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
               //登入成功
               @Override
               public void onSuccess(LoginResult loginResult) {
-
                   //accessToken之後或許還會用到 先存起來
                   accessToken = loginResult.getAccessToken();
                   Log.d("FB","access token got.");
-
                   //send request and call graph api
-
-                  GraphRequest request = GraphRequest.newMeRequest(
-                          accessToken,
+                  GraphRequest request = GraphRequest.newMeRequest(accessToken, 
                           new GraphRequest.GraphJSONObjectCallback() {
-
-                              //當RESPONSE回來的時候
+                             //當RESPONSE回來的時候
    							@Override
    							public void onCompleted(JSONObject object, GraphResponse response) {
    								// TODO Auto-generated method stub
@@ -522,19 +529,20 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
    	                            										  object.optString("name"),
    	                            										  object.optString("email"));
    							}
+   							
+   							
                           });
                   //包入你想要得到的資料 送出request
                   Bundle parameters = new Bundle();
                   parameters.putString("fields", "id,name,link,email");
                   request.setParameters(parameters);
-                  request.executeAsync();               
+                  request.executeAsync();
               }
 
               //登入取消
               @Override
               public void onCancel() {
                   // App code
-
                   Log.d("FB","CANCEL");
               }
 
