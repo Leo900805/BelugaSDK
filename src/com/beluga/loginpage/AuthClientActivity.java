@@ -21,49 +21,94 @@ import android.widget.Toast;
 import com.beluga.belugakeys.Keys;
 import com.beluga.loginpage.datacontrol.Saveaccountandpassword;
 import com.beluga.loginpage.datacontrol.UsedString;
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.appevents.AppEventsLogger;
+import com.facebook.applinks.AppLinkData;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
+
+import org.json.JSONObject;
+
 import com.beluga.R;
+
 
 /**
  * Created by Leo on 2015/10/5.
  */
 public class AuthClientActivity extends Activity implements OnClickListener,TextWatcher{
 
-    //撖Ⅳ�辣
+    //密碼元件
     public EditText inputpassword;
-    //撣唾��辣
+    //帳號元件
     public EditText inputaccount;
     public Button quickSignUpBtn;
     public Button signUpBtn;
     public Button modPwdBtn;
+    public LoginButton fbLoginButton;
     public Button loginBtn;
-    //public MorphingButton loginBtn;
     public ImageView logoView;
 
-    //Edit�批
+    //Edit控制
     int EditEnd;
     int EditTextAccountMax = 16;
     int EditTextPassMax = 16;
     private int img_GameLogo;
 
-    //摮鞈�摨怎�撣喳�
+    //存在資料庫的帳密
     String saveacc = "";
     String savepwd = "";
 
-    //Server�批
+    //Server控制
     AuthHttpClient authhttpclient;
     private final static String TAG = "AuthClient";
     int mMorphCounter1 = 1;
     boolean inMaintain;
     String dialogTitle;
     String dialogMessage;
+    
+    CallbackManager callbackManager;
+    private AccessToken accessToken;
+    boolean pressFbButton = false;
+    
+    
+    @Override
+    protected void onResume() {
+      super.onResume();
 
+      // Logs 'install' and 'app activate' App Events.
+      AppEventsLogger.activateApp(this);
+    }
+    
+    @Override
+    protected void onPause() {
+      super.onPause();
 
+      // Logs 'app deactivate' App Event.
+      AppEventsLogger.deactivateApp(this);
+    }
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext()); 
         this.setContentView(R.layout.login_page);
+       
+        AppLinkData.fetchDeferredAppLinkData(this, 
+        		  new AppLinkData.CompletionHandler() {
+        		     @Override
+        		     public void onDeferredAppLinkDataFetched(AppLinkData appLinkData) {
+        		         // Process app link data
+        		    	 Log.i("deef link", "...");
+        		     }
+        		 }
+        		);
+        
         GetDataSetting();
 
         this.quickSignUpBtn = (Button)this.findViewById(R.id.quick_sign_up_btn);
@@ -77,17 +122,20 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
 
 
         //R.drawable.cbimage
-        //this.loginBtn = (MorphingButton)this.findViewById(R.id.login_btn);
         this.loginBtn = (Button)this.findViewById(R.id.login_btn);
         Log.i("In login page", "loginBtn v is " + this.loginBtn);
         this.loginBtn.setOnClickListener(this);
+        
+        this.fbLoginButton = (LoginButton)this.findViewById(R.id.fblogin_button);
+        Log.i("In login page", "fbloginBtn v is " + this.fbLoginButton);
+        this.fbLoginButton.setOnClickListener(this);
 
 
         this.modPwdBtn = (Button)this.findViewById(R.id.modify_btn);
         Log.i("In login page", "modPwdBtn v is " + this.modPwdBtn);
         this.modPwdBtn.setOnClickListener(this);
 
-        //this.morphToSquare(loginBtn, 0);
+
         inputpassword = (EditText)this.findViewById(R.id.loginPwdEditText);
         inputaccount =  (EditText)this.findViewById(R.id.loginAccEditText);
         this.logoView = (ImageView)this.findViewById(R.id.advertView);
@@ -102,8 +150,8 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
             Log.i("onCreate","in maintain");
             showDialog();
         }else{
-            CreateHttpClient(); //閮剖�http���拐辣
-            SetDefaultText(); //閮剖�text box�身��
+            CreateHttpClient(); //設定http連接物件
+            SetDefaultText(); //設定text box預設值
         }
 
     }
@@ -125,7 +173,7 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
 //		String APIUrl = "http://23.102.255.253:9000/api/";
         String APIUrl = "http://api.belugame.com/api/";
         Log.d("tag", "versionCode :" + AuthHttpClient.version);
-        //霈��憭�
+        //讀取外部參數
         Intent intent = getIntent();
         AuthHttpClient.ApiUrl = APIUrl;
         AuthHttpClient.AppID = intent.getStringExtra(Keys.AppID.toString());
@@ -164,12 +212,12 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
 
     private void CreateHttpClient()
     {
-        //撱箇���鈭辣
-        //蝬脰楝��_�芸歇撖怎�憿 __����   "�澆暺������澆��
+        //建立監聽事件
+        //網路處理_自已寫的類別 __手術用    "呼叫點 按下按鈕呼叫到"
         authhttpclient = new AuthHttpClient(this);
-        //�交�啁雯頝臬�靘��� ----- "�澆��鈭辣�曄��唳"
-        //�嗆�銝���  �澆�啣�   "SERVER�喳�鞈����澆�啣�---------"
-        //�兄ERVER�靘�鞈� ��摰�
+        //接收到網路回來資料  ----- "呼叫監聽事件放的地方"
+        //當按下按鈕時  呼叫到它   "SERVER傳回資料時會呼叫到它---------"
+        //接SERVER回傳來的資料 處理它
         authhttpclient.AuthEventListener(new AuthHttpClient.OnAuthEventListener() {
             public void onProcessDoneEvent(int Code, String Message, Long uid, String Account, String token) {
                 //ok=false;
@@ -191,17 +239,17 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
             }
         });
     }
-    //���餃��怎��唳
+    //按下登入鈕呼叫的地方
     public void PressLogin()
     {
         String accid = inputaccount.getText().toString();
         String accpwd = inputpassword.getText().toString();
     	/* Changed by Leo Ling */
     	/*
-    	  if(accid.equals("隢撓�亙董��))
-		{	Toast.makeText(AuthClientActivity.this, "隢撓�交�董��, Toast.LENGTH_LONG).show();return;}
-    	if(accpwd.equals("隢撓�亙�蝣�))
-		{	Toast.makeText(AuthClientActivity.this, "隢撓�交��蝣�, Toast.LENGTH_LONG).show();return;}
+    	  if(accid.equals("請輸入帳號"))
+		{	Toast.makeText(AuthClientActivity.this, "請輸入您的帳號", Toast.LENGTH_LONG).show();return;}
+    	if(accpwd.equals("請輸入密碼"))
+		{	Toast.makeText(AuthClientActivity.this, "請輸入您的密碼", Toast.LENGTH_LONG).show();return;}
     	 */
         if(accid.equals(this.getString(R.string.Enter_Ac_Type))){
             Toast.makeText(AuthClientActivity.this,
@@ -217,7 +265,7 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
             return;
         }
      	/* Changed by Leo Ling end */
-        //�喲�鞈��訕ERVER 撣唾�/撖Ⅳ
+        //傳送資料到SERVER 帳號/密碼
         authhttpclient.Auth_UserLogin(accid, accpwd);
     }
 
@@ -281,10 +329,10 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
     private void SetPasswordShowable(boolean show) {
         if(show){
             inputpassword.setTransformationMethod(HideReturnsTransformationMethod
-                    .getInstance());// 閮剔蔭撖Ⅳ�箏閬�
+                    .getInstance());// 設置密碼為可見
         }else{
             inputpassword.setTransformationMethod(PasswordTransformationMethod
-                    .getInstance());// 閮剔蔭撖Ⅳ�箔��航�
+                    .getInstance());// 設置密碼為不可見
         }
     }
 
@@ -293,7 +341,7 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
         savepwd = Saveaccountandpassword.GetpasswordString(this);
     }
 
-    //摮���撣喳�
+    //存成功的帳密
     public void SaveAccountPassword(String accid,String accpwd)
     {
         if(accid.length() > 0 && accpwd.length() > 0)
@@ -320,17 +368,17 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
     private void SetDefaultText()
     {
         GetAccountAndPasswordFromData();
-        //撣唾�霈�銝隞亦�
-        //蝚砌�甈∪�鋆��曇�頛詨/撣�撖�摮�
+        //帳號變成不可以看
+        //第一次安裝呈現請輸入/帳/密文字
         if(saveacc.length() > 0 && savepwd.length() > 0)
         {
-            //�澆����撣�撖�閮剖��蚩ditText
+            //呼叫成功的 帳/密 設定到EditText
             inputaccount.setText(saveacc);
             inputpassword.setText(savepwd);
             SetPasswordShowable(false);
         }
     }
-    //�� 銝血��喳董��uid
+    //回到遊戲 並回傳帳號與uid
     private void SetFinish(String thisuserid,String thisuid,String token,String thispwd)
     {
         Intent resultdata = new Intent();
@@ -339,8 +387,7 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
         bundle.putString("uid", thisuid);
         bundle.putString("pwd", thispwd);
         resultdata.putExtras(bundle);
-        //onMorphButton1Clicked(loginBtn);
-        setResult(Activity.RESULT_OK, resultdata); //�RESULT_OK
+        setResult(Activity.RESULT_OK, resultdata); //回傳RESULT_OK
 
         Handler handler = new Handler();
         Runnable delayRunnable =  new Runnable() {
@@ -360,17 +407,17 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         /* Developer by Leo Ling   Facebook login */
-    	/*
+    	
     		if(this.pressFbButton == true){
     			this.pressFbButton = false;
     			callbackManager.onActivityResult(requestCode, resultCode, data);
     		}
-    	*/
+    	
     	/* Developer by Leo Ling   Facebook login end */
 
         if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
             try
-            {	//撠ctivity�����蝚砌��ctivity
+            {	//將Activity的資料收集傳送到第二個Activity
                 Bundle bundle = data.getExtras();
                 int ResultType = bundle.getInt("ResultType");
                 if(ResultType == 1)
@@ -383,7 +430,7 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
                     EditText inputpwd = (EditText)this.findViewById(R.id.loginPwdEditText);
                     inputpwd.setText(userpwd);
                     SaveAccountPassword(userid,userpwd);
-                    authhttpclient.Auth_UserLogin(userid,userpwd);//�餃�航炊�恍
+                    authhttpclient.Auth_UserLogin(userid,userpwd);//登入錯誤畫面
                     return;
                 }
                 if(ResultType == 2){
@@ -433,18 +480,73 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
             Intent Registrationintent = new Intent();
             Registrationintent.setClass(this, Registration.class);
             startActivityForResult(Registrationintent, 1);
-
-		/* Developer by Leo Ling   Facebook login */
-		/*
-		case 0000: //fb login
-			LoginButton loginButton = (LoginButton)this.findViewById(0000);
-			//Button loginButton = (Button)this.findViewById(0000);
-			loginFB(loginButton);
+        }else if (i == R.id.fblogin_button){
+        	loginFB(fbLoginButton);
 			this.pressFbButton = true;
-			break;
-		*/
-		/* Developer by Leo Ling   Facebook login end */
         }
     }
+    
+    /* Developer by Leo Ling   Facebook login */
+   	public void loginFB(LoginButton loginButton){
+   	//public void loginFB(Button loginButton){
+   		 
+   		 //宣告callback Manager
+          callbackManager = CallbackManager.Factory.create();
+          loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+              //登入成功
+              @Override
+              public void onSuccess(LoginResult loginResult) {
+
+                  //accessToken之後或許還會用到 先存起來
+                  accessToken = loginResult.getAccessToken();
+                  Log.d("FB","access token got.");
+
+                  //send request and call graph api
+
+                  GraphRequest request = GraphRequest.newMeRequest(
+                          accessToken,
+                          new GraphRequest.GraphJSONObjectCallback() {
+
+                              //當RESPONSE回來的時候
+   							@Override
+   							public void onCompleted(JSONObject object, GraphResponse response) {
+   								// TODO Auto-generated method stub
+   								//讀出姓名 ID FB個人頁面連結
+   	                            Log.d("FB","complete");
+   	                            Log.d("FB",object.optString("name"));
+   	                            Log.d("FB",object.optString("link"));
+   	                            Log.d("FB",object.optString("id"));
+   	                            Log.d("FB",object.optString("email"));
+   	                            //Log.d("FB",object.optString("user_friends"));
+   	                            authhttpclient.Auth_FacebookLoignRegister(object.optString("id"), 
+   	                            										  object.optString("name"),
+   	                            										  object.optString("email"));
+   							}
+                          });
+                  //包入你想要得到的資料 送出request
+                  Bundle parameters = new Bundle();
+                  parameters.putString("fields", "id,name,link,email");
+                  request.setParameters(parameters);
+                  request.executeAsync();               
+              }
+
+              //登入取消
+              @Override
+              public void onCancel() {
+                  // App code
+
+                  Log.d("FB","CANCEL");
+              }
+
+              //登入失敗
+   		@Override
+   		public void onError(FacebookException error) {
+   			// TODO Auto-generated method stub
+   			Log.d("FB",error.toString());
+   		}
+   		
+          });
+   	}
+   	/* Developer by Leo Ling   Facebook login end */
 
 }

@@ -20,7 +20,7 @@ public final class R {
 <tr><td><code>top</code></td><td>2</td><td></td></tr>
 </table>
          */
-        public static int com_facebook_auxiliary_view_position=0x7f01000a;
+        public static int auxiliary_view_position=0x7f010009;
         /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -28,7 +28,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static int com_facebook_confirm_logout=0x7f010000;
+        public static int confirm_logout=0x7f010000;
         /** <p>Must be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
 "<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
 <p>This may also be a reference to a resource (in the form
@@ -37,7 +37,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static int com_facebook_foreground_color=0x7f010006;
+        public static int foreground_color=0x7f010005;
         /** <p>Must be one of the following constant values.</p>
 <table>
 <colgroup align="left" />
@@ -49,7 +49,7 @@ containing a value of this type.
 <tr><td><code>right</code></td><td>2</td><td></td></tr>
 </table>
          */
-        public static int com_facebook_horizontal_alignment=0x7f01000b;
+        public static int horizontal_alignment=0x7f01000a;
         /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -57,7 +57,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static int com_facebook_is_cropped=0x7f010005;
+        public static int is_cropped=0x7f010004;
         /** <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -65,7 +65,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static int com_facebook_login_text=0x7f010001;
+        public static int login_text=0x7f010001;
         /** <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -73,7 +73,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static int com_facebook_logout_text=0x7f010002;
+        public static int logout_text=0x7f010002;
         /** <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
 <p>This may also be a reference to a resource (in the form
 "<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
@@ -81,7 +81,7 @@ theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
          */
-        public static int com_facebook_object_id=0x7f010007;
+        public static int object_id=0x7f010006;
         /** <p>Must be one of the following constant values.</p>
 <table>
 <colgroup align="left" />
@@ -93,7 +93,7 @@ containing a value of this type.
 <tr><td><code>page</code></td><td>2</td><td></td></tr>
 </table>
          */
-        public static int com_facebook_object_type=0x7f010008;
+        public static int object_type=0x7f010007;
         /** <p>Must be one of the following constant values.</p>
 <table>
 <colgroup align="left" />
@@ -105,7 +105,7 @@ containing a value of this type.
 <tr><td><code>large</code></td><td>-4</td><td></td></tr>
 </table>
          */
-        public static int com_facebook_preset_size=0x7f010004;
+        public static int preset_size=0x7f010003;
         /** <p>Must be one of the following constant values.</p>
 <table>
 <colgroup align="left" />
@@ -117,19 +117,7 @@ containing a value of this type.
 <tr><td><code>box_count</code></td><td>2</td><td></td></tr>
 </table>
          */
-        public static int com_facebook_style=0x7f010009;
-        /** <p>Must be one of the following constant values.</p>
-<table>
-<colgroup align="left" />
-<colgroup align="left" />
-<colgroup align="left" />
-<tr><th>Constant</th><th>Value</th><th>Description</th></tr>
-<tr><td><code>automatic</code></td><td>0</td><td> Keep in sync with Enums in LoginButton </td></tr>
-<tr><td><code>display_always</code></td><td>1</td><td></td></tr>
-<tr><td><code>never_display</code></td><td>2</td><td></td></tr>
-</table>
-         */
-        public static int com_facebook_tooltip_mode=0x7f010003;
+        public static int style=0x7f010008;
     }
     public static final class color {
         public static int colorAccent=0x7f06000f;
@@ -255,77 +243,75 @@ containing a value of this type.
         public static int su_btn_bg=0x7f020030;
     }
     public static final class id {
-        public static int advertView=0x7f09001f;
-        public static int agLogoLinearLayout=0x7f09001e;
-        public static int automatic=0x7f090000;
-        public static int bottmSideLinearLayout=0x7f090027;
-        public static int bottom=0x7f09000c;
-        public static int box_count=0x7f090009;
-        public static int btnSideLinearLayout=0x7f090023;
-        public static int button=0x7f09000a;
-        public static int center=0x7f09000f;
-        public static int com_facebook_body_frame=0x7f090014;
-        public static int com_facebook_button_xout=0x7f090016;
-        public static int com_facebook_fragment_container=0x7f090012;
-        public static int com_facebook_login_activity_progress_bar=0x7f090013;
-        public static int com_facebook_tooltip_bubble_view_bottom_pointer=0x7f090018;
-        public static int com_facebook_tooltip_bubble_view_text_body=0x7f090017;
-        public static int com_facebook_tooltip_bubble_view_top_pointer=0x7f090015;
-        public static int contextSideLinearLayout=0x7f09001d;
-        public static int display_always=0x7f090001;
-        public static int inline=0x7f09000d;
-        public static int large=0x7f090003;
-        public static int left=0x7f090010;
-        public static int loginAccEditText=0x7f090021;
-        public static int loginAccSideLinearLayout=0x7f090020;
-        public static int loginBgLinearLayout=0x7f09001a;
-        public static int loginPwdEditText=0x7f090022;
-        public static int loginSideLinearLayout=0x7f090019;
-        public static int login_btn=0x7f090028;
-        public static int loginpagetitle=0x7f09001c;
-        public static int messenger_send_button=0x7f090029;
-        public static int modaccTextView=0x7f09002b;
-        public static int modacctextView=0x7f09002c;
-        public static int modcomfirmbtn=0x7f090034;
-        public static int modify_btn=0x7f090026;
-        public static int modnewpwdTextView=0x7f09002f;
-        public static int modnewpwdeditText=0x7f090030;
-        public static int modpwdTextView=0x7f09002d;
-        public static int modpwdeditText=0x7f09002e;
-        public static int modpwdpagetitle=0x7f09002a;
-        public static int modreturnbtn=0x7f090033;
-        public static int modretypepwdTextView=0x7f090031;
-        public static int modretypepwdeditText=0x7f090032;
-        public static int never_display=0x7f090002;
-        public static int normal=0x7f090004;
-        public static int open_graph=0x7f090006;
-        public static int page=0x7f090007;
-        public static int qsacceditText=0x7f090037;
-        public static int qscheckBox=0x7f09003a;
-        public static int qscomfirmbtn=0x7f09003c;
-        public static int qsmodbtn=0x7f090039;
-        public static int qspagetitle=0x7f090036;
-        public static int qspwdeditText=0x7f090038;
-        public static int qsreturnbtn=0x7f09003b;
-        public static int quick_sign_up_btn=0x7f090024;
-        public static int right=0x7f090011;
-        public static int sign_up_btn=0x7f090025;
-        public static int signupacctextView=0x7f09003f;
-        public static int signupacctextViewTextView=0x7f09003e;
-        public static int signupcheckBox=0x7f090044;
-        public static int signupcomfirmbtn=0x7f090046;
-        public static int signupnewpwdTextView=0x7f090042;
-        public static int signupnewpwdeditText=0x7f090043;
-        public static int signuppagetitle=0x7f09003d;
-        public static int signuppwdTextView=0x7f090040;
-        public static int signuppwdeditText=0x7f090041;
-        public static int signupreturnbtn=0x7f090045;
-        public static int small=0x7f090005;
-        public static int standard=0x7f09000b;
-        public static int tileSideLinearLayout=0x7f09001b;
-        public static int top=0x7f09000e;
-        public static int unknown=0x7f090008;
-        public static int webView=0x7f090035;
+        public static int advertView=0x7f09001c;
+        public static int agLogoLinearLayout=0x7f09001b;
+        public static int bottmSideLinearLayout=0x7f090024;
+        public static int bottom=0x7f090009;
+        public static int box_count=0x7f090006;
+        public static int btnSideLinearLayout=0x7f090020;
+        public static int button=0x7f090007;
+        public static int center=0x7f09000c;
+        public static int com_facebook_body_frame=0x7f090011;
+        public static int com_facebook_button_xout=0x7f090013;
+        public static int com_facebook_fragment_container=0x7f09000f;
+        public static int com_facebook_login_activity_progress_bar=0x7f090010;
+        public static int com_facebook_tooltip_bubble_view_bottom_pointer=0x7f090015;
+        public static int com_facebook_tooltip_bubble_view_text_body=0x7f090014;
+        public static int com_facebook_tooltip_bubble_view_top_pointer=0x7f090012;
+        public static int contextSideLinearLayout=0x7f09001a;
+        public static int fblogin_button=0x7f090025;
+        public static int inline=0x7f09000a;
+        public static int large=0x7f090000;
+        public static int left=0x7f09000d;
+        public static int loginAccEditText=0x7f09001e;
+        public static int loginAccSideLinearLayout=0x7f09001d;
+        public static int loginBgLinearLayout=0x7f090017;
+        public static int loginPwdEditText=0x7f09001f;
+        public static int loginSideLinearLayout=0x7f090016;
+        public static int login_btn=0x7f090026;
+        public static int loginpagetitle=0x7f090019;
+        public static int messenger_send_button=0x7f090027;
+        public static int modaccTextView=0x7f090029;
+        public static int modacctextView=0x7f09002a;
+        public static int modcomfirmbtn=0x7f090032;
+        public static int modify_btn=0x7f090023;
+        public static int modnewpwdTextView=0x7f09002d;
+        public static int modnewpwdeditText=0x7f09002e;
+        public static int modpwdTextView=0x7f09002b;
+        public static int modpwdeditText=0x7f09002c;
+        public static int modpwdpagetitle=0x7f090028;
+        public static int modreturnbtn=0x7f090031;
+        public static int modretypepwdTextView=0x7f09002f;
+        public static int modretypepwdeditText=0x7f090030;
+        public static int normal=0x7f090001;
+        public static int open_graph=0x7f090003;
+        public static int page=0x7f090004;
+        public static int qsacceditText=0x7f090035;
+        public static int qscheckBox=0x7f090038;
+        public static int qscomfirmbtn=0x7f09003a;
+        public static int qsmodbtn=0x7f090037;
+        public static int qspagetitle=0x7f090034;
+        public static int qspwdeditText=0x7f090036;
+        public static int qsreturnbtn=0x7f090039;
+        public static int quick_sign_up_btn=0x7f090021;
+        public static int right=0x7f09000e;
+        public static int sign_up_btn=0x7f090022;
+        public static int signupacctextView=0x7f09003d;
+        public static int signupacctextViewTextView=0x7f09003c;
+        public static int signupcheckBox=0x7f090042;
+        public static int signupcomfirmbtn=0x7f090044;
+        public static int signupnewpwdTextView=0x7f090040;
+        public static int signupnewpwdeditText=0x7f090041;
+        public static int signuppagetitle=0x7f09003b;
+        public static int signuppwdTextView=0x7f09003e;
+        public static int signuppwdeditText=0x7f09003f;
+        public static int signupreturnbtn=0x7f090043;
+        public static int small=0x7f090002;
+        public static int standard=0x7f090008;
+        public static int tileSideLinearLayout=0x7f090018;
+        public static int top=0x7f09000b;
+        public static int unknown=0x7f090005;
+        public static int webView=0x7f090033;
     }
     public static final class integer {
         public static int mb_animation=0x7f080000;
@@ -474,26 +460,26 @@ containing a value of this type.
            <colgroup align="left" />
            <colgroup align="left" />
            <tr><th>Attribute</th><th>Description</th></tr>
-           <tr><td><code>{@link #com_facebook_like_view_com_facebook_auxiliary_view_position com.beluga:com_facebook_auxiliary_view_position}</code></td><td></td></tr>
-           <tr><td><code>{@link #com_facebook_like_view_com_facebook_foreground_color com.beluga:com_facebook_foreground_color}</code></td><td></td></tr>
-           <tr><td><code>{@link #com_facebook_like_view_com_facebook_horizontal_alignment com.beluga:com_facebook_horizontal_alignment}</code></td><td></td></tr>
-           <tr><td><code>{@link #com_facebook_like_view_com_facebook_object_id com.beluga:com_facebook_object_id}</code></td><td></td></tr>
-           <tr><td><code>{@link #com_facebook_like_view_com_facebook_object_type com.beluga:com_facebook_object_type}</code></td><td></td></tr>
-           <tr><td><code>{@link #com_facebook_like_view_com_facebook_style com.beluga:com_facebook_style}</code></td><td></td></tr>
+           <tr><td><code>{@link #com_facebook_like_view_auxiliary_view_position com.beluga:auxiliary_view_position}</code></td><td></td></tr>
+           <tr><td><code>{@link #com_facebook_like_view_foreground_color com.beluga:foreground_color}</code></td><td></td></tr>
+           <tr><td><code>{@link #com_facebook_like_view_horizontal_alignment com.beluga:horizontal_alignment}</code></td><td></td></tr>
+           <tr><td><code>{@link #com_facebook_like_view_object_id com.beluga:object_id}</code></td><td></td></tr>
+           <tr><td><code>{@link #com_facebook_like_view_object_type com.beluga:object_type}</code></td><td></td></tr>
+           <tr><td><code>{@link #com_facebook_like_view_style com.beluga:style}</code></td><td></td></tr>
            </table>
-           @see #com_facebook_like_view_com_facebook_auxiliary_view_position
-           @see #com_facebook_like_view_com_facebook_foreground_color
-           @see #com_facebook_like_view_com_facebook_horizontal_alignment
-           @see #com_facebook_like_view_com_facebook_object_id
-           @see #com_facebook_like_view_com_facebook_object_type
-           @see #com_facebook_like_view_com_facebook_style
+           @see #com_facebook_like_view_auxiliary_view_position
+           @see #com_facebook_like_view_foreground_color
+           @see #com_facebook_like_view_horizontal_alignment
+           @see #com_facebook_like_view_object_id
+           @see #com_facebook_like_view_object_type
+           @see #com_facebook_like_view_style
          */
         public static final int[] com_facebook_like_view = {
-            0x7f010006, 0x7f010007, 0x7f010008, 0x7f010009,
-            0x7f01000a, 0x7f01000b
+            0x7f010005, 0x7f010006, 0x7f010007, 0x7f010008,
+            0x7f010009, 0x7f01000a
         };
         /**
-          <p>This symbol is the offset where the {@link com.beluga.R.attr#com_facebook_auxiliary_view_position}
+          <p>This symbol is the offset where the {@link com.beluga.R.attr#auxiliary_view_position}
           attribute's value can be found in the {@link #com_facebook_like_view} array.
 
 
@@ -507,11 +493,11 @@ containing a value of this type.
 <tr><td><code>inline</code></td><td>1</td><td></td></tr>
 <tr><td><code>top</code></td><td>2</td><td></td></tr>
 </table>
-          @attr name com.beluga:com_facebook_auxiliary_view_position
+          @attr name com.beluga:auxiliary_view_position
         */
-        public static int com_facebook_like_view_com_facebook_auxiliary_view_position = 4;
+        public static int com_facebook_like_view_auxiliary_view_position = 4;
         /**
-          <p>This symbol is the offset where the {@link com.beluga.R.attr#com_facebook_foreground_color}
+          <p>This symbol is the offset where the {@link com.beluga.R.attr#foreground_color}
           attribute's value can be found in the {@link #com_facebook_like_view} array.
 
 
@@ -522,11 +508,11 @@ containing a value of this type.
 theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
-          @attr name com.beluga:com_facebook_foreground_color
+          @attr name com.beluga:foreground_color
         */
-        public static int com_facebook_like_view_com_facebook_foreground_color = 0;
+        public static int com_facebook_like_view_foreground_color = 0;
         /**
-          <p>This symbol is the offset where the {@link com.beluga.R.attr#com_facebook_horizontal_alignment}
+          <p>This symbol is the offset where the {@link com.beluga.R.attr#horizontal_alignment}
           attribute's value can be found in the {@link #com_facebook_like_view} array.
 
 
@@ -540,11 +526,11 @@ containing a value of this type.
 <tr><td><code>left</code></td><td>1</td><td></td></tr>
 <tr><td><code>right</code></td><td>2</td><td></td></tr>
 </table>
-          @attr name com.beluga:com_facebook_horizontal_alignment
+          @attr name com.beluga:horizontal_alignment
         */
-        public static int com_facebook_like_view_com_facebook_horizontal_alignment = 5;
+        public static int com_facebook_like_view_horizontal_alignment = 5;
         /**
-          <p>This symbol is the offset where the {@link com.beluga.R.attr#com_facebook_object_id}
+          <p>This symbol is the offset where the {@link com.beluga.R.attr#object_id}
           attribute's value can be found in the {@link #com_facebook_like_view} array.
 
 
@@ -554,11 +540,11 @@ containing a value of this type.
 theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
-          @attr name com.beluga:com_facebook_object_id
+          @attr name com.beluga:object_id
         */
-        public static int com_facebook_like_view_com_facebook_object_id = 1;
+        public static int com_facebook_like_view_object_id = 1;
         /**
-          <p>This symbol is the offset where the {@link com.beluga.R.attr#com_facebook_object_type}
+          <p>This symbol is the offset where the {@link com.beluga.R.attr#object_type}
           attribute's value can be found in the {@link #com_facebook_like_view} array.
 
 
@@ -572,11 +558,11 @@ containing a value of this type.
 <tr><td><code>open_graph</code></td><td>1</td><td></td></tr>
 <tr><td><code>page</code></td><td>2</td><td></td></tr>
 </table>
-          @attr name com.beluga:com_facebook_object_type
+          @attr name com.beluga:object_type
         */
-        public static int com_facebook_like_view_com_facebook_object_type = 2;
+        public static int com_facebook_like_view_object_type = 2;
         /**
-          <p>This symbol is the offset where the {@link com.beluga.R.attr#com_facebook_style}
+          <p>This symbol is the offset where the {@link com.beluga.R.attr#style}
           attribute's value can be found in the {@link #com_facebook_like_view} array.
 
 
@@ -590,30 +576,28 @@ containing a value of this type.
 <tr><td><code>button</code></td><td>1</td><td></td></tr>
 <tr><td><code>box_count</code></td><td>2</td><td></td></tr>
 </table>
-          @attr name com.beluga:com_facebook_style
+          @attr name com.beluga:style
         */
-        public static int com_facebook_like_view_com_facebook_style = 3;
+        public static int com_facebook_like_view_style = 3;
         /** Attributes that can be used with a com_facebook_login_view.
            <p>Includes the following attributes:</p>
            <table>
            <colgroup align="left" />
            <colgroup align="left" />
            <tr><th>Attribute</th><th>Description</th></tr>
-           <tr><td><code>{@link #com_facebook_login_view_com_facebook_confirm_logout com.beluga:com_facebook_confirm_logout}</code></td><td></td></tr>
-           <tr><td><code>{@link #com_facebook_login_view_com_facebook_login_text com.beluga:com_facebook_login_text}</code></td><td></td></tr>
-           <tr><td><code>{@link #com_facebook_login_view_com_facebook_logout_text com.beluga:com_facebook_logout_text}</code></td><td></td></tr>
-           <tr><td><code>{@link #com_facebook_login_view_com_facebook_tooltip_mode com.beluga:com_facebook_tooltip_mode}</code></td><td></td></tr>
+           <tr><td><code>{@link #com_facebook_login_view_confirm_logout com.beluga:confirm_logout}</code></td><td></td></tr>
+           <tr><td><code>{@link #com_facebook_login_view_login_text com.beluga:login_text}</code></td><td></td></tr>
+           <tr><td><code>{@link #com_facebook_login_view_logout_text com.beluga:logout_text}</code></td><td></td></tr>
            </table>
-           @see #com_facebook_login_view_com_facebook_confirm_logout
-           @see #com_facebook_login_view_com_facebook_login_text
-           @see #com_facebook_login_view_com_facebook_logout_text
-           @see #com_facebook_login_view_com_facebook_tooltip_mode
+           @see #com_facebook_login_view_confirm_logout
+           @see #com_facebook_login_view_login_text
+           @see #com_facebook_login_view_logout_text
          */
         public static final int[] com_facebook_login_view = {
-            0x7f010000, 0x7f010001, 0x7f010002, 0x7f010003
+            0x7f010000, 0x7f010001, 0x7f010002
         };
         /**
-          <p>This symbol is the offset where the {@link com.beluga.R.attr#com_facebook_confirm_logout}
+          <p>This symbol is the offset where the {@link com.beluga.R.attr#confirm_logout}
           attribute's value can be found in the {@link #com_facebook_login_view} array.
 
 
@@ -623,11 +607,11 @@ containing a value of this type.
 theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
-          @attr name com.beluga:com_facebook_confirm_logout
+          @attr name com.beluga:confirm_logout
         */
-        public static int com_facebook_login_view_com_facebook_confirm_logout = 0;
+        public static int com_facebook_login_view_confirm_logout = 0;
         /**
-          <p>This symbol is the offset where the {@link com.beluga.R.attr#com_facebook_login_text}
+          <p>This symbol is the offset where the {@link com.beluga.R.attr#login_text}
           attribute's value can be found in the {@link #com_facebook_login_view} array.
 
 
@@ -637,11 +621,11 @@ containing a value of this type.
 theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
-          @attr name com.beluga:com_facebook_login_text
+          @attr name com.beluga:login_text
         */
-        public static int com_facebook_login_view_com_facebook_login_text = 1;
+        public static int com_facebook_login_view_login_text = 1;
         /**
-          <p>This symbol is the offset where the {@link com.beluga.R.attr#com_facebook_logout_text}
+          <p>This symbol is the offset where the {@link com.beluga.R.attr#logout_text}
           attribute's value can be found in the {@link #com_facebook_login_view} array.
 
 
@@ -651,44 +635,26 @@ containing a value of this type.
 theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
-          @attr name com.beluga:com_facebook_logout_text
+          @attr name com.beluga:logout_text
         */
-        public static int com_facebook_login_view_com_facebook_logout_text = 2;
-        /**
-          <p>This symbol is the offset where the {@link com.beluga.R.attr#com_facebook_tooltip_mode}
-          attribute's value can be found in the {@link #com_facebook_login_view} array.
-
-
-          <p>Must be one of the following constant values.</p>
-<table>
-<colgroup align="left" />
-<colgroup align="left" />
-<colgroup align="left" />
-<tr><th>Constant</th><th>Value</th><th>Description</th></tr>
-<tr><td><code>automatic</code></td><td>0</td><td> Keep in sync with Enums in LoginButton </td></tr>
-<tr><td><code>display_always</code></td><td>1</td><td></td></tr>
-<tr><td><code>never_display</code></td><td>2</td><td></td></tr>
-</table>
-          @attr name com.beluga:com_facebook_tooltip_mode
-        */
-        public static int com_facebook_login_view_com_facebook_tooltip_mode = 3;
+        public static int com_facebook_login_view_logout_text = 2;
         /** Attributes that can be used with a com_facebook_profile_picture_view.
            <p>Includes the following attributes:</p>
            <table>
            <colgroup align="left" />
            <colgroup align="left" />
            <tr><th>Attribute</th><th>Description</th></tr>
-           <tr><td><code>{@link #com_facebook_profile_picture_view_com_facebook_is_cropped com.beluga:com_facebook_is_cropped}</code></td><td></td></tr>
-           <tr><td><code>{@link #com_facebook_profile_picture_view_com_facebook_preset_size com.beluga:com_facebook_preset_size}</code></td><td></td></tr>
+           <tr><td><code>{@link #com_facebook_profile_picture_view_is_cropped com.beluga:is_cropped}</code></td><td></td></tr>
+           <tr><td><code>{@link #com_facebook_profile_picture_view_preset_size com.beluga:preset_size}</code></td><td></td></tr>
            </table>
-           @see #com_facebook_profile_picture_view_com_facebook_is_cropped
-           @see #com_facebook_profile_picture_view_com_facebook_preset_size
+           @see #com_facebook_profile_picture_view_is_cropped
+           @see #com_facebook_profile_picture_view_preset_size
          */
         public static final int[] com_facebook_profile_picture_view = {
-            0x7f010004, 0x7f010005
+            0x7f010003, 0x7f010004
         };
         /**
-          <p>This symbol is the offset where the {@link com.beluga.R.attr#com_facebook_is_cropped}
+          <p>This symbol is the offset where the {@link com.beluga.R.attr#is_cropped}
           attribute's value can be found in the {@link #com_facebook_profile_picture_view} array.
 
 
@@ -698,11 +664,11 @@ containing a value of this type.
 theme attribute (in the form
 "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
 containing a value of this type.
-          @attr name com.beluga:com_facebook_is_cropped
+          @attr name com.beluga:is_cropped
         */
-        public static int com_facebook_profile_picture_view_com_facebook_is_cropped = 1;
+        public static int com_facebook_profile_picture_view_is_cropped = 1;
         /**
-          <p>This symbol is the offset where the {@link com.beluga.R.attr#com_facebook_preset_size}
+          <p>This symbol is the offset where the {@link com.beluga.R.attr#preset_size}
           attribute's value can be found in the {@link #com_facebook_profile_picture_view} array.
 
 
@@ -716,8 +682,8 @@ containing a value of this type.
 <tr><td><code>normal</code></td><td>-3</td><td></td></tr>
 <tr><td><code>large</code></td><td>-4</td><td></td></tr>
 </table>
-          @attr name com.beluga:com_facebook_preset_size
+          @attr name com.beluga:preset_size
         */
-        public static int com_facebook_profile_picture_view_com_facebook_preset_size = 0;
+        public static int com_facebook_profile_picture_view_preset_size = 0;
     };
 }

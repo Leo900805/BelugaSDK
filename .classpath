@@ -7,5 +7,6 @@
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
 	<classpathentry exported="true" kind="lib" path="C:/Users/deskuser/workspace/BelugaSDK/libs/org.apache.http.legacy.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/classes.jar"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/facebook"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

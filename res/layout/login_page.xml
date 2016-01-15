@@ -11,17 +11,17 @@
 
 
     <LinearLayout
-        android:orientation="vertical"
+        android:id="@+id/loginBgLinearLayout"
         android:layout_width="wrap_content"
         android:layout_height="560dp"
         android:background="@drawable/beluga_background"
-        android:id="@+id/loginBgLinearLayout"
-        android:gravity="center_vertical|center_horizontal">
-
+        android:gravity="center_horizontal"
+        android:orientation="vertical" >
+        
         <LinearLayout
             android:id="@+id/tileSideLinearLayout"
             android:layout_width="match_parent"
-            android:layout_height="135dp"
+            android:layout_height="130dp"
             android:gravity="bottom"
             android:orientation="horizontal"
             android:textAlignment="gravity" >
@@ -35,25 +35,25 @@
                 android:text="@string/Login_Page_Title_Text"
                 android:textAlignment="gravity"
                 android:textColor="#6ba2af"
-                android:textSize="20dp" />
+                android:textSize="20sp" />
 
         </LinearLayout>
-
+        
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="380dp"
+            android:layout_height="300dp"
             android:id="@+id/contextSideLinearLayout">
 
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="150dp"
                 android:weightSum="1"
                 android:id="@+id/agLogoLinearLayout">
 
                 <ImageView
-                    android:layout_width="400dp"
+                    android:layout_width="400sp"
                     android:layout_height="wrap_content"
                     android:id="@+id/advertView"
                     android:focusable="false"
@@ -95,14 +95,15 @@
                     android:drawableLeft="@drawable/gpassword"/>
 
             </LinearLayout>
+
             <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="54dp"
                 android:id="@+id/btnSideLinearLayout"
-                android:weightSum="1"
+                android:layout_width="match_parent"
+                android:layout_height="43dp"
+                android:layout_gravity="center_horizontal"
                 android:gravity="center_horizontal"
-                android:layout_gravity="center_horizontal">
+                android:orientation="horizontal"
+                android:weightSum="1" >
 
                 <Button
                     android:layout_width="95dp"
@@ -132,29 +133,36 @@
             </LinearLayout>
 
         </LinearLayout>
-
+        
         <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
             android:id="@+id/bottmSideLinearLayout"
-            android:gravity="center_horizontal"
-            android:layout_marginBottom="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="83dp"
             android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp" >
-
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="40dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical" >
+            
+            <com.facebook.login.widget.LoginButton
+                android:id="@+id/fblogin_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:text="  connect_with_facebook" />
 
                 <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
                     android:id="@+id/login_btn"
-                    android:textColor="@color/mb_white"
-                    android:text="@string/Login_Button_Text"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="5dp"
                     android:background="@drawable/login_btn_bg"
+                    android:text="@string/Login_Button_Text"
+                    android:textColor="@color/mb_white"
                     android:textSize="20sp" />
+
             </LinearLayout>
-
-
 
     </LinearLayout>
 
