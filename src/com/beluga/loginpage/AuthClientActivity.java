@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.beluga.belugakeys.Keys;
+import com.beluga.loginpage.AuthHttpClient.OnAuthEventListener;
 import com.beluga.loginpage.datacontrol.Saveaccountandpassword;
 import com.beluga.loginpage.datacontrol.UsedString;
 import com.facebook.AccessToken;
@@ -75,9 +76,11 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
     CallbackManager callbackManager;
     private AccessToken accessToken;
     boolean pressFbButton = false;
-    private String fbAcc;
-    private String fbPwd;
-    
+    private String belugaAccForFb;
+    private String belugaPwdForFb;
+    private String fbId;
+    private String fbName;
+    private String fbEmail;
     
     
     @Override
@@ -157,14 +160,6 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
             SetDefaultText(); //設定text box預設值
         }
         
-        if(accessToken != null){
-    		Toast.makeText(AuthClientActivity.this, "FB already Login", Toast.LENGTH_LONG).show();
-    	}else{
-    		//Log.i("call Auth_QuickAccount()", "Start");
-        	//authhttpclient.Auth_QuickAccount();
-        	//Log.i("call Auth_QuickAccount()", "Success");
-    	}
-
     }
     private void showDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -220,35 +215,36 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
             }
         }
     }
-
+    
     private void CreateHttpClient()
     {
         //建立監聽事件
         //網路處理_自已寫的類別 __手術用    "呼叫點 按下按鈕呼叫到"
         authhttpclient = new AuthHttpClient(this);
-        //接收到網路回來資料  ----- "呼叫監聽事件放的地方"
-        //當按下按鈕時  呼叫到它   "SERVER傳回資料時會呼叫到它---------"
-        //接SERVER回傳來的資料 處理它
-        authhttpclient.AuthEventListener(new AuthHttpClient.OnAuthEventListener() {
-            public void onProcessDoneEvent(int Code, String Message, Long uid, String Account, String token) {
-                //ok=false;
-                String CodeStr = UsedString.getLoginstring(getApplicationContext(), Code);
-                if (CodeStr.compareTo("") == 0) {
-                    //Looper.prepare();
-                    Toast.makeText(AuthClientActivity.this, Message, Toast.LENGTH_SHORT).show();
-                    //Looper.loop();
-                } else if (Code == 1) {
-                    //onMorphButton1Clicked(loginBtn);
-                    Toast.makeText(AuthClientActivity.this, CodeStr, Toast.LENGTH_LONG).show();
-                    SaveAccountPassword(inputaccount.getText().toString(), inputpassword.getText().toString());
-                    Saveaccountandpassword.saveUserUid(Long.toString(uid), AuthClientActivity.this);
-                    SetFinish(inputaccount.getText().toString(), uid.toString(), token, inputpassword.getText().toString());
-                    Log.i("FB acc and pwd", "fb acc:"+ Account +"fb pwd:"+ token);
-                } else {
-                    Toast.makeText(AuthClientActivity.this, CodeStr, Toast.LENGTH_LONG).show();
+        
+        	//接收到網路回來資料  ----- "呼叫監聽事件放的地方"
+            //當按下按鈕時  呼叫到它   "SERVER傳回資料時會呼叫到它---------"
+            //接SERVER回傳來的資料 處理它
+            authhttpclient.AuthEventListener(new AuthHttpClient.OnAuthEventListener() {
+                public void onProcessDoneEvent(int Code, String Message, Long uid, String Account, String token) {
+                    //ok=false;
+                    String CodeStr = UsedString.getLoginstring(getApplicationContext(), Code);
+                    if (CodeStr.compareTo("") == 0) {
+                        //Looper.prepare();
+                        Toast.makeText(AuthClientActivity.this, Message, Toast.LENGTH_SHORT).show();
+                        //Looper.loop();
+                    } else if (Code == 1) {
+                        //onMorphButton1Clicked(loginBtn);
+                        Toast.makeText(AuthClientActivity.this, CodeStr, Toast.LENGTH_LONG).show();
+                        SaveAccountPassword(inputaccount.getText().toString(), inputpassword.getText().toString());
+                        Saveaccountandpassword.saveUserUid(Long.toString(uid), AuthClientActivity.this);
+                        //Log.i("FB acc and pwd", "fb acc:"+ Account +"fb pwd:"+ token);
+                        SetFinish(inputaccount.getText().toString(), uid.toString(), token, inputpassword.getText().toString());
+                    } else {
+                        Toast.makeText(AuthClientActivity.this, CodeStr, Toast.LENGTH_LONG).show();
+                    }
                 }
-            }
-        });
+            });
     }
     //按下登入鈕呼叫的地方
     public void PressLogin()
@@ -409,9 +405,6 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
             }
         };
         handler.postDelayed(delayRunnable, 700);
-
-
-
     }
 
     @Override
@@ -473,7 +466,6 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
         int i = v.getId();
         if (i == R.id.login_btn) {
             this.PressLogin();
-
         } else if (i == R.id.modify_btn) {
 
             Intent Changepasswordintent = new Intent();
@@ -493,13 +485,21 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
             startActivityForResult(Registrationintent, 1);
         }else if (i == R.id.fblogin_button){
         	
-        	loginFB(fbLoginButton);
-			this.pressFbButton = true;
+        	if(this.pressFbButton == false){
+        		requestQuickAccountPassword();
+                authhttpclient.Auth_QuickAccount();
+                Log.i("Login button stutus", "Login");
+        		this.pressFbButton = true;
+        	}else{
+    			
+        	}
+        	
+        	getFBInfo(fbLoginButton);
         }
     }
     
     /* Developer by Leo Ling   Facebook login */
-   	public void loginFB(LoginButton loginButton){
+   	public void getFBInfo(LoginButton loginButton){
    	//public void loginFB(Button loginButton){
    		 
    		 //宣告callback Manager
@@ -511,6 +511,7 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
                   //accessToken之後或許還會用到 先存起來
                   accessToken = loginResult.getAccessToken();
                   Log.d("FB","access token got.");
+                  
                   //send request and call graph api
                   GraphRequest request = GraphRequest.newMeRequest(accessToken, 
                           new GraphRequest.GraphJSONObjectCallback() {
@@ -518,20 +519,25 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
    							@Override
    							public void onCompleted(JSONObject object, GraphResponse response) {
    								// TODO Auto-generated method stub
+   								
+   								//authhttpclient.Auth_QuickAccount();
    								//讀出姓名 ID FB個人頁面連結
    	                            Log.d("FB","complete");
-   	                            Log.d("FB",object.optString("name"));
-   	                            Log.d("FB",object.optString("link"));
-   	                            Log.d("FB",object.optString("id"));
-   	                            Log.d("FB",object.optString("email"));
+   	                            fbName = object.optString("name");
+   	                            fbId = object.optString("id");
+   	                            fbEmail = object.optString("email");
+   	                            Log.d("FB",fbName);
+   	                            Log.d("FB",fbId);
+   	                            Log.d("FB",fbEmail);
+   	                            
    	                            //Log.d("FB",object.optString("user_friends"));
-   	                            authhttpclient.Auth_FacebookLoignRegister(object.optString("id"), 
-   	                            										  object.optString("name"),
-   	                            										  object.optString("email"));
+   	                            authhttpclient.Auth_FacebookLoignRegister(fbId, fbName, fbEmail, 
+   	                            							belugaAccForFb, belugaPwdForFb);
+   	                             
    							}
    							
    							
-                          });
+                     });
                   //包入你想要得到的資料 送出request
                   Bundle parameters = new Bundle();
                   parameters.putString("fields", "id,name,link,email");
@@ -554,6 +560,33 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
    		}
    		
           });
+   	}
+   	
+   	private void requestQuickAccountPassword(){
+
+        authhttpclient = new AuthHttpClient(this);
+
+        authhttpclient.AuthEventListener(new OnAuthEventListener() {
+            public void onProcessDoneEvent(int Code, String Message, Long uid, String Account, String Pwd) {
+                String CodeStr = UsedString.getFastRegistrationGenerateString(getApplicationContext(), Code);
+                if (CodeStr.compareTo("") == 0 && Code != 1) {
+                    //Looper.prepare();
+                    Toast.makeText(AuthClientActivity.this, Message, Toast.LENGTH_SHORT).show();
+                    //Looper.loop();
+                } else if (Code == 1) {
+                    Log.i("AuthClientActivity","got Account value is:"+Account);
+                    //inputaccount.setText(Account);
+                    belugaAccForFb = Account;
+                    Log.i("AuthClientActivity", "got password value is:" + Pwd);
+                    //inputpassword.setText(Pwd);
+                    belugaPwdForFb = Pwd;
+                } else {
+                    Toast.makeText(AuthClientActivity.this, CodeStr, Toast.LENGTH_LONG).show();
+                }
+                System.out.println("Code " + Code + "  message   " + Message + "  uid " + uid + "  Account " + Account + " pwd  " + Pwd);
+            }
+
+        });
    	}
    	/* Developer by Leo Ling   Facebook login end */
 

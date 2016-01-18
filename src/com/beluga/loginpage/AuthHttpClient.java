@@ -368,7 +368,8 @@ public class AuthHttpClient {
     }
 
     //Facebook login and Register
-    public void Auth_FacebookLoignRegister(String FacebookID, String fbName, String fbEmail){
+    public void Auth_FacebookLoignRegister(String FacebookID, String fbName, String fbEmail, 
+    		String UserID, String UserPassword){
         //final String UrlAction = "FacebookMemberLoginRegister";
         final String UrlAction = "http://belugame.com/api/fblogin.asp";
 			/*
@@ -384,8 +385,8 @@ public class AuthHttpClient {
         params.add(new BasicNameValuePair("fbid", FacebookID));
         params.add(new BasicNameValuePair("fbname", fbName));
         params.add(new BasicNameValuePair("fbemail", fbEmail));
-        //params.add(new BasicNameValuePair("pwd", UserPassword));
-        //params.add(new BasicNameValuePair("devid", devid));
+        params.add(new BasicNameValuePair("userid", UserID));
+        params.add(new BasicNameValuePair("userpwd", UserPassword));
         //params.add(new BasicNameValuePair("sign", sign));
         Runnable runnable = new Runnable() {
             @Override

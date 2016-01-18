@@ -47,17 +47,14 @@ public class Fastregistration extends Activity implements OnClickListener{
         checkBox.setText(Html.fromHtml(source));
         checkBox.setOnClickListener(this);
         CreateHttpClient();
-        //�喲�鞈��訕ERVER 撣唾�/撖Ⅳ
         authhttpclient.Auth_QuickAccount();
     }
 
     private void CreateHttpClient(){
 
-        //撱箇���鈭辣
-        //蝬脰楝��_�芸歇撖怎�憿 __����   "�暺��������
+      
         authhttpclient = new AuthHttpClient(this);
-        //�交�啁雯頝臬�靘��� ----- "���鈭辣�曄��唳"
-        //�嗆�銝���  ��啣�   "SERVER�喳�鞈�����啣�---------"
+      
         authhttpclient.AuthEventListener(new OnAuthEventListener() {
             public void onProcessDoneEvent(int Code, String Message, Long uid, String Account, String Pwd) {
                 String CodeStr = UsedString.getFastRegistrationGenerateString(getApplicationContext(), Code);
@@ -89,11 +86,9 @@ public class Fastregistration extends Activity implements OnClickListener{
 
     private void CreateHttpClientConfirm()
     {
-        //撱箇���鈭辣
-        //蝬脰楝��_�芸歇撖怎�憿 __����   "�暺��������
+      
         authhttpclient_confirm = new AuthHttpClient(this);
-        //�交�啁雯頝臬�靘��� ----- "���鈭辣�曄��唳"
-        //�嗆�銝���  ��啣�   "SERVER�喳�鞈�����啣�---------"
+      
         authhttpclient_confirm.AuthEventListener(new OnAuthEventListener() {
             public void onProcessDoneEvent(int Code, String Message, Long uid, String Account, String Pwd) {
                 String CodeStr = UsedString.getFastRegistrationGenerateString(getApplicationContext(), Code);
@@ -103,7 +98,6 @@ public class Fastregistration extends Activity implements OnClickListener{
                     //Looper.loop();
                 } else if (Code == 1) {
                     Toast.makeText(Fastregistration.this, CodeStr, Toast.LENGTH_LONG).show();
-                    //�� 撠勗�撣�撖�韏瑚�
                     Saveaccountandpassword.saveUserUid(Long.toString(uid), Fastregistration.this);
                     SetFinish(inputaccount.getText().toString(), inputpassword.getText().toString());
                 } else {
