@@ -30,8 +30,12 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
+
+import java.net.URLConnection;
 import java.security.MessageDigest;
+import 	java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.net.ssl.HostnameVerifier;
@@ -368,39 +372,41 @@ public class AuthHttpClient {
     }
 
     //Facebook login and Register
-    public void Auth_FacebookLoignRegister(String FacebookID, String fbName, String fbEmail, 
-    		String UserID, String UserPassword){
+    public void Auth_FacebookLoignRegister(String fbID){
         //final String UrlAction = "FacebookMemberLoginRegister";
-        final String UrlAction = "http://belugame.com/api/fblogin.asp";
-			/*
-			 * appid userid pwd devid sign
-			 */
-
-        // apikey+appid+userid+pwd+apikey
-        //String sign = MD5(ApiKey + AppID + FacebookID + UserPassword + ApiKey);
-        Log.d("FBinAuth", FacebookID);
-
+        //final String UrlAction = "http://belugame.com/api/fblogin.asp";
+    	String UrlAction = "http://belugame.com/api/facebook/";
+    	
+    	
+    	Long tsLong = System.currentTimeMillis()/1000;
+    	String ts = tsLong.toString();
+        Log.i("fb timestamp", "ts " + ts);
+        String sign = MD5(AppID + fbID + ApiKey + ts);
+        UrlAction = UrlAction+"?"+AppID+"-"+fbID+"-"+ApiKey+"-"+ts+"-"+sign;
+        Log.d("Url", "url:"+ UrlAction);
+        
+        
+        
+        /*
         final List<NameValuePair> params = new ArrayList<NameValuePair>();
-        //params.add(new BasicNameValuePair("appid", AppID));
-        params.add(new BasicNameValuePair("fbid", FacebookID));
-        params.add(new BasicNameValuePair("fbname", fbName));
-        params.add(new BasicNameValuePair("fbemail", fbEmail));
-        params.add(new BasicNameValuePair("userid", UserID));
-        params.add(new BasicNameValuePair("userpwd", UserPassword));
-        //params.add(new BasicNameValuePair("sign", sign));
+        params.add(new BasicNameValuePair("appid", AppID));
+        params.add(new BasicNameValuePair("fbid", fbID));
+        params.add(new BasicNameValuePair("apikey", ApiKey));
+        params.add(new BasicNameValuePair("ts", ts));
+        params.add(new BasicNameValuePair("sign", sign));
+        
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                // �SER 憛怠�董��撖Ⅳ鞈��喳�喟雯頝臭�
-                // ����餃��
+          
                 Log.d("FBinAuth", ApiUrl + UrlAction);
                 httpPOST(AuthCommandType.FacebookLoginRegister, UrlAction, params);
             }
         };
         new Thread(runnable).start();
+        */
     }
 
-    // 敹恍�閮餃�
     public void Auth_QuickAccount() {
 
         if (!isApiInfoExists()) {

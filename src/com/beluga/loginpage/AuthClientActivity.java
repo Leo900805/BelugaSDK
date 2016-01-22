@@ -76,8 +76,6 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
     CallbackManager callbackManager;
     private AccessToken accessToken;
     boolean pressFbButton = false;
-    private String belugaAccForFb;
-    private String belugaPwdForFb;
     private String fbId;
     private String fbName;
     private String fbEmail;
@@ -238,7 +236,6 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
                         Toast.makeText(AuthClientActivity.this, CodeStr, Toast.LENGTH_LONG).show();
                         SaveAccountPassword(inputaccount.getText().toString(), inputpassword.getText().toString());
                         Saveaccountandpassword.saveUserUid(Long.toString(uid), AuthClientActivity.this);
-                        //Log.i("FB acc and pwd", "fb acc:"+ Account +"fb pwd:"+ token);
                         SetFinish(inputaccount.getText().toString(), uid.toString(), token, inputpassword.getText().toString());
                     } else {
                         Toast.makeText(AuthClientActivity.this, CodeStr, Toast.LENGTH_LONG).show();
@@ -485,15 +482,7 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
             startActivityForResult(Registrationintent, 1);
         }else if (i == R.id.fblogin_button){
         	
-        	if(this.pressFbButton == false){
-        		requestQuickAccountPassword();
-                authhttpclient.Auth_QuickAccount();
-                Log.i("Login button stutus", "Login");
-        		this.pressFbButton = true;
-        	}else{
-    			
-        	}
-        	
+        	this.pressFbButton = true;
         	getFBInfo(fbLoginButton);
         }
     }
@@ -531,8 +520,7 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
    	                            Log.d("FB",fbEmail);
    	                            
    	                            //Log.d("FB",object.optString("user_friends"));
-   	                            authhttpclient.Auth_FacebookLoignRegister(fbId, fbName, fbEmail, 
-   	                            							belugaAccForFb, belugaPwdForFb);
+   	                            authhttpclient.Auth_FacebookLoignRegister(fbId);
    	                             
    							}
    							
@@ -560,33 +548,6 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
    		}
    		
           });
-   	}
-   	
-   	private void requestQuickAccountPassword(){
-
-        authhttpclient = new AuthHttpClient(this);
-
-        authhttpclient.AuthEventListener(new OnAuthEventListener() {
-            public void onProcessDoneEvent(int Code, String Message, Long uid, String Account, String Pwd) {
-                String CodeStr = UsedString.getFastRegistrationGenerateString(getApplicationContext(), Code);
-                if (CodeStr.compareTo("") == 0 && Code != 1) {
-                    //Looper.prepare();
-                    Toast.makeText(AuthClientActivity.this, Message, Toast.LENGTH_SHORT).show();
-                    //Looper.loop();
-                } else if (Code == 1) {
-                    Log.i("AuthClientActivity","got Account value is:"+Account);
-                    //inputaccount.setText(Account);
-                    belugaAccForFb = Account;
-                    Log.i("AuthClientActivity", "got password value is:" + Pwd);
-                    //inputpassword.setText(Pwd);
-                    belugaPwdForFb = Pwd;
-                } else {
-                    Toast.makeText(AuthClientActivity.this, CodeStr, Toast.LENGTH_LONG).show();
-                }
-                System.out.println("Code " + Code + "  message   " + Message + "  uid " + uid + "  Account " + Account + " pwd  " + Pwd);
-            }
-
-        });
    	}
    	/* Developer by Leo Ling   Facebook login end */
 
