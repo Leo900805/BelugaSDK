@@ -18,7 +18,9 @@ import com.beluga.R;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
@@ -31,6 +33,7 @@ import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 
+import java.io.InputStream;
 import java.net.URLConnection;
 import java.security.MessageDigest;
 import 	java.sql.Timestamp;
@@ -129,8 +132,7 @@ public class AuthHttpClient {
     }
 
     // HttpPost撖阡��寞�
-    private void httpPOST(AuthCommandType t, String url,
-                          List<NameValuePair> list) {
+    private void httpPOST(AuthCommandType t, String url, List<NameValuePair> list) {
         MainActivity.runOnUiThread(new Runnable() {
 
             @Override
@@ -191,6 +193,30 @@ public class AuthHttpClient {
         } catch (Exception e) {
             e.printStackTrace();
             OnAuthEvent(-100, "HttpPostError", -1, "", "");
+        }
+    }
+    private void httpGET(AuthCommandType t, String url){
+        try {
+        	 
+            // create HttpClient
+            HttpClient httpclient = new DefaultHttpClient();
+
+            // make GET request to the given URL
+            HttpResponse httpResponse = httpclient.execute(new HttpGet(url));
+
+            // receive response as inputStream
+            //inputStream = httpResponse.getEntity().getContent();
+            String strResult = EntityUtils.toString(httpResponse.getEntity());
+            Log.d("httpGet", "Result:"+strResult);
+            
+            Message msg = new Message();
+            Bundle data = new Bundle();
+            data.putString("AuthValue", strResult);
+            data.putInt("AuthType", t.getIntValue());
+            msg.setData(data);
+            HttpPostHandler.sendMessage(msg);
+        } catch (Exception e) {
+            Log.d("InputStream", e.getLocalizedMessage());
         }
     }
 
@@ -373,38 +399,20 @@ public class AuthHttpClient {
 
     //Facebook login and Register
     public void Auth_FacebookLoignRegister(String fbID){
-        //final String UrlAction = "FacebookMemberLoginRegister";
-        //final String UrlAction = "http://belugame.com/api/fblogin.asp";
-    	String UrlAction = "http://belugame.com/api/facebook/";
-    	
-    	
+        
     	Long tsLong = System.currentTimeMillis()/1000;
     	String ts = tsLong.toString();
         Log.i("fb timestamp", "ts " + ts);
         String sign = MD5(AppID + fbID + ApiKey + ts);
-        UrlAction = UrlAction+"?"+AppID+"-"+fbID+"-"+ApiKey+"-"+ts+"-"+sign;
-        Log.d("Url", "url:"+ UrlAction);
-        
-        
-        
-        /*
-        final List<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("appid", AppID));
-        params.add(new BasicNameValuePair("fbid", fbID));
-        params.add(new BasicNameValuePair("apikey", ApiKey));
-        params.add(new BasicNameValuePair("ts", ts));
-        params.add(new BasicNameValuePair("sign", sign));
-        
+        final String UrlAction = "http://belugame.com/api/facebook/"+"?"+AppID+"-"+fbID+"-"+ApiKey+"-"+ts+"-"+sign+".html";
+
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-          
-                Log.d("FBinAuth", ApiUrl + UrlAction);
-                httpPOST(AuthCommandType.FacebookLoginRegister, UrlAction, params);
+                httpGET(AuthCommandType.FacebookLoginRegister, UrlAction);
             }
         };
         new Thread(runnable).start();
-        */
     }
 
     public void Auth_QuickAccount() {
@@ -619,7 +627,9 @@ public class AuthHttpClient {
                 AuthBackDataProc_ChangePassword(Data);
                 break;
             case FacebookLoginRegister:
+            	Log.d("AuthBackDataProcess","Case FacebookLoginRegister start");
                 AuthBackDataProc_FacebookLoginRegister(Data);
+                Log.d("AuthBackDataProcess","Case FacebookLoginRegister end");
                 break;
             default:
                 AuthBackDataProc_UnknowType();
@@ -651,8 +661,7 @@ public class AuthHttpClient {
             String uid = jObj.getString("useruid");
             String userid = jObj.getString("userid");
             String userpwd = jObj.getString("upd");
-            OnAuthEvent(Integer.parseInt(code), msg, Long.parseLong(uid),
-                    userid, userpwd);
+            OnAuthEvent(Integer.parseInt(code), msg, Long.parseLong(uid), userid, userpwd);
         } catch (Exception e) {
             //OnAuthEvent(-102, "DataParseError", -1, "", "");
             OnAuthEvent(-102,  MainActivity.getString(R.string.Data_Parse_Error_Type), -1, "", "");
@@ -687,19 +696,30 @@ public class AuthHttpClient {
     }
 
     private void AuthBackDataProc_FacebookLoginRegister(String Data) {
+    	Log.i("AuthBackDataProc_FacebookLoginRegister", "Start...");
         try {
+        	/* check JSON
+        	 * fisrt time {"uid":1030068, "fbid":936544699763939, "QuickReg":"BAFQJ044", "Quickpw":"B722541", "code":1, "message":"Succeed!"} 
+        	 * second time */
             JSONObject jObj = new JSONObject(Data);
-            String code = jObj.getString("Code");
-            String msg = jObj.getString("Message");
-            OnAuthEvent(Integer.parseInt(code), msg, 0, "", "");
+            String code = jObj.getString("code");
+            String msg = jObj.getString("message");
+            String uid = jObj.getString("uid");
+            String userid = jObj.getString("QuickReg");
+            String userpwd = jObj.getString("Quickpw");
+            String fbId = jObj.getString("fbid");
+            OnAuthEvent(Integer.parseInt(code), msg, Long.parseLong(uid), userid, userpwd);
         } catch (Exception e) {
             //OnAuthEvent(-102, "DataParseError", -1, "", "");
+        	Log.i("AuthBackDataProc_FacebookLoginRegister", "Data_Parse_Error_Type");
             OnAuthEvent(-102,  MainActivity.getString(R.string.Data_Parse_Error_Type), -1, "", "");
         }
+        Log.i("AuthBackDataProc_FacebookLoginRegister", "end...");
     }
 
     private void AuthBackDataProc_UnknowType() {
         //OnAuthEvent(-102, "DataParseError", -1, "", "");
+    	Log.i("AuthBackDataProc_UnknowType", "Unknow");
         OnAuthEvent(-102,  MainActivity.getString(R.string.Data_Parse_Error_Type), -1, "", "");
     }
 
