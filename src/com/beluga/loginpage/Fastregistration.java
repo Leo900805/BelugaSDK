@@ -75,6 +75,13 @@ public class Fastregistration extends Activity implements OnClickListener{
                 System.out.println("Code " + Code + "  message   " + Message + "  uid " + uid + "  Account " + Account + " pwd  " + Pwd);
             }
 
+			@Override
+			public void onProcessDoneEvent(int Code, String Message, Long uid, String Account, String Pwd,
+					String accountBound) {
+				// TODO Auto-generated method stub
+				
+			}
+
         });
     }
 
@@ -104,6 +111,13 @@ public class Fastregistration extends Activity implements OnClickListener{
                     Toast.makeText(Fastregistration.this, CodeStr, Toast.LENGTH_LONG).show();
                 }
             }
+
+			@Override
+			public void onProcessDoneEvent(int Code, String Message, Long uid, String Account, String Pwd,
+					String accountBound) {
+				// TODO Auto-generated method stub
+				
+			}
         });
     }
 

@@ -112,6 +112,13 @@ public class Registration extends Activity implements OnClickListener {
                     Toast.makeText(Registration.this, CodeStr, Toast.LENGTH_LONG).show();
                 }
             }
+
+			@Override
+			public void onProcessDoneEvent(int Code, String Message, Long uid, String Account, String Pwd,
+					String accountBound) {
+				// TODO Auto-generated method stub
+				
+			}
         });
     }
 

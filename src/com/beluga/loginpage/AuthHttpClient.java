@@ -89,6 +89,7 @@ public class AuthHttpClient {
     // 鈭辣Listener摰��
     public interface OnAuthEventListener {
         public void onProcessDoneEvent(int Code, String Message, Long uid, String Account, String Pwd);
+        public void onProcessDoneEvent(int Code, String Message, Long uid, String Account, String Pwd, String accountBound);
     }
 
     // 閫貊鈭辣�
@@ -96,6 +97,13 @@ public class AuthHttpClient {
         //
         if (AuthEventListener != null) {
             AuthEventListener.onProcessDoneEvent(Code, Message, i, Account, Pwd);
+        }
+    }
+    
+    private void OnAuthEvent(int Code, String Message, long i, String Account,String Pwd, String accountBound) {
+        //
+        if (AuthEventListener != null) {
+            AuthEventListener.onProcessDoneEvent(Code, Message, i, Account, Pwd, accountBound);
         }
     }
 
@@ -205,7 +213,6 @@ public class AuthHttpClient {
             HttpResponse httpResponse = httpclient.execute(new HttpGet(url));
 
             // receive response as inputStream
-            //inputStream = httpResponse.getEntity().getContent();
             String strResult = EntityUtils.toString(httpResponse.getEntity());
             Log.d("httpGet", "Result:"+strResult);
             
@@ -524,8 +531,7 @@ public class AuthHttpClient {
             @Override
             public void run() {
                 // �SER �喳���蝬脰楝銝�
-                httpPOST(AuthCommandType.RegisterAccount, ApiUrl + UrlAction,
-                        params);
+                httpPOST(AuthCommandType.RegisterAccount, ApiUrl + UrlAction, params);
             }
         };
         new Thread(runnable).start();
@@ -674,8 +680,7 @@ public class AuthHttpClient {
             String code = jObj.getString("Code");
             String msg = jObj.getString("Message");
             String uid = jObj.getString("uid");
-            OnAuthEvent(Integer.parseInt(code), msg, Long.parseLong(uid), "",
-                    "");
+            OnAuthEvent(Integer.parseInt(code), msg, Long.parseLong(uid), "", "");
 
         } catch (Exception e) {
             //OnAuthEvent(-102, "DataParseError", -1, "", "");
@@ -698,9 +703,6 @@ public class AuthHttpClient {
     private void AuthBackDataProc_FacebookLoginRegister(String Data) {
     	Log.i("AuthBackDataProc_FacebookLoginRegister", "Start...");
         try {
-        	/* check JSON
-        	 * fisrt time {"uid":1030068, "fbid":936544699763939, "QuickReg":"BAFQJ044", "Quickpw":"B722541", "code":1, "message":"Succeed!"} 
-        	 * second time */
             JSONObject jObj = new JSONObject(Data);
             String code = jObj.getString("code");
             String msg = jObj.getString("message");
@@ -708,11 +710,11 @@ public class AuthHttpClient {
             String userid = jObj.getString("QuickReg");
             String userpwd = jObj.getString("Quickpw");
             String fbId = jObj.getString("fbid");
-            OnAuthEvent(Integer.parseInt(code), msg, Long.parseLong(uid), userid, userpwd);
+            OnAuthEvent(Integer.parseInt(code), msg, Long.parseLong(uid), userid, userpwd, fbId);
         } catch (Exception e) {
             //OnAuthEvent(-102, "DataParseError", -1, "", "");
         	Log.i("AuthBackDataProc_FacebookLoginRegister", "Data_Parse_Error_Type");
-            OnAuthEvent(-102,  MainActivity.getString(R.string.Data_Parse_Error_Type), -1, "", "");
+            OnAuthEvent(-102,  MainActivity.getString(R.string.Data_Parse_Error_Type), -1, "", "", "");
         }
         Log.i("AuthBackDataProc_FacebookLoginRegister", "end...");
     }

@@ -241,6 +241,28 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
                         Toast.makeText(AuthClientActivity.this, CodeStr, Toast.LENGTH_LONG).show();
                     }
                 }
+
+				@Override
+				public void onProcessDoneEvent(int Code, String Message, Long uid, String Account, String Pwd,
+						String accountBound) {
+					// TODO Auto-generated method stub
+					//ok=false;
+                    String CodeStr = UsedString.getLoginstring(getApplicationContext(), Code);
+                    if (CodeStr.compareTo("") == 0) {
+                        //Looper.prepare();
+                        Toast.makeText(AuthClientActivity.this, Message, Toast.LENGTH_SHORT).show();
+                        //Looper.loop();
+                    } else if (Code == 1) {
+                    	Log.i("info", "Uid:"+ uid +", Account:"+ Account);
+                        Toast.makeText(AuthClientActivity.this, CodeStr, Toast.LENGTH_LONG).show();
+                        SaveAccountPassword(Account, Pwd);
+                        Saveaccountandpassword.saveUserUid(Long.toString(uid), AuthClientActivity.this);
+                        SetFinish(Account, uid.toString(), accountBound, Pwd);
+                    } else {
+                        Toast.makeText(AuthClientActivity.this, CodeStr, Toast.LENGTH_LONG).show();
+                    }
+					
+				}
             });
     }
     //按下登入鈕呼叫的地方
@@ -390,6 +412,7 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
         bundle.putString("userid", thisuserid);
         bundle.putString("uid", thisuid);
         bundle.putString("pwd", thispwd);
+        bundle.putString("token", token);
         resultdata.putExtras(bundle);
         setResult(Activity.RESULT_OK, resultdata); //回傳RESULT_OK
 
@@ -407,8 +430,9 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Bundle bundle = data.getExtras();
         /* Developer by Leo Ling   Facebook login */
-    	
+        
     		if(this.pressFbButton == true){
     			this.pressFbButton = false;
     			callbackManager.onActivityResult(requestCode, resultCode, data);
@@ -419,7 +443,6 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
         if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
             try
             {	//將Activity的資料收集傳送到第二個Activity
-                Bundle bundle = data.getExtras();
                 int ResultType = bundle.getInt("ResultType");
                 if(ResultType == 1)
                 {
@@ -446,13 +469,10 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
                     return;
                 }
                 SetAccountTextFromSave();
-            }
-            catch(Exception ex){
+            } catch(Exception ex) {
                 ex.printStackTrace();
             }
-        }
-        else
-        {
+        } else {
             SetAccountTextFromSave();
             //callbackManager.onActivityResult(requestCode, resultCode, data);
         }
@@ -518,13 +538,9 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
    	                            Log.d("FB",fbName);
    	                            Log.d("FB",fbId);
    	                            Log.d("FB",fbEmail);
-   	                            
    	                            //Log.d("FB",object.optString("user_friends"));
-   	                            authhttpclient.Auth_FacebookLoignRegister(fbId);
-   	                             
+   	                            authhttpclient.Auth_FacebookLoignRegister(fbId);        
    							}
-   							
-   							
                      });
                   //包入你想要得到的資料 送出request
                   Bundle parameters = new Bundle();
