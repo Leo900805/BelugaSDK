@@ -45,10 +45,6 @@ public class UnityActivity extends UnityPlayerActivity{
                 uid = bundle.getString("uid");
                 String useruid = bundle.getString("userid");
                 String userpwd = bundle.getString("pwd");
-                //String fbtoken = bundle.getString("fbtoken");
-                //TextView v = (TextView)this.findViewById(R.id.tv1);
-                //v.setText("Login User UID:"+uid +"\nuseruid: "+useruid+"\nfbtoken: "+fbtoken);
-                //v.setText("Login User UID:"+uid +"\nuseruid: "+useruid+"\npwd:"+userpwd);
                 Log.i("AuthClient", "UID:" + uid + "\nuseruid: " + useruid + "\n");
                 UnityPlayer.UnitySendMessage("Main Camera","messgae"
                 		,"Login User UID:"+uid +"\nuseruid: "+useruid+"\npwd:"+userpwd);
