@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
@@ -83,8 +82,7 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
     private String fbEmail;
     
     
-    SharedPreferences settings = getSharedPreferences("setting", 0);
-    SharedPreferences.Editor editor = settings.edit();
+    
     
     @Override
     protected void onResume() {
@@ -169,9 +167,6 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
         	Log.i("Check fb login status", "already logged in");
         	LoginManager.getInstance().logOut();
         	//this.loginFB(fbLoginButton);
-        	fbId = settings.getString("fbId", "");
-        	Log.i("Check fb login status", "got fb id on settings"+ settings.getString("fbId", "") );
-        	authhttpclient.Auth_FacebookLoignRegister(fbId);
         	Log.i("Check fb login status", "check end");
         }
         
@@ -537,7 +532,6 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
               @Override
               public void onSuccess(LoginResult loginResult) {
                   //accessToken之後或許還會用到 先存起來
-            	  
                   accessToken = loginResult.getAccessToken();
                   Log.d("FB","access token got.");
                   
@@ -551,7 +545,6 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
    								//讀出姓名 ID FB個人頁面連結
    	                            Log.d("FB","complete");
    	                            fbId = object.optString("id");
-   	                            editor.putString("fbId", fbId);
    	                            Log.d("FB",fbId);
    	                            authhttpclient.Auth_FacebookLoignRegister(fbId);        
    							}
@@ -581,5 +574,4 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
           });
    	}
    	/* Developer by Leo Ling   Facebook login end */
-
 }
