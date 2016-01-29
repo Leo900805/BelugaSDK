@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
@@ -31,6 +32,7 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.applinks.AppLinkData;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
@@ -80,6 +82,9 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
     private String fbName;
     private String fbEmail;
     
+    
+    SharedPreferences settings = getSharedPreferences("setting", 0);
+    SharedPreferences.Editor editor = settings.edit();
     
     @Override
     protected void onResume() {
@@ -157,6 +162,20 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
             CreateHttpClient(); //設定http連接物件
             SetDefaultText(); //設定text box預設值
         }
+        
+        if (AccessToken.getCurrentAccessToken() == null) {
+        	Log.i("Check fb login status", "already logged out");
+        }else{
+        	Log.i("Check fb login status", "already logged in");
+        	LoginManager.getInstance().logOut();
+        	//this.loginFB(fbLoginButton);
+        	fbId = settings.getString("fbId", "");
+        	Log.i("Check fb login status", "got fb id on settings"+ settings.getString("fbId", "") );
+        	authhttpclient.Auth_FacebookLoignRegister(fbId);
+        	Log.i("Check fb login status", "check end");
+        }
+        
+        
         
     }
     private void showDialog(){
@@ -503,12 +522,12 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
         }else if (i == R.id.fblogin_button){
         	
         	this.pressFbButton = true;
-        	getFBInfo(fbLoginButton);
+        	loginFB(fbLoginButton);
         }
     }
     
     /* Developer by Leo Ling   Facebook login */
-   	public void getFBInfo(LoginButton loginButton){
+   	public void loginFB(LoginButton loginButton){
    	//public void loginFB(Button loginButton){
    		 
    		 //宣告callback Manager
@@ -518,6 +537,7 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
               @Override
               public void onSuccess(LoginResult loginResult) {
                   //accessToken之後或許還會用到 先存起來
+            	  
                   accessToken = loginResult.getAccessToken();
                   Log.d("FB","access token got.");
                   
@@ -528,23 +548,18 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
    							@Override
    							public void onCompleted(JSONObject object, GraphResponse response) {
    								// TODO Auto-generated method stub
-   								
-   								//authhttpclient.Auth_QuickAccount();
    								//讀出姓名 ID FB個人頁面連結
    	                            Log.d("FB","complete");
-   	                            fbName = object.optString("name");
    	                            fbId = object.optString("id");
-   	                            fbEmail = object.optString("email");
-   	                            Log.d("FB",fbName);
+   	                            editor.putString("fbId", fbId);
    	                            Log.d("FB",fbId);
-   	                            Log.d("FB",fbEmail);
-   	                            //Log.d("FB",object.optString("user_friends"));
    	                            authhttpclient.Auth_FacebookLoignRegister(fbId);        
    							}
                      });
                   //包入你想要得到的資料 送出request
                   Bundle parameters = new Bundle();
-                  parameters.putString("fields", "id,name,link,email");
+                  //parameters.putString("fields", "id,name,link,email");
+                  parameters.putString("fields", "id");
                   request.setParameters(parameters);
                   request.executeAsync();
               }

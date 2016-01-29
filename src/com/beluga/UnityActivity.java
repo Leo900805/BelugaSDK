@@ -8,7 +8,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 
 public class UnityActivity extends UnityPlayerActivity{
@@ -26,7 +25,6 @@ public class UnityActivity extends UnityPlayerActivity{
     String apikey = "4fbc7b551f8ab63d4dadd8694ff261bf";
     String packageID = this.getClass().getPackage().getName();
     Intent intent; 
-    //MorphingButton btnMorph1;
     boolean inMaintain = false;
     String dialogTitle = "Warnings";// if inMaintain is false setDialog title null
     String dialogMessage = "server in maintain...";// if inMaintain is false setDialog message null
@@ -34,8 +32,6 @@ public class UnityActivity extends UnityPlayerActivity{
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        //this.isClicked = 0;
-        //onMorphButton1Clicked(btnMorph1);
 
         if (requestCode == 100 && resultCode == Activity.RESULT_OK) {
             try
