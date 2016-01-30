@@ -19,9 +19,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.beluga.belugakeys.Keys;
-import com.beluga.loginpage.AuthHttpClient.OnAuthEventListener;
 import com.beluga.loginpage.datacontrol.InformationProcess;
-//import com.beluga.loginpage.datacontrol.Saveaccountandpassword;
 import com.beluga.loginpage.datacontrol.UsedString;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -67,20 +65,18 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
     String saveacc = "";
     String savepwd = "";
 
-    //Server控制
+    //Server control correlation object declare
     AuthHttpClient authhttpclient;
     private final static String TAG = "AuthClient";
-    int mMorphCounter1 = 1;
     boolean inMaintain;
     String dialogTitle;
     String dialogMessage;
     
+    //Facebook correlation object declare
     CallbackManager callbackManager;
     private AccessToken accessToken;
     boolean pressFbButton = false;
     private String fbId;
-    private String fbName;
-    private String fbEmail;
     
     
     
@@ -124,12 +120,9 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
         this.quickSignUpBtn.setOnClickListener(this);
 
         this.signUpBtn = (Button)this.findViewById(R.id.sign_up_btn);
-        //this.signUpBtn = (MorphingButton)this.findViewById(R.id.sign_up_btn);
         Log.i("In login page", "SignUpBtn v is " + this.signUpBtn);
         this.signUpBtn.setOnClickListener(this);
 
-
-        //R.drawable.cbimage
         this.loginBtn = (Button)this.findViewById(R.id.login_btn);
         Log.i("In login page", "loginBtn v is " + this.loginBtn);
         this.loginBtn.setOnClickListener(this);
@@ -137,7 +130,6 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
         this.fbLoginButton = (LoginButton)this.findViewById(R.id.fblogin_button);
         Log.i("In login page", "fbloginBtn v is " + this.fbLoginButton);
         this.fbLoginButton.setOnClickListener(this);
-
 
         this.modPwdBtn = (Button)this.findViewById(R.id.modify_btn);
         Log.i("In login page", "modPwdBtn v is " + this.modPwdBtn);
@@ -203,8 +195,6 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
         dialogTitle = intent.getStringExtra(Keys.DialogTitle.toString());
         dialogMessage = intent.getStringExtra(Keys.DialogMessage.toString());
 
-
-
         if(AuthHttpClient.AppID == null || AuthHttpClient.ApiKey == null || AuthHttpClient.PackageID == null){
             Toast.makeText(this, "params error", Toast.LENGTH_LONG).show();
             Log.e(TAG,"appid is "+AuthHttpClient.AppID + " .");
@@ -223,8 +213,7 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
         }
     }
     
-    private void CreateHttpClient()
-    {
+    private void CreateHttpClient(){
         //建立監聽事件
         //網路處理_自已寫的類別 __手術用    "呼叫點 按下按鈕呼叫到"
         authhttpclient = new AuthHttpClient(this);
@@ -237,9 +226,7 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
                     //ok=false;
                     String CodeStr = UsedString.getLoginstring(getApplicationContext(), Code);
                     if (CodeStr.compareTo("") == 0) {
-                        //Looper.prepare();
                         Toast.makeText(AuthClientActivity.this, Message, Toast.LENGTH_SHORT).show();
-                        //Looper.loop();
                     } else if (Code == 1) {
                         Toast.makeText(AuthClientActivity.this, CodeStr, Toast.LENGTH_LONG).show();
                         SaveAccountPassword(inputaccount.getText().toString(), inputpassword.getText().toString());
@@ -257,9 +244,7 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
 					//ok=false;
                     String CodeStr = UsedString.getFacebookLoginstring(getApplicationContext(), Code);
                     if (CodeStr.compareTo("") == 0) {
-                        //Looper.prepare();
                         Toast.makeText(AuthClientActivity.this, Message, Toast.LENGTH_SHORT).show();
-                        //Looper.loop();
                     } else if (Code == 1) {
                     	Log.i("info", "Uid:"+ uid +", Account:"+ Account);
                         Toast.makeText(AuthClientActivity.this, CodeStr, Toast.LENGTH_LONG).show();
@@ -482,7 +467,6 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
         } else {
         	Log.i("Auth ", "else set SetAccountTextFromSave()");
             SetAccountTextFromSave();
-            //callbackManager.onActivityResult(requestCode, resultCode, data);
         }
         Log.i("Auth ", "end...");
     }
