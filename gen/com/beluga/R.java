@@ -351,6 +351,7 @@ containing a value of this type.
         public static int Enter_Ac_Type=0x7f040011;
         public static int Enter_New_Pwd_Type=0x7f040013;
         public static int Enter_Pwd_Type=0x7f040012;
+        public static int FB_Login_Success=0x7f040043;
         public static int I_Agree_and_Read_Type=0x7f040016;
         public static int Login_Button_Text=0x7f040037;
         public static int Login_Page_Passsword_Text=0x7f04003f;
@@ -382,8 +383,8 @@ containing a value of this type.
         public static int System_Err_Type=0x7f04001f;
         public static int Write_DB_failed_Type=0x7f040021;
         public static int Wrong_AppID_Type=0x7f040019;
-        public static int app_id=0x7f040044;
-        public static int app_name=0x7f040043;
+        public static int app_id=0x7f040045;
+        public static int app_name=0x7f040044;
         public static int com_facebook_image_download_unknown_error=0x7f04000e;
         public static int com_facebook_internet_permission_error_message=0x7f04000c;
         public static int com_facebook_internet_permission_error_title=0x7f04000b;
@@ -400,7 +401,7 @@ containing a value of this type.
         public static int com_facebook_send_button_text=0x7f040010;
         public static int com_facebook_share_button_text=0x7f04000f;
         public static int com_facebook_tooltip_default=0x7f04000d;
-        public static int content_description=0x7f040045;
+        public static int content_description=0x7f040046;
         public static int messenger_send_button_text=0x7f040000;
         public static int modify_Page_Title_Text=0x7f040040;
     }

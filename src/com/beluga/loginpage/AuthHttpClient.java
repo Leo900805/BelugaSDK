@@ -33,12 +33,8 @@ import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 
-import java.io.InputStream;
-import java.net.URLConnection;
 import java.security.MessageDigest;
-import 	java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.net.ssl.HostnameVerifier;

@@ -166,9 +166,8 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
         }else{
         	Log.i("Check fb login status", "already logged in");
         	//LoginManager.getInstance().logOut();
-        	//this.loginFB(fbLoginButton);
-        	authhttpclient.Auth_FacebookLoignRegister("936544699763939");
-        	Log.i("Check fb login status", "check end");
+        	fbId = InformationProcess.getThirdPartyInfo(this);
+        	authhttpclient.Auth_FacebookLoignRegister(fbId);
         }
         
         
@@ -242,10 +241,8 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
                         Toast.makeText(AuthClientActivity.this, Message, Toast.LENGTH_SHORT).show();
                         //Looper.loop();
                     } else if (Code == 1) {
-                        //onMorphButton1Clicked(loginBtn);
                         Toast.makeText(AuthClientActivity.this, CodeStr, Toast.LENGTH_LONG).show();
                         SaveAccountPassword(inputaccount.getText().toString(), inputpassword.getText().toString());
-                        //Saveaccountandpassword.saveUserUid(Long.toString(uid), AuthClientActivity.this);
                         InformationProcess.saveUserUid(Long.toString(uid), AuthClientActivity.this);
                         SetFinish(inputaccount.getText().toString(), uid.toString(), token, inputpassword.getText().toString());
                     } else {
@@ -258,7 +255,7 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
 						String accountBound) {
 					// TODO Auto-generated method stub
 					//ok=false;
-                    String CodeStr = UsedString.getLoginstring(getApplicationContext(), Code);
+                    String CodeStr = UsedString.getFacebookLoginstring(getApplicationContext(), Code);
                     if (CodeStr.compareTo("") == 0) {
                         //Looper.prepare();
                         Toast.makeText(AuthClientActivity.this, Message, Toast.LENGTH_SHORT).show();
@@ -266,7 +263,6 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
                     } else if (Code == 1) {
                     	Log.i("info", "Uid:"+ uid +", Account:"+ Account);
                         Toast.makeText(AuthClientActivity.this, CodeStr, Toast.LENGTH_LONG).show();
-                        SaveAccountPassword(Account, Pwd);
                         InformationProcess.saveUserUid(Long.toString(uid), AuthClientActivity.this);
                         SetFinish(Account, uid.toString(), accountBound, Pwd);
                     } else {
@@ -282,12 +278,6 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
         String accid = inputaccount.getText().toString();
         String accpwd = inputpassword.getText().toString();
     	/* Changed by Leo Ling */
-    	/*
-    	  if(accid.equals("請輸入帳號"))
-		{	Toast.makeText(AuthClientActivity.this, "請輸入您的帳號", Toast.LENGTH_LONG).show();return;}
-    	if(accpwd.equals("請輸入密碼"))
-		{	Toast.makeText(AuthClientActivity.this, "請輸入您的密碼", Toast.LENGTH_LONG).show();return;}
-    	 */
         if(accid.equals(this.getString(R.string.Enter_Ac_Type))){
             Toast.makeText(AuthClientActivity.this,
                     this.getString(R.string.Enter_Ac_Type),
@@ -374,8 +364,6 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
     }
 
     private void GetAccountAndPasswordFromData(){
-        //saveacc = Saveaccountandpassword.GetaccountString(this);
-        //savepwd = Saveaccountandpassword.GetpasswordString(this);
         saveacc = InformationProcess.getAccountString(this);
         savepwd = InformationProcess.getPasswordString(this);
     }
@@ -385,7 +373,6 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
     {
         if(accid.length() > 0 && accpwd.length() > 0)
         {
-            //Saveaccountandpassword.saveaccountpassword(accid, accpwd, this);
         	InformationProcess.saveAccountPassword(accid, accpwd, this);
         }
     }
@@ -443,8 +430,9 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    	Log.i("Auth ", "start...");
         super.onActivityResult(requestCode, resultCode, data);
-        Bundle bundle = data.getExtras();
+        
         /* Developer by Leo Ling   Facebook login */
         
     		if(this.pressFbButton == true){
@@ -455,11 +443,15 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
     	/* Developer by Leo Ling   Facebook login end */
 
         if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
+        	Log.i("Auth ", "requestCode == 1 && resultCode == Activity.RESULT_OK");
             try
-            {	//將Activity的資料收集傳送到第二個Activity
+            {	
+            	Bundle bundle = data.getExtras();
+            	//將Activity的資料收集傳送到第二個Activity
                 int ResultType = bundle.getInt("ResultType");
                 if(ResultType == 1)
                 {
+                	Log.i("Auth ", "ResultType == 1");
                     //do user login
                     String userid = bundle.getString("userid");
                     String userpwd = bundle.getString("userpwd");
@@ -473,6 +465,7 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
                 }
                 if(ResultType == 2){
                     //do user login
+                	Log.i("Auth ", "ResultType == 2");
                     String userid = bundle.getString("userid");
                     String userpwd = bundle.getString("userpwd");
                     EditText inputacc = (EditText)this.findViewById(R.id.loginAccEditText);
@@ -487,9 +480,11 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
                 ex.printStackTrace();
             }
         } else {
+        	Log.i("Auth ", "else set SetAccountTextFromSave()");
             SetAccountTextFromSave();
             //callbackManager.onActivityResult(requestCode, resultCode, data);
         }
+        Log.i("Auth ", "end...");
     }
 
     @Override

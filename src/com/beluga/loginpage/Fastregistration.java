@@ -135,7 +135,9 @@ public class Fastregistration extends Activity implements OnClickListener{
             AccountConfirm();
 
         } else if (i == R.id.qsreturnbtn) {
+        	Log.i("fastReg return", "finish() start");
             finish();
+            Log.i("fastReg return", "finish() end");
 
         } else if (i == R.id.qsmodbtn) {
             inputpassword.setEnabled(true);
@@ -147,9 +149,12 @@ public class Fastregistration extends Activity implements OnClickListener{
 
     private void SetFinish(String thisuserid,String thisuid)
     {
+    	Log.i("fastReg sset finish", "start...");
         Intent resultdata = new Intent();
         Bundle bundle = new Bundle();
         bundle.putInt("ResultType",1);
+        Log.i("fastReg sset finish", "userid："+ thisuserid);
+        Log.i("fastReg sset finish", "userpwd："+ thisuid);
         bundle.putString("userid", thisuserid);
         bundle.putString("userpwd", thisuid);
         resultdata.putExtras(bundle);
@@ -162,6 +167,7 @@ public class Fastregistration extends Activity implements OnClickListener{
             getParent().setResult(Activity.RESULT_OK, resultdata);
         }
         finish();
+        Log.i("fastReg sset finish", "end...");
     }
 
 }

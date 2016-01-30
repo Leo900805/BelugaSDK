@@ -226,6 +226,7 @@ int string Data_Parse_Error_Type 0x7f040036
 int string Enter_Ac_Type 0x7f040011
 int string Enter_New_Pwd_Type 0x7f040013
 int string Enter_Pwd_Type 0x7f040012
+int string FB_Login_Success 0x7f040043
 int string I_Agree_and_Read_Type 0x7f040016
 int string Login_Button_Text 0x7f040037
 int string Login_Page_Passsword_Text 0x7f04003f
@@ -257,8 +258,8 @@ int string Success_Register_Type 0x7f040027
 int string System_Err_Type 0x7f04001f
 int string Write_DB_failed_Type 0x7f040021
 int string Wrong_AppID_Type 0x7f040019
-int string app_id 0x7f040044
-int string app_name 0x7f040043
+int string app_id 0x7f040045
+int string app_name 0x7f040044
 int string com_facebook_image_download_unknown_error 0x7f04000e
 int string com_facebook_internet_permission_error_message 0x7f04000c
 int string com_facebook_internet_permission_error_title 0x7f04000b
@@ -275,7 +276,7 @@ int string com_facebook_loginview_logged_in_using_facebook 0x7f040007
 int string com_facebook_send_button_text 0x7f040010
 int string com_facebook_share_button_text 0x7f04000f
 int string com_facebook_tooltip_default 0x7f04000d
-int string content_description 0x7f040045
+int string content_description 0x7f040046
 int string messenger_send_button_text 0x7f040000
 int string modify_Page_Title_Text 0x7f040040
 int style AppBaseTheme 0x7f050015

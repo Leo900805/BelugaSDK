@@ -9,43 +9,33 @@ import com.beluga.R;
  * Created by deskuser on 2015/10/6.
  */
 public class UsedString {
-    /**
-     * �餃敺��閮
-     * */
+   
     public static String getLoginstring(Context context, int id){
         String LoginReturn = "";
         switch(id){
             case -1:
                 LoginReturn = context.getResources().getString(R.string.Wrong_AppID_Type);
-                //LoginReturn = "appid�航炊";
                 break;
             case -2:
                 LoginReturn = context.getResources().getString(R.string.Ac_Or_Pwd_Length_Err_Type);
-                //LoginReturn = "撣唾���蝣潮摨阡隤�;
                 break;
             case -4:
                 LoginReturn = context.getResources().getString(R.string.Ac_Or_Pwd_Err_Type);
-                //LoginReturn = "撣唾���蝣潮隤�;
                 break;
             case -10:
                 LoginReturn = context.getResources().getString(R.string.Ac_Has_Been_Baned_Type);
-                //LoginReturn = "撣唾�撌脰◤��(���閬�)";
                 break;
             case -11:
                 LoginReturn = context.getResources().getString(R.string.Ac_Has_Been_Disabled_Type);
-                //LoginReturn = "撣唾�撌脩��";
                 break;
             case 1:
-                //LoginReturn = "�餃��";
                 LoginReturn = context.getResources().getString(R.string.Success_Login_Type);
                 break;
             case -97:
                 LoginReturn = context.getResources().getString(R.string.Checksum_Err_Type);
-                //LoginReturn = "瑼Ｘ蝣潮隤�;
                 break;
             case -98:
                 LoginReturn = context.getResources().getString(R.string.System_Err_Type);
-                //LoginReturn = "蝟餌絞�航炊";
                 break;
             case -99:
                 LoginReturn = context.getResources().getString(R.string.Program_Err_Type);
@@ -54,9 +44,16 @@ public class UsedString {
         }
         return LoginReturn;
     }
-    /**
-     * ��敹恍�閮餃���撣喳�敺��唾���
-     * */
+    
+    public static String getFacebookLoginstring(Context context, int id){
+        String facebookLoginReturn = "";
+        switch(id){
+            case 1:
+            	facebookLoginReturn = context.getResources().getString(R.string.FB_Login_Success);
+              break;
+        }
+        return facebookLoginReturn;
+    }
     public static String getFastRegistrationGenerateString(Context context, int id){
         String FastRegisGenString = "";
         switch(id){
@@ -88,9 +85,6 @@ public class UsedString {
         }
         return FastRegisGenString;
     }
-    /**
-     * �脰�敹恍�閮餃�敺��唾���
-     * */
     public static String getFastRegistrationString(Context context, int id){
         String FastRegisString = "";
         switch(id){
@@ -122,9 +116,6 @@ public class UsedString {
         }
         return FastRegisString;
     }
-    /**
-     * �脰�閮餃�敺��唾���
-     * */
     public static String getRegisterString(Context context, int id){
         String RegisString = "";
         switch (id) {

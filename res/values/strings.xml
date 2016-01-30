@@ -53,5 +53,5 @@
     <string name="modify_Page_Title_Text">Modify Password Page</string>
     <string name="Signup_Page_Title_Text">Resgister Page</string>
     <string name="QS_Page_Title_Text">Quick Sign Up Page</string>
-
+    <string name="FB_Login_Success">Facebook binding login to complete</string>
 </resources>
