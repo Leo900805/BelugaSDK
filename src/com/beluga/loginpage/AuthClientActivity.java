@@ -143,7 +143,6 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
         Log.i("In login page", "modPwdBtn v is " + this.modPwdBtn);
         this.modPwdBtn.setOnClickListener(this);
 
-
         inputpassword = (EditText)this.findViewById(R.id.loginPwdEditText);
         inputaccount =  (EditText)this.findViewById(R.id.loginAccEditText);
         this.logoView = (ImageView)this.findViewById(R.id.advertView);
@@ -168,7 +167,6 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
         	Log.i("Check fb login status", "already logged in");
         	//LoginManager.getInstance().logOut();
         	//this.loginFB(fbLoginButton);
-        	
         	authhttpclient.Auth_FacebookLoignRegister("936544699763939");
         	Log.i("Check fb login status", "check end");
         }
