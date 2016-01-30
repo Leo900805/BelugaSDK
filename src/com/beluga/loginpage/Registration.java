@@ -14,7 +14,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.beluga.loginpage.AuthHttpClient.OnAuthEventListener;
-import com.beluga.loginpage.datacontrol.Saveaccountandpassword;
+import com.beluga.loginpage.datacontrol.InformationProcess;
 import com.beluga.loginpage.datacontrol.UsedString;
 import com.beluga.R;
 /**
@@ -102,9 +102,9 @@ public class Registration extends Activity implements OnClickListener {
                     Toast.makeText(Registration.this, Message, Toast.LENGTH_SHORT).show();
                     //Looper.loop();
                 }else if(Code == 1){
-                    Saveaccountandpassword.saveaccountpassword(inputaccount.getText()
+                    InformationProcess.saveAccountPassword(inputaccount.getText()
                             .toString(), inputpassword.getText().toString(), Registration.this);
-                    Saveaccountandpassword.saveUserUid(Long.toString(uid),
+                    InformationProcess.saveUserUid(Long.toString(uid),
                             Registration.this);
                     SetFinish(inputaccount.getText().toString(), inputpassword
                             .getText().toString());

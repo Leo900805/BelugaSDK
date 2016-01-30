@@ -1,8 +1,5 @@
 package com.beluga.loginpage.datacontrol;
 
-/**
- * Created by deskuser on 2015/10/6.
- */
 
 import android.app.Activity;
 import android.content.Context;
@@ -26,40 +23,54 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
-public class Saveaccountandpassword {
-    //撣唾�
-    private static final String  successaccount= "hsaccount";
-    //撖Ⅳ
-    private static final String  successpassword = "hspassword";
-    //Uid
-    private static final String successUid = "hsUserUid";
 
+public class InformationProcess {
+	
+    private static final String  successAccount= "belugaAccount";
+    
+    private static final String  successPassword = "belugaPassword";
+    
+    private static final String successUid = "belugaUserUid";
+    
+    private static final String thirdPartyInfo = "Third Party Info";
+    
     public static boolean ok;
+    
 
-
-    //摮�脖�摮葡
-    public static void saveaccountpassword(String account,String password,Activity act)
+    public static void saveAccountPassword(String account,String password,Activity act)
     {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(act);
         Editor editor = preferences.edit();
 
         //key,value
         try {
-            //摮鞈�
             String encacc = encrypt(account, "9@a8i7Az");
             String enpwd = encrypt(password, "9@a8i7Az");
-            editor.putString(successaccount,URLEncoder.encode(encacc, "utf-8"));
-            editor.putString(successpassword,URLEncoder.encode(enpwd, "utf-8"));
-            Settings.System.putString(act.getContentResolver(), successaccount, URLEncoder.encode(encacc, "utf-8"));
-            Settings.System.putString(act.getContentResolver(), successpassword, URLEncoder.encode(enpwd, "utf-8"));
+            editor.putString(successAccount,URLEncoder.encode(encacc, "utf-8"));
+            editor.putString(successPassword,URLEncoder.encode(enpwd, "utf-8"));
+            Settings.System.putString(act.getContentResolver(), successAccount, URLEncoder.encode(encacc, "utf-8"));
+            Settings.System.putString(act.getContentResolver(), successPassword, URLEncoder.encode(enpwd, "utf-8"));
 
         } catch (Exception e) {
         }
         editor.commit();
 
     }
-
-    // 摮id
+    
+    public static void saveThirdPartyInfo(String info, Activity act){
+    	
+    	SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(act);
+        Editor editor = preferences.edit();
+        
+        try {
+            String data = encrypt(info, "9@a8i7Az");
+            editor.putString(thirdPartyInfo, URLEncoder.encode(data, "utf-8"));
+            Settings.System.putString(act.getContentResolver(), thirdPartyInfo, URLEncoder.encode(data, "utf-8"));
+        } catch (Exception e) {
+        }
+        editor.commit();
+    }
+ 
     public static void saveUserUid(String uid, Activity act) {
         if (uid.equalsIgnoreCase("") || uid.equalsIgnoreCase("0") || uid == null ) {
             return;
@@ -79,18 +90,15 @@ public class Saveaccountandpassword {
             e.printStackTrace();
         }
     }
-
-    //�撣唾�
-    public static String GetaccountString(Activity act)
+    public static String getAccountString(Activity act)
     {
-        //��鞈�
         String getaccountString ;
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(act);
-        getaccountString = preferences.getString(successaccount, "");//settings.getInt(�����key,憒����啣����潸�蝯虫�暻潮�閮剖�)
+        getaccountString = preferences.getString(successAccount, "");
 
         try {
             if(getaccountString.compareTo("")==0){
-                getaccountString = Settings.System.getString(act.getContentResolver(), successaccount);
+                getaccountString = Settings.System.getString(act.getContentResolver(), successAccount);
             }
             if(getaccountString == null){
                 getaccountString = "";
@@ -103,17 +111,37 @@ public class Saveaccountandpassword {
         }
         return "";
     }
-
-    //�撖Ⅳ
-    public static String GetpasswordString(Activity act)
+    
+    public static String getThirdPartyInfo(Activity act)
     {
-        //��鞈�
+        String getThirdPartyInfo ;
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(act);
+        getThirdPartyInfo = preferences.getString(thirdPartyInfo, "");
+
+        try {
+            if(getThirdPartyInfo.compareTo("")==0){
+            	getThirdPartyInfo = Settings.System.getString(act.getContentResolver(), thirdPartyInfo);
+            }
+            if(getThirdPartyInfo == null){
+            	getThirdPartyInfo = "";
+            }
+            getThirdPartyInfo = URLDecoder.decode(getThirdPartyInfo, "utf-8");
+            String decThirdPartyInfo = decrypt(getThirdPartyInfo, "9@a8i7Az");
+            return decThirdPartyInfo;
+        } catch (Exception e) {
+
+        }
+        return "";
+    }
+
+    public static String getPasswordString(Activity act)
+    {
         String getpasswordString ;
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(act);
-        getpasswordString = preferences.getString(successpassword, "");//settings.getInt(�����key,憒����啣����潸�蝯虫�暻潮�閮剖�)
+        getpasswordString = preferences.getString(successPassword, "");
         try {
             if(getpasswordString.compareTo("")==0){
-                getpasswordString = Settings.System.getString(act.getContentResolver(), successpassword);
+                getpasswordString = Settings.System.getString(act.getContentResolver(), successPassword);
             }
             if(getpasswordString == null){
                 getpasswordString = "";
@@ -126,7 +154,6 @@ public class Saveaccountandpassword {
         return "";
     }
 
-    // �Uid
     public static String getUserUid(Context context) {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         String userUid = preferences.getString(successUid, "");
@@ -202,5 +229,4 @@ public class Saveaccountandpassword {
         byte[] keyBytes = getKeyBytes(key);
         return new String(decrypt(cipheredBytes, keyBytes, keyBytes), characterEncoding);
     }
-
 }

@@ -20,7 +20,8 @@ import android.widget.Toast;
 
 import com.beluga.belugakeys.Keys;
 import com.beluga.loginpage.AuthHttpClient.OnAuthEventListener;
-import com.beluga.loginpage.datacontrol.Saveaccountandpassword;
+import com.beluga.loginpage.datacontrol.InformationProcess;
+//import com.beluga.loginpage.datacontrol.Saveaccountandpassword;
 import com.beluga.loginpage.datacontrol.UsedString;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -165,8 +166,10 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
         	Log.i("Check fb login status", "already logged out");
         }else{
         	Log.i("Check fb login status", "already logged in");
-        	LoginManager.getInstance().logOut();
+        	//LoginManager.getInstance().logOut();
         	//this.loginFB(fbLoginButton);
+        	
+        	authhttpclient.Auth_FacebookLoignRegister("936544699763939");
         	Log.i("Check fb login status", "check end");
         }
         
@@ -188,7 +191,6 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
     }
 
     private void GetDataSetting(){
-//		String APIUrl = "http://23.102.255.253:9000/api/";
         String APIUrl = "http://api.belugame.com/api/";
         Log.d("tag", "versionCode :" + AuthHttpClient.version);
         //讀取外部參數
@@ -198,10 +200,6 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
         AuthHttpClient.ApiKey = intent.getStringExtra(Keys.ApiKey.toString());
         AuthHttpClient.PackageID = intent.getStringExtra(Keys.PackageID.toString());
 
-        //AuthHttpClient.ApiUrl = APIUrl;
-        //AuthHttpClient.AppID = "herinv";
-        //AuthHttpClient.ApiKey = "c4a980bfa03286646f173ae63a0b0b6d";
-        //AuthHttpClient.PackageID = "Deno";
         this.img_GameLogo = intent.getIntExtra(Keys.GameLogo.toString(),0);
         Log.i("Login page", "img_GameLogo value is:" + img_GameLogo);
         inMaintain = intent.getBooleanExtra(Keys.ActiveMaintainDialog.toString(), false);
@@ -249,7 +247,8 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
                         //onMorphButton1Clicked(loginBtn);
                         Toast.makeText(AuthClientActivity.this, CodeStr, Toast.LENGTH_LONG).show();
                         SaveAccountPassword(inputaccount.getText().toString(), inputpassword.getText().toString());
-                        Saveaccountandpassword.saveUserUid(Long.toString(uid), AuthClientActivity.this);
+                        //Saveaccountandpassword.saveUserUid(Long.toString(uid), AuthClientActivity.this);
+                        InformationProcess.saveUserUid(Long.toString(uid), AuthClientActivity.this);
                         SetFinish(inputaccount.getText().toString(), uid.toString(), token, inputpassword.getText().toString());
                     } else {
                         Toast.makeText(AuthClientActivity.this, CodeStr, Toast.LENGTH_LONG).show();
@@ -270,7 +269,7 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
                     	Log.i("info", "Uid:"+ uid +", Account:"+ Account);
                         Toast.makeText(AuthClientActivity.this, CodeStr, Toast.LENGTH_LONG).show();
                         SaveAccountPassword(Account, Pwd);
-                        Saveaccountandpassword.saveUserUid(Long.toString(uid), AuthClientActivity.this);
+                        InformationProcess.saveUserUid(Long.toString(uid), AuthClientActivity.this);
                         SetFinish(Account, uid.toString(), accountBound, Pwd);
                     } else {
                         Toast.makeText(AuthClientActivity.this, CodeStr, Toast.LENGTH_LONG).show();
@@ -377,8 +376,10 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
     }
 
     private void GetAccountAndPasswordFromData(){
-        saveacc = Saveaccountandpassword.GetaccountString(this);
-        savepwd = Saveaccountandpassword.GetpasswordString(this);
+        //saveacc = Saveaccountandpassword.GetaccountString(this);
+        //savepwd = Saveaccountandpassword.GetpasswordString(this);
+        saveacc = InformationProcess.getAccountString(this);
+        savepwd = InformationProcess.getPasswordString(this);
     }
 
     //存成功的帳密
@@ -386,7 +387,8 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
     {
         if(accid.length() > 0 && accpwd.length() > 0)
         {
-            Saveaccountandpassword.saveaccountpassword(accid, accpwd, this);
+            //Saveaccountandpassword.saveaccountpassword(accid, accpwd, this);
+        	InformationProcess.saveAccountPassword(accid, accpwd, this);
         }
     }
     private void SetAccountTextFromSave()
@@ -546,6 +548,7 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
    	                            Log.d("FB","complete");
    	                            fbId = object.optString("id");
    	                            Log.d("FB",fbId);
+   	                             InformationProcess.saveThirdPartyInfo(fbId, AuthClientActivity.this);
    	                            authhttpclient.Auth_FacebookLoignRegister(fbId);        
    							}
                      });

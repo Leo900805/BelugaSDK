@@ -14,7 +14,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.beluga.loginpage.AuthHttpClient.OnAuthEventListener;
-import com.beluga.loginpage.datacontrol.Saveaccountandpassword;
+import com.beluga.loginpage.datacontrol.InformationProcess;
 import com.beluga.loginpage.datacontrol.UsedString;
 import com.beluga.R;
 /**
@@ -71,7 +71,7 @@ public class Fastregistration extends Activity implements OnClickListener{
                     Toast.makeText(Fastregistration.this, CodeStr, Toast.LENGTH_LONG).show();
                 }
 
-                //�交�����珞��摰�
+            
                 System.out.println("Code " + Code + "  message   " + Message + "  uid " + uid + "  Account " + Account + " pwd  " + Pwd);
             }
 
@@ -105,7 +105,7 @@ public class Fastregistration extends Activity implements OnClickListener{
                     //Looper.loop();
                 } else if (Code == 1) {
                     Toast.makeText(Fastregistration.this, CodeStr, Toast.LENGTH_LONG).show();
-                    Saveaccountandpassword.saveUserUid(Long.toString(uid), Fastregistration.this);
+                    InformationProcess.saveUserUid(Long.toString(uid), Fastregistration.this);
                     SetFinish(inputaccount.getText().toString(), inputpassword.getText().toString());
                 } else {
                     Toast.makeText(Fastregistration.this, CodeStr, Toast.LENGTH_LONG).show();

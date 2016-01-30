@@ -11,7 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.beluga.loginpage.AuthHttpClient.OnAuthEventListener;
-import com.beluga.loginpage.datacontrol.Saveaccountandpassword;
+import com.beluga.loginpage.datacontrol.InformationProcess;
 import com.beluga.loginpage.datacontrol.UsedString;
 import com.beluga.R;
 /**
@@ -36,9 +36,8 @@ public class Changepassword extends Activity implements OnClickListener{
         inputdeterminepassword = (EditText)this.findViewById(R.id.modretypepwdeditText);
         inputnewpassword = (EditText)this.findViewById(R.id.modnewpwdeditText);
 
-        //�����董/撖�
-        inputaccount.setText(Saveaccountandpassword.GetaccountString(this));
-        inputpassword.setText(Saveaccountandpassword.GetpasswordString(this));
+        inputaccount.setText(InformationProcess.getAccountString(this));
+        inputpassword.setText(InformationProcess.getPasswordString(this));
     }
 
     @Override
@@ -49,17 +48,15 @@ public class Changepassword extends Activity implements OnClickListener{
 
         } else if (i == R.id.modcomfirmbtn) {
             ChangeAccountPassword();
-
         }
     }
 
-    //��蝣箏������SERVER
+
     public void ChangeAccountPassword()
     {
-        //撱箇���鈭辣
+       
         authhttpclient = new AuthHttpClient(this);
-        //�交�啁雯頝臬�靘��� ----- "�澆��鈭辣�曄��唳"
-        //�嗆�銝���  �澆�啣�   "SERVER�喳�鞈����澆�啣�---------"
+       
         authhttpclient.AuthEventListener(new OnAuthEventListener(){
             public void onProcessDoneEvent(int Code,String Message,Long uid,String Account,String Pwd)
             {
@@ -82,7 +79,7 @@ public class Changepassword extends Activity implements OnClickListener{
 				
 			}
         });
-        //�喲�鞈��訕ERVER 撣唾�/撖Ⅳ
+        
         authhttpclient.Auth_ChangePassword(this.inputaccount.getText().toString(),this.inputpassword.getText().toString(),this.inputdeterminepassword.getText().toString());
     }
 
