@@ -37,7 +37,6 @@ public class UnityActivity extends UnityPlayerActivity{
             try
             {
                 Bundle bundle = data.getExtras();
-                //user login back,uid is 9splay member unique id
                 uid = bundle.getString("uid");
                 String useruid = bundle.getString("userid");
                 String userpwd = bundle.getString("pwd");

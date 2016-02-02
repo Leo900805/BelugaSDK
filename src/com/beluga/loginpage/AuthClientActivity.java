@@ -30,14 +30,13 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.applinks.AppLinkData;
-import com.facebook.login.LoginManager;
+//import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
 import org.json.JSONObject;
 
 import com.beluga.R;
-
 
 /**
  * Created by Leo on 2015/10/5.
@@ -78,9 +77,6 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
     boolean pressFbButton = false;
     private String fbId;
     
-    
-    
-    
     @Override
     protected void onResume() {
       super.onResume();
@@ -100,9 +96,11 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //Facebook Initialize
         FacebookSdk.sdkInitialize(getApplicationContext()); 
         this.setContentView(R.layout.login_page);
-       
+        
+        //deef link...
         AppLinkData.fetchDeferredAppLinkData(this, 
         		  new AppLinkData.CompletionHandler() {
         		     @Override
@@ -113,38 +111,60 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
         		 }
         		);
         
+        //get external data 
         GetDataSetting();
-
+        
+        //Quick register button
         this.quickSignUpBtn = (Button)this.findViewById(R.id.quick_sign_up_btn);
         Log.i("In login page", "quickSignUpBtn v is " + quickSignUpBtn);
         this.quickSignUpBtn.setOnClickListener(this);
-
+        
+        //General register button
         this.signUpBtn = (Button)this.findViewById(R.id.sign_up_btn);
         Log.i("In login page", "SignUpBtn v is " + this.signUpBtn);
         this.signUpBtn.setOnClickListener(this);
-
+        
+        //General login button 
         this.loginBtn = (Button)this.findViewById(R.id.login_btn);
         Log.i("In login page", "loginBtn v is " + this.loginBtn);
         this.loginBtn.setOnClickListener(this);
         
+        //Facebook login button
         this.fbLoginButton = (LoginButton)this.findViewById(R.id.fblogin_button);
         Log.i("In login page", "fbloginBtn v is " + this.fbLoginButton);
         this.fbLoginButton.setOnClickListener(this);
-
+        
+        //Modify password button
         this.modPwdBtn = (Button)this.findViewById(R.id.modify_btn);
         Log.i("In login page", "modPwdBtn v is " + this.modPwdBtn);
         this.modPwdBtn.setOnClickListener(this);
-
+        
+        //Password input Field
         inputpassword = (EditText)this.findViewById(R.id.loginPwdEditText);
+        //Account input Field
         inputaccount =  (EditText)this.findViewById(R.id.loginAccEditText);
+        //Game logo image view
         this.logoView = (ImageView)this.findViewById(R.id.advertView);
-        //this.logoView.setImageResource(R.drawable.cbimage);
+        
+        /*
+         * Game Logo setup,
+         * if img_GameLogo is 0,
+         * set default image
+         * else set custom image
+         */
         if(this.img_GameLogo == 0){
             Log.d("login page","img_GameLogo value is"+img_GameLogo);
         }else{
             this.logoView.setImageResource(this.img_GameLogo);
         }
-
+        
+        /*
+         * Maintain setup
+         * inMaintain is true then,
+         * active maintain show maintain dialog
+         * else execute CreateHttpClient(); method
+         * and set default text to text fields
+         */
         if(this.inMaintain == true){
             Log.i("onCreate","in maintain");
             showDialog();
@@ -153,22 +173,35 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
             SetDefaultText(); //設定text box預設值
         }
         
+        /*
+         * determine facebook whether logout?
+         * if getCurrentAccessToken() is null, 
+         * facebook button status is logout
+         * else, facebook button status is login
+         * then auto use faccebook login 
+         */
         if (AccessToken.getCurrentAccessToken() == null) {
         	Log.i("Check fb login status", "already logged out");
         }else{
         	Log.i("Check fb login status", "already logged in");
+        	//developer Facebook logout setting
         	//LoginManager.getInstance().logOut();
+        	//get facebook ID
         	fbId = InformationProcess.getThirdPartyInfo(this);
+        	//auto login
         	authhttpclient.Auth_FacebookLoignRegister(fbId);
-        }
-        
-        
-        
+        }    
     }
+    
+    //Maintain Dialog show method
     private void showDialog(){
+    	
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        //set dialog title
         builder.setTitle(dialogTitle);
+        //set dialog content message
         builder.setMessage(dialogMessage);
+        //set confirm button in dialog and set button click event
         builder.setPositiveButton(R.string.Confirm_Button_Text, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -178,30 +211,47 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
         });
         builder.create().show();
     }
-
+    
+    //get external data method 
     private void GetDataSetting(){
         String APIUrl = "http://api.belugame.com/api/";
         Log.d("tag", "versionCode :" + AuthHttpClient.version);
         //讀取外部參數
         Intent intent = getIntent();
+        //assign Api Url into AuthHttpClient.ApiUrl
         AuthHttpClient.ApiUrl = APIUrl;
+        //get App ID assign into AuthHttpClient.AppID
         AuthHttpClient.AppID = intent.getStringExtra(Keys.AppID.toString());
+        //get App Key assign into AuthHttpClient.ApiKey
         AuthHttpClient.ApiKey = intent.getStringExtra(Keys.ApiKey.toString());
+        //get Package ID assign into AuthHttpClient.PackageID
         AuthHttpClient.PackageID = intent.getStringExtra(Keys.PackageID.toString());
-
+        
+        //get Game logo assign into img_GameLogo global variable 
         this.img_GameLogo = intent.getIntExtra(Keys.GameLogo.toString(),0);
         Log.i("Login page", "img_GameLogo value is:" + img_GameLogo);
+        
+        //get boolean assign into inMaintain 
         inMaintain = intent.getBooleanExtra(Keys.ActiveMaintainDialog.toString(), false);
+        //get dialog title into  dialogTitle global variable  
         dialogTitle = intent.getStringExtra(Keys.DialogTitle.toString());
+        //get dialog message into  dialogMessage global variable
         dialogMessage = intent.getStringExtra(Keys.DialogMessage.toString());
-
+        
+        /*
+         * AppID, ApiKey and PackageID is null show "params error" string 
+         */
         if(AuthHttpClient.AppID == null || AuthHttpClient.ApiKey == null || AuthHttpClient.PackageID == null){
-            Toast.makeText(this, "params error", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.Params_ERROR, Toast.LENGTH_LONG).show();
             Log.e(TAG,"appid is "+AuthHttpClient.AppID + " .");
             Log.e(TAG,"apikey is "+AuthHttpClient.ApiKey + " .");
             Log.e(TAG,"packageid is "+AuthHttpClient.PackageID + " .");
         }
-        Log.d(TAG, " APPID: " + AuthHttpClient.AppID);
+        
+        Log.d(TAG, " APPID: " + AuthHttpClient.AppID); 
+        /*
+         * AuthHttpClient.ApiKey cannot be null 
+         */
         if(AuthHttpClient.ApiKey != null){
             if(AuthHttpClient.ApiKey.compareTo("") != 0){
                 Log.d(TAG,AuthHttpClient.ApiKey
@@ -213,17 +263,18 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
         }
     }
     
+    //Create connection method
     private void CreateHttpClient(){
         //建立監聽事件
         //網路處理_自已寫的類別 __手術用    "呼叫點 按下按鈕呼叫到"
         authhttpclient = new AuthHttpClient(this);
-        
         	//接收到網路回來資料  ----- "呼叫監聽事件放的地方"
             //當按下按鈕時  呼叫到它   "SERVER傳回資料時會呼叫到它---------"
             //接SERVER回傳來的資料 處理它
             authhttpclient.AuthEventListener(new AuthHttpClient.OnAuthEventListener() {
+            	//receive general correlation information
+            	//Implement onProcessDoneEvent() method 
                 public void onProcessDoneEvent(int Code, String Message, Long uid, String Account, String token) {
-                    //ok=false;
                     String CodeStr = UsedString.getLoginstring(getApplicationContext(), Code);
                     if (CodeStr.compareTo("") == 0) {
                         Toast.makeText(AuthClientActivity.this, Message, Toast.LENGTH_SHORT).show();
@@ -236,12 +287,13 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
                         Toast.makeText(AuthClientActivity.this, CodeStr, Toast.LENGTH_LONG).show();
                     }
                 }
-
+                
+                //receive Facebook correlation information
+                //Implement onProcessDoneEvent() method 
 				@Override
 				public void onProcessDoneEvent(int Code, String Message, Long uid, String Account, String Pwd,
 						String accountBound) {
 					// TODO Auto-generated method stub
-					//ok=false;
                     String CodeStr = UsedString.getFacebookLoginstring(getApplicationContext(), Code);
                     if (CodeStr.compareTo("") == 0) {
                         Toast.makeText(AuthClientActivity.this, Message, Toast.LENGTH_SHORT).show();
@@ -253,16 +305,16 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
                     } else {
                         Toast.makeText(AuthClientActivity.this, CodeStr, Toast.LENGTH_LONG).show();
                     }
-					
 				}
             });
     }
+    
     //按下登入鈕呼叫的地方
     public void PressLogin()
     {
         String accid = inputaccount.getText().toString();
         String accpwd = inputpassword.getText().toString();
-    	/* Changed by Leo Ling */
+  
         if(accid.equals(this.getString(R.string.Enter_Ac_Type))){
             Toast.makeText(AuthClientActivity.this,
                     this.getString(R.string.Enter_Ac_Type),
@@ -276,7 +328,7 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
                     Toast.LENGTH_LONG).show();
             return;
         }
-     	/* Changed by Leo Ling end */
+   
         //傳送資料到SERVER 帳號/密碼
         authhttpclient.Auth_UserLogin(accid, accpwd);
     }
@@ -294,7 +346,8 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
     @Override
     public void afterTextChanged(Editable s) {
         View focView = AuthClientActivity.this.getCurrentFocus();
-        /* if t use EditText.settxt to change text  and the user has no
+        /* 
+         * if t use EditText.settxt to change text  and the user has no
          * CurrentFocus  the focView will be null
          */
         if(focView != null){
@@ -419,14 +472,11 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
         super.onActivityResult(requestCode, resultCode, data);
         
         /* Developer by Leo Ling   Facebook login */
-        
     		if(this.pressFbButton == true){
     			this.pressFbButton = false;
     			callbackManager.onActivityResult(requestCode, resultCode, data);
     		}
-    	
     	/* Developer by Leo Ling   Facebook login end */
-
         if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
         	Log.i("Auth ", "requestCode == 1 && resultCode == Activity.RESULT_OK");
             try
@@ -475,6 +525,7 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
     public void onClick(View v) {
         int i = v.getId();
         if (i == R.id.login_btn) {
+        	
             this.PressLogin();
         } else if (i == R.id.modify_btn) {
 
@@ -499,7 +550,6 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
         	loginFB(fbLoginButton);
         }
     }
-    
     /* Developer by Leo Ling   Facebook login */
    	public void loginFB(LoginButton loginButton){
    	//public void loginFB(Button loginButton){
@@ -525,13 +575,12 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
    	                            Log.d("FB","complete");
    	                            fbId = object.optString("id");
    	                            Log.d("FB",fbId);
-   	                             InformationProcess.saveThirdPartyInfo(fbId, AuthClientActivity.this);
+   	                            InformationProcess.saveThirdPartyInfo(fbId, AuthClientActivity.this);
    	                            authhttpclient.Auth_FacebookLoignRegister(fbId);        
    							}
                      });
                   //包入你想要得到的資料 送出request
                   Bundle parameters = new Bundle();
-                  //parameters.putString("fields", "id,name,link,email");
                   parameters.putString("fields", "id");
                   request.setParameters(parameters);
                   request.executeAsync();
@@ -544,12 +593,12 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
                   Log.d("FB","CANCEL");
               }
 
-              //登入失敗
-   		@Override
-   		public void onError(FacebookException error) {
-   			// TODO Auto-generated method stub
-   			Log.d("FB",error.toString());
-   		}
+            //登入失敗
+	   		@Override
+	   		public void onError(FacebookException error) {
+	   			// TODO Auto-generated method stub
+	   			Log.d("FB",error.toString());
+	   		}
    		
           });
    	}

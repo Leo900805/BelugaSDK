@@ -46,7 +46,8 @@ import javax.net.ssl.HttpsURLConnection;
 @SuppressLint("HandlerLeak")
 @SuppressWarnings("deprecation")
 public class AuthHttpClient {
-
+	
+	//Global variable
     Activity MainActivity;
     OnAuthEventListener AuthEventListener;
     public static String AppID = "";
@@ -56,19 +57,13 @@ public class AuthHttpClient {
     public static String version="10405121054";
 
     private ProgressDialog loadingProgress;
-
-    // 撱箸�撘�
+    
+    //AuthHttpClient Constructor
     public AuthHttpClient(Activity act) {
         MainActivity = act;
     }
-
-    /*
-     * public AuthHttpClient(Activity act,String appid,String apikey) {
-     * MainActivity = act; this.SetApiInfo(appid, apikey); }
-     *
-     * public void SetApiInfo(String appid,String apikey) { AppID = appid;
-     * ApiKey = apikey; }
-     */
+    
+    //Check API whether exists 
     public boolean isApiInfoExists() {
         if (AppID.length() == 0) {
             return false;
@@ -82,34 +77,32 @@ public class AuthHttpClient {
         return true;
     }
 
-    // 鈭辣Listener摰��
+    //Create OnAuthEventListener interface 
     public interface OnAuthEventListener {
         public void onProcessDoneEvent(int Code, String Message, Long uid, String Account, String Pwd);
         public void onProcessDoneEvent(int Code, String Message, Long uid, String Account, String Pwd, String accountBound);
     }
 
-    // 閫貊鈭辣�
+    //For general Auth Event
     private void OnAuthEvent(int Code, String Message, long i, String Account,String Pwd) {
-        //
         if (AuthEventListener != null) {
             AuthEventListener.onProcessDoneEvent(Code, Message, i, Account, Pwd);
         }
     }
-    
+    //For the third party Auth Event
     private void OnAuthEvent(int Code, String Message, long i, String Account,String Pwd, String accountBound) {
-        //
         if (AuthEventListener != null) {
             AuthEventListener.onProcessDoneEvent(Code, Message, i, Account, Pwd, accountBound);
         }
     }
-
-    // 0000000
+    
+    //Method AuthEventListener(); 
     public void AuthEventListener(OnAuthEventListener onAuthEventListener) {
 
         AuthEventListener = onAuthEventListener;
     }
 
-    // 蝬脰楝�臬�舐
+    //Check Internet whether available
     public boolean isInternetAvailable() {
         ConnectivityManager manager = (ConnectivityManager) MainActivity
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -135,7 +128,6 @@ public class AuthHttpClient {
         return false;
     }
 
-    // HttpPost撖阡��寞�
     private void httpPOST(AuthCommandType t, String url, List<NameValuePair> list) {
         MainActivity.runOnUiThread(new Runnable() {
 
@@ -168,27 +160,26 @@ public class AuthHttpClient {
             } else {
                 httpClient = new DefaultHttpClient();
             }
-            // �HTTP request
-            // 撠lient鞈� �SERVER
+          
             for(int i=0;i<list.size();i++){
                 Log.d("list:", list.get(i).toString());
             }
             post.setEntity(new UrlEncodedFormEntity(list, HTTP.UTF_8));
 
-            // ��HTTP response
+            
             HttpResponse httpResponse = httpClient.execute(post);
-            // 瑼Ｘ���蝣潘�200銵函內OK
+            
             if (httpResponse.getStatusLine().getStatusCode() == 200) {
-                // *********���摮葡 ��SERVER�喳�靘�鞈�
+               
                 String strResult = EntityUtils.toString(httpResponse.getEntity());
-                // �啣����~~
+                
                 Message msg = new Message();
                 Bundle data = new Bundle();
                 data.putString("AuthValue", strResult);
                 data.putInt("AuthType", t.getIntValue());
-                // ����
+                
                 msg.setData(data);
-                // �����亙鞈���ㄐ
+                
                 HttpPostHandler.sendMessage(msg);
             } else {
                 OnAuthEvent(-101, "ServerHttpStatusError"
@@ -222,14 +213,10 @@ public class AuthHttpClient {
             Log.d("InputStream", e.getLocalizedMessage());
         }
     }
-
-
-    // HttpPost摰�鈭辣�� "�亦雯頝臭��喳�靘���
+    
     Handler HttpPostHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            // ��蝬脰楝銝���
-
             if (loadingProgress != null) {
                 loadingProgress.dismiss();
             }
@@ -246,7 +233,6 @@ public class AuthHttpClient {
         }
     };
 
-    // Server蝡臬隞日��亙�蝢�
     public enum AuthCommandType {
         Login(0), QuickAccount(1), RegisterAccount(2), ChangePassword(3),
         FacebookLoginRegister(4);
@@ -262,7 +248,7 @@ public class AuthHttpClient {
         }
     }
 
-    // MD5 ????
+    //MD5 encrypt
     public static String MD5(String str) {
         MessageDigest md5 = null;
         try {
@@ -290,7 +276,8 @@ public class AuthHttpClient {
         }
         return hexValue.toString();
     }
-
+    
+    //Get Device Name
     private static String getDeviceName() {
         String manufacturer = Build.MANUFACTURER;
         String model = Build.MODEL;
@@ -300,6 +287,8 @@ public class AuthHttpClient {
             return capitalize(manufacturer) + " " + model;
         }
     }
+    
+    //Let string to upper case string
     private static String capitalize(String s) {
         if (s == null || s.length() == 0) {
             return "";
@@ -311,6 +300,8 @@ public class AuthHttpClient {
             return Character.toUpperCase(first) + s.substring(1);
         }
     }
+    
+    //Get package name
     private String getPackgetName() {
         return MainActivity.getApplicationContext().getPackageName();
     }
@@ -323,7 +314,8 @@ public class AuthHttpClient {
 
         return result;
     }
-    // 撣唾�閬��摨�
+    
+    //Check Account Length
     public static boolean isAccountRuleLength(String target) {
 
         if (target.length() < 6 || target.length() > 32) {
@@ -332,41 +324,37 @@ public class AuthHttpClient {
         return true;
     }
 
-    // ==============================�箏�� End==============================
-    // �餃 撣唾� 撖Ⅳ
+  
     public void Auth_UserLogin(String UserID, String UserPassword) {
-        // 撣唾� ��駁擐偏蝛箇蝚西���摮葡
+        
         UserID = UserID.trim();
-        // 撖Ⅳ
+        
         UserPassword = UserPassword.trim();
-        // 憒�銝泵�董�摨�
         if (!isAccountRuleLength(UserID)) {
-            //OnAuthEvent(-2, "撣唾��瑕漲�航炊", -1, "", "");
             OnAuthEvent(-2, MainActivity.getString(R.string.Ac_Length_Err_Type), -1, "", "");
             return;
         }
         if (!isAccountRuleLength(UserPassword)) {
-            //OnAuthEvent(-2, "撖Ⅳ�瑕漲�航炊", -1, "", "");
             OnAuthEvent(-2, MainActivity.getString(R.string.Pwd_Length_Err_Type) , -1, "", "");
             return;
         }
         if (!isAccountRuleString(UserID)) {
-            //OnAuthEvent(-2, "撣唾��芾�刻�摮�, -1, "", "");
+            
             OnAuthEvent(-2, MainActivity.getString(R.string.Ac_Only_Char_And_Num_Type), -1, "", "");
             return;
         }
         if (!isAccountRuleString(UserPassword)) {
-            //OnAuthEvent(-2, "撖Ⅳ�芾�刻�摮�, -1, "", "");
+           
             OnAuthEvent(-2, MainActivity.getString(R.string.Pwd_Only_Char_And_Num_Type), -1, "", "");
             return;
         }
         if (!isApiInfoExists()) {
-            //OnAuthEvent(-501, "Appid or Apikey error", -1, "", "");
+            
             OnAuthEvent(-2, MainActivity.getString(R.string.Appid_Or_Apikey_Err_Type), -1, "", "");
             return;
         }
         if (!isInternetAvailable()) {
-            //OnAuthEvent(-500, "蝬脰楝���憭望�", -1, "", "");
+            
             OnAuthEvent(-2, MainActivity.getString(R.string.Network_Connection_Failure_Type), -1, "", "");
             return;
         }
@@ -391,8 +379,6 @@ public class AuthHttpClient {
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                // �SER 憛怠�董��撖Ⅳ鞈��喳�喟雯頝臭�
-                // ����餃��
                 httpPOST(AuthCommandType.Login, ApiUrl + UrlAction, params);
 
             }
@@ -421,12 +407,12 @@ public class AuthHttpClient {
     public void Auth_QuickAccount() {
 
         if (!isApiInfoExists()) {
-            //OnAuthEvent(-501, "Appid or Apikey error", -1, "", "");
+            
             OnAuthEvent(-501, MainActivity.getString(R.string.Appid_Or_Apikey_Err_Type), -1, "", "");
             return;
         }
         if (!isInternetAvailable()) {
-            //OnAuthEvent(-500, "蝬脰楝���憭望�", -1, "", "");
+            
             OnAuthEvent(-500, MainActivity.getString(R.string.Network_Connection_Failure_Type), -1, "", "");
             return;
         }
@@ -448,11 +434,11 @@ public class AuthHttpClient {
         params.add(new BasicNameValuePair("packid", packid));
         params.add(new BasicNameValuePair("packageid", PackageID));
         params.add(new BasicNameValuePair("sign", sign));
-        // 銝�芾��頝銵�
+
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                // �唾����
+
                 httpPOST(AuthCommandType.QuickAccount, ApiUrl + UrlAction,
                         params);
             }
@@ -460,38 +446,38 @@ public class AuthHttpClient {
         new Thread(runnable).start();
     }
 
-    // 閮餃� _�亦�Ｖ�頛詨�董��撖Ⅳ
+
     public void Auth_RegisterAccount(String UserID, String UserPassword) {
         UserID = UserID.trim();
         UserPassword = UserPassword.trim();
-        // 瑼Ｘ�臬ERROR �交����瑁�蝺�
+
         if (!isAccountRuleLength(UserID)) {
-            //OnAuthEvent(-2, "撣唾��瑕漲�航炊", -1, "", "");
+
             OnAuthEvent(-2, MainActivity.getString(R.string.Ac_Length_Err_Type), -1, "", "");
             return;
         }
         if (!isAccountRuleLength(UserPassword)) {
-            //OnAuthEvent(-2, "撖Ⅳ�瑕漲�航炊", -1, "", "");
+
             OnAuthEvent(-2, MainActivity.getString(R.string.Pwd_Length_Err_Type), -1, "", "");
             return;
         }
         if (!isAccountRuleString(UserID)) {
-            //OnAuthEvent(-2, "撣唾��芾�刻�摮�, -1, "", "");
+
             OnAuthEvent(-2, MainActivity.getString(R.string.Ac_Only_Char_And_Num_Type), -1, "", "");
             return;
         }
         if (!isAccountRuleString(UserPassword)) {
-            //OnAuthEvent(-2, "撖Ⅳ�芾�刻�摮�, -1, "", "");
+
             OnAuthEvent(-2, MainActivity.getString(R.string.Pwd_Only_Char_And_Num_Type), -1, "", "");
             return;
         }
         if (!isApiInfoExists()) {
-            //OnAuthEvent(-501, "Appid or Apikey error", -1, "", "");
+
             OnAuthEvent(-501, MainActivity.getString(R.string.Appid_Or_Apikey_Err_Type), -1, "", "");
             return;
         }
         if (!isInternetAvailable()) {
-            //OnAuthEvent(-500, "蝬脰楝���憭望�", -1, "", "");
+
             OnAuthEvent(-500, MainActivity.getString(R.string.Network_Connection_Failure_Type), -1, "", "");
             return;
         }
@@ -522,11 +508,9 @@ public class AuthHttpClient {
         params.add(new BasicNameValuePair("packageid", PackageID));
         params.add(new BasicNameValuePair("sign", sign));
 
-        // �����
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                // �SER �喳���蝬脰楝銝�
                 httpPOST(AuthCommandType.RegisterAccount, ApiUrl + UrlAction, params);
             }
         };
@@ -534,7 +518,6 @@ public class AuthHttpClient {
 
     }
 
-    // 靽格撖Ⅳ
     public void Auth_ChangePassword(String UserID, String OldPassword,
                                     String NewPassword) {
         UserID = UserID.trim();
@@ -542,52 +525,42 @@ public class AuthHttpClient {
         NewPassword = NewPassword.trim();
         Log.i("Auth_ChangePassword","UserID "+UserID + " OldPassword "+OldPassword +" NewPassword "+NewPassword);
         if (!isAccountRuleLength(UserID)) {
-            //OnAuthEvent(-2, "撣唾��瑕漲�航炊", -1, "", "");
             OnAuthEvent(-2, MainActivity.getString(R.string.Ac_Length_Err_Type), -1, "", "");
             return;
         }
         if (!isAccountRuleLength(OldPassword)) {
-            //OnAuthEvent(-2, "��蝣潮摨阡隤�, -1, "", "");
             OnAuthEvent(-2, MainActivity.getString(R.string.Old_Password_Length_Err_Type), -1, "", "");
             return;
         }
         if (!isAccountRuleLength(NewPassword)) {
-            //OnAuthEvent(-2, "�啣�蝣潮摨阡隤�, -1, "", "");
             OnAuthEvent(-2, MainActivity.getString(R.string.New_Pwd_Length_Err_Type), -1, "", "");
             return;
         }
         if (!isAccountRuleString(UserID)) {
-            //OnAuthEvent(-2, "撣唾��芾�刻�摮�, -1, "", "");
             OnAuthEvent(-2, MainActivity.getString(R.string.Ac_Only_Char_And_Num_Type), -1, "", "");
             return;
         }
         if (!isAccountRuleString(OldPassword)) {
-            //OnAuthEvent(-2, "��蝣澆�賜�望��詨�", -1, "", "");
             OnAuthEvent(-2, MainActivity.getString(R.string.Old_Password_Only_Char_And_Num_Type), -1, "", "");
             return;
         }
         if (!isAccountRuleString(NewPassword)) {
-            //OnAuthEvent(-2, "�啣�蝣澆�賜�望��詨�", -1, "", "");
             OnAuthEvent(-2, MainActivity.getString(R.string.New_Password_Only_Char_And_Num_Type), -1, "", "");
             return;
         }
         if (!isApiInfoExists()) {
-            //OnAuthEvent(-501, "Appid or Apikey error", -1, "", "");
             OnAuthEvent(-501, MainActivity.getString(R.string.Appid_Or_Apikey_Err_Type), -1, "", "");
             return;
         }
         if (!isInternetAvailable()) {
-            //OnAuthEvent(-500, "蝬脰楝���憭望�", -1, "", "");
             OnAuthEvent(-500, MainActivity.getString(R.string.Network_Connection_Failure_Type), -1, "", "");
             return;
         }
         if (!isApiInfoExists()) {
-            //OnAuthEvent(-501, "Appid or Apikey error", -1, "", "");
             OnAuthEvent(-501, MainActivity.getString(R.string.Appid_Or_Apikey_Err_Type), -1, "", "");
             return;
         }
-
-
+        
         final String UrlAction = "MemberModPwd";
 
         String devid = Secure.getString(MainActivity.getContentResolver(),
@@ -611,16 +584,13 @@ public class AuthHttpClient {
         new Thread(runnable).start();
     }
 
-    // Server蝡臬��唾�����__handle���交�訕erver蝡臬��唾����唳 //�餃 敹恍�閮餃� 閮餃� �寡�撖Ⅳ�����
     private void AuthBackDataProcess(AuthCommandType t, String Data) {
         switch (t) {
             case Login:
                 AuthBackDataProc_Login(Data);
-//				Log.i("tag", "AuthBackDataProc_Login:"+Data.toString());
                 break;
             case QuickAccount:
                 AuthBackDataProc_QuickAccount(Data);
-//				Log.i("tag", "QuickAccount:"+Data.toString());
                 break;
             case RegisterAccount:
                 AuthBackDataProc_RegisterAccount(Data);
@@ -639,17 +609,14 @@ public class AuthHttpClient {
         }
     }
 
-    // 隞乩��航���_"����� �亦雯頝臬�靘�JSON鞈� 閫��JSON
     private void AuthBackDataProc_Login(String Data) {
         try {
             JSONObject jObj = new JSONObject(Data);
             String code = jObj.getString("Code");
             String msg = jObj.getString("Message");
             String uid = jObj.getString("uid");
-            //String pid = jObj.getString(name)
             OnAuthEvent(Integer.parseInt(code), msg, Long.parseLong(uid), "","");
         } catch (Exception e) {
-            //OnAuthEvent(-102, "DataParseError", -1, "", "");
             OnAuthEvent(-102,  MainActivity.getString(R.string.Data_Parse_Error_Type), -1, "", "");
         }
 
@@ -665,7 +632,6 @@ public class AuthHttpClient {
             String userpwd = jObj.getString("upd");
             OnAuthEvent(Integer.parseInt(code), msg, Long.parseLong(uid), userid, userpwd);
         } catch (Exception e) {
-            //OnAuthEvent(-102, "DataParseError", -1, "", "");
             OnAuthEvent(-102,  MainActivity.getString(R.string.Data_Parse_Error_Type), -1, "", "");
         }
     }
@@ -677,9 +643,7 @@ public class AuthHttpClient {
             String msg = jObj.getString("Message");
             String uid = jObj.getString("uid");
             OnAuthEvent(Integer.parseInt(code), msg, Long.parseLong(uid), "", "");
-
         } catch (Exception e) {
-            //OnAuthEvent(-102, "DataParseError", -1, "", "");
             OnAuthEvent(-102,  MainActivity.getString(R.string.Data_Parse_Error_Type), -1, "", "");
         }
     }
@@ -691,7 +655,6 @@ public class AuthHttpClient {
             String msg = jObj.getString("Message");
             OnAuthEvent(Integer.parseInt(code), msg, 0, "", "");
         } catch (Exception e) {
-            //OnAuthEvent(-102, "DataParseError", -1, "", "");
             OnAuthEvent(-102,  MainActivity.getString(R.string.Data_Parse_Error_Type), -1, "", "");
         }
     }
@@ -708,7 +671,6 @@ public class AuthHttpClient {
             String fbId = jObj.getString("fbid");
             OnAuthEvent(Integer.parseInt(code), msg, Long.parseLong(uid), userid, userpwd, fbId);
         } catch (Exception e) {
-            //OnAuthEvent(-102, "DataParseError", -1, "", "");
         	Log.i("AuthBackDataProc_FacebookLoginRegister", "Data_Parse_Error_Type");
             OnAuthEvent(-102,  MainActivity.getString(R.string.Data_Parse_Error_Type), -1, "", "", "");
         }
@@ -716,7 +678,6 @@ public class AuthHttpClient {
     }
 
     private void AuthBackDataProc_UnknowType() {
-        //OnAuthEvent(-102, "DataParseError", -1, "", "");
     	Log.i("AuthBackDataProc_UnknowType", "Unknow");
         OnAuthEvent(-102,  MainActivity.getString(R.string.Data_Parse_Error_Type), -1, "", "");
     }
