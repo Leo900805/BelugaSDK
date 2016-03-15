@@ -448,6 +448,7 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
     {
         Intent resultdata = new Intent();
         Bundle bundle = new Bundle();
+        bundle.putString("type", "LOGIN");
         bundle.putString("userid", thisuserid);
         bundle.putString("uid", thisuid);
         bundle.putString("pwd", thispwd);

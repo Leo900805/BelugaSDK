@@ -23,7 +23,7 @@ import com.beluga.R;
 public class Registration extends Activity implements OnClickListener {
 
     EditText inputaccount,inputpassword,inputdeterminepassword;
-    // ���SERVER��
+   
     AuthHttpClient authhttpclient;
     public Button signUpComfirmBtn, signUpReturnBtn;
     public CheckBox checkBox;
@@ -65,7 +65,6 @@ public class Registration extends Activity implements OnClickListener {
         } else if (i == R.id.signupcomfirmbtn) {/* Changed by Leo Ling */
             if (inputaccount.getText().toString().compareTo("") == 0) {
 
-                //Toast.makeText(Registration.this, "隢撓�亙董��, Toast.LENGTH_LONG).show();
                 Toast.makeText(Registration.this,
                         this.getString(R.string.Enter_Ac_Type),
                         Toast.LENGTH_LONG).show();
@@ -73,7 +72,7 @@ public class Registration extends Activity implements OnClickListener {
                 return;
             }
             if (inputpassword.getText().toString().equals(inputdeterminepassword.getText().toString())) {
-                //銝�見�店撠梁�亥酉��
+               
                 authhttpclient.Auth_RegisterAccount(inputaccount.getText().toString(),
                         inputpassword.getText().toString());
             } else {
@@ -88,11 +87,9 @@ public class Registration extends Activity implements OnClickListener {
     }
 
     private void CreateHttpClient() {
-        // 撱箇���鈭辣
-        // 蝬脰楝��_�芸歇撖怎�憿 __����"�暺��������
+    
         authhttpclient = new AuthHttpClient(this);
-        // �交�啁雯頝臬�靘���----- "���鈭辣�曄��唳"
-        // �嗆�銝��� ��啣� "SERVER�喳�鞈�����啣�---------"
+       
         authhttpclient.AuthEventListener(new OnAuthEventListener() {
             public void onProcessDoneEvent(int Code, String Message, Long uid,
                                            String Account, String Pwd) {

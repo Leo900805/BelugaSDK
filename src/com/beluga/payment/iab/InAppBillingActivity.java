@@ -24,11 +24,12 @@ public class InAppBillingActivity extends Activity {
 	
 	String base64 = "";
 	private String mTradeid;
-	//使用Iapppaybill的helper
+	private String mReceipt;
+	private String mOrder;
+	private String mOrdersign;
 	private IabHelper mHelper;
 	private String mItemId;
 	private String mUserId;
-	private boolean isTaiwan;
 	private String TAG = "Beluga IAB";
 	private boolean afterPurchase = false;
 	ProgressDialog dialog;
@@ -41,10 +42,11 @@ public class InAppBillingActivity extends Activity {
 	public static String message = "message";
 	public static String code = "code";
 	public static String Tradeid = "Tradeid";
-	public static String isTW = "isTW";
 	public static String Order = "o";
 	public static String Server = "s";
 	public static String Role = "r";
+	public static String ApiUrl = "api_url";
+	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -182,7 +184,7 @@ public class InAppBillingActivity extends Activity {
 			return;
 		}
         mHelper = new IabHelper(InAppBillingActivity.this, base64);//init
-        mHelper.enableDebugLogging(true);//是否開debug，官方建議使用false
+        mHelper.enableDebugLogging(true);
         Log.d(TAG, "Starting setup.");
         mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
             public void onIabSetupFinished(IabResult result) {
@@ -373,6 +375,7 @@ public class InAppBillingActivity extends Activity {
                     mHelper.launchPurchaseFlow(InAppBillingActivity.this, mItemId, RC_REQUEST, mPurchaseFinishedListener, payload);
                 }else{
                 	verifyReceipt(purchase);
+                	//here add notice
                 }
             }
             else {
@@ -385,6 +388,9 @@ public class InAppBillingActivity extends Activity {
     
     private void verifyReceipt(Purchase purchase) {
     	Bundle b = new Bundle();
+    	mReceipt =purchase.getOrderId();
+    	mOrder = purchase.getOriginalJson();
+    	mOrdersign = purchase.getSignature();
     	if(mTradeid == null){
     		Log.e(TAG,"Trade id is null");
     		sendOnTradeGoogleFinished(-3, "Trade id is null");
@@ -392,9 +398,9 @@ public class InAppBillingActivity extends Activity {
     	}
     	Log.d(TAG,"Trade id is "+mTradeid);
         b.putString("tradeid", mTradeid);
-        b.putString("receipt", purchase.getOrderId());
-        b.putString("order", purchase.getOriginalJson());
-        b.putString("ordersign", purchase.getSignature());
+        b.putString("receipt", mReceipt);
+        b.putString("order", mOrder);
+        b.putString("ordersign", mOrdersign);
         verifyReceiptToServer(b);
     }
 	private void verifyReceiptToServer(final Bundle b) {
@@ -487,10 +493,16 @@ public class InAppBillingActivity extends Activity {
 		Log.i(TAG,"seted code and message " + code +"  "+ message);
 		b.putInt("code", code);
 		b.putString("message", message);
-		if(code == 1)
-			b.putString(Tradeid, mTradeid);
+		if(code == 1){
+			b.putString("type", "PAYMENT");
+			//b.putString(Tradeid, mTradeid);
+			b.putString("tradeid", mTradeid);
+			b.putString("receipt", mReceipt);
+			b.putString("order", mOrder);
+			b.putString("ordersign", mOrdersign);
+		}
 		intent.putExtras(b);
-		setResult(code, intent); 
+		setResult(Activity.RESULT_OK, intent); 
 		mItemId = null;
 		mUserId = null;
 		this.finish();

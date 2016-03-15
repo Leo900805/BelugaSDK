@@ -184,6 +184,7 @@ public final class ServerUtilities {
     	return sb.toString();
     }
     
+    
 //    private static JSONObject parseHttpConnectionResult(HttpURLConnection conn) throws IOException {
 //    	BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
 //    	String line, result;
@@ -263,4 +264,6 @@ public final class ServerUtilities {
         	b.putString("sign", MD5(packageName + b.getString("u") + b.getString("i") + timestamp + "buy"));
     	}
     }
+    
+    
 }
