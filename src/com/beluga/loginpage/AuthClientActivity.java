@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentSender.SendIntentException;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
@@ -11,6 +12,7 @@ import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -33,6 +35,18 @@ import com.facebook.applinks.AppLinkData;
 //import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
+import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+import com.google.android.gms.plus.Plus;
+import com.google.android.gms.plus.model.people.Person;
 
 import org.json.JSONObject;
 
@@ -41,8 +55,11 @@ import com.beluga.R;
 /**
  * Created by Leo on 2015/10/5.
  */
-public class AuthClientActivity extends Activity implements OnClickListener,TextWatcher{
-
+public class AuthClientActivity extends Activity implements OnClickListener,
+		TextWatcher, ConnectionCallbacks,OnConnectionFailedListener{
+	
+	private static final int RC_SIGN_IN = 0;
+	
     //密碼元件
     public EditText inputpassword;
     //帳號元件
@@ -77,6 +94,17 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
     boolean pressFbButton = false;
     private String fbId;
     
+    // Google client to communicate with Google
+ 	private GoogleApiClient mGoogleApiClient;
+ 	
+	private SignInButton signinButton;
+	//private Button signinButton;
+	
+	boolean mExplicitSignOut = false;
+	boolean mInSignInFlow = false; // set to true when you're in the middle of the
+	                               // sign in flow, to know you should not attempt
+	                               // to connect in onStart()
+    
     @Override
     protected void onResume() {
       super.onResume();
@@ -92,8 +120,16 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
       // Logs 'app deactivate' App Event.
       AppEventsLogger.deactivateApp(this);
     }
-    
     @Override
+    protected void onStart() {
+        super.onStart();
+        if (!mInSignInFlow && !mExplicitSignOut) {
+            // auto sign in
+            mGoogleApiClient.connect();
+        }
+    }
+    
+	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //Facebook Initialize
@@ -111,6 +147,16 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
         		 }
         		);
         
+	     // Configure sign-in to request the user's ID, email address, and basic
+	     // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
+	     GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+	             .requestEmail()
+	             .build();
+	  
+	     mGoogleApiClient = new GoogleApiClient.Builder(this).addConnectionCallbacks(this).
+	     		addOnConnectionFailedListener(this).
+	     		addApi(Auth.GOOGLE_SIGN_IN_API, gso).build();
+		  
         //get external data 
         GetDataSetting();
         
@@ -145,6 +191,11 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
         inputaccount =  (EditText)this.findViewById(R.id.loginAccEditText);
         //Game logo image view
         this.logoView = (ImageView)this.findViewById(R.id.advertView);
+        
+        //google button 
+        //signinButton = (Button) findViewById(R.id.google_sign_in_button);
+        signinButton = (SignInButton) findViewById(R.id.google_sign_in_button);
+		signinButton.setOnClickListener(this);
         
         /*
          * Game Logo setup,
@@ -190,7 +241,18 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
         	fbId = InformationProcess.getThirdPartyInfo(this);
         	//auto login
         	authhttpclient.Auth_FacebookLoignRegister(fbId);
-        }    
+        }   
+        
+        if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
+        	   // signed in. Show the "sign out" button and explanation.
+        	   // ...
+        	Log.i("Check google login status", "already logged in");
+        	} else {
+        	   // not signed in. Show the "sign in" button and explanation.
+        	   // ...
+        		Log.i("Check google login status", "already logged out");
+        		
+        	}
     }
     
     //Maintain Dialog show method
@@ -288,13 +350,13 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
                     }
                 }
                 
-                //receive Facebook correlation information
+                //receive Facebook and google correlation information
                 //Implement onProcessDoneEvent() method 
 				@Override
 				public void onProcessDoneEvent(int Code, String Message, Long uid, String Account, String Pwd,
 						String accountBound) {
 					// TODO Auto-generated method stub
-                    String CodeStr = UsedString.getFacebookLoginstring(getApplicationContext(), Code);
+                    String CodeStr = UsedString.getThirdPartnerLoginStatusString(getApplicationContext(), Code);
                     if (CodeStr.compareTo("") == 0) {
                         Toast.makeText(AuthClientActivity.this, Message, Toast.LENGTH_SHORT).show();
                     } else if (Code == 1) {
@@ -333,7 +395,7 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
         authhttpclient.Auth_UserLogin(accid, accpwd);
     }
 
-    @Override
+	@Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
     }
@@ -515,12 +577,30 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
             } catch(Exception ex) {
                 ex.printStackTrace();
             }
-        } else {
+        } else if(requestCode == RC_SIGN_IN){
+        	GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            handleSignInResult(result);
+        }else{
         	Log.i("Auth ", "else set SetAccountTextFromSave()");
             SetAccountTextFromSave();
         }
         Log.i("Auth ", "end...");
     }
+    private void handleSignInResult(GoogleSignInResult result) {
+        Log.d(TAG, "handleSignInResult:" + result.isSuccess());
+        if (result.isSuccess()) {
+            // Signed in successfully, show authenticated UI.
+            GoogleSignInAccount acct = result.getSignInAccount();
+            Log.i(TAG, "gid:"+ acct.getId() + " gmail:"+ acct.getEmail() + " gname:"+ acct.getDisplayName());
+            InformationProcess.saveThirdPartyInfo(acct.getId(), AuthClientActivity.this);
+            authhttpclient.Auth_GoogleLoignRegister(acct.getId(), acct.getEmail(),acct.getDisplayName());
+            updateProfile(true);
+        } else {
+            // Signed out, show unauthenticated UI.
+        	updateProfile(false);
+        }
+    }
+
 
     @Override
     public void onClick(View v) {
@@ -549,7 +629,16 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
         	
         	this.pressFbButton = true;
         	loginFB(fbLoginButton);
+        }else if (i == R.id.google_sign_in_button){
+        	signIn();
         }
+    }
+    
+    private void signIn() {
+    	 Log.d(TAG, "Signin start ....");
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+        Log.d(TAG, "Signin end ....");
     }
     /* Developer by Leo Ling   Facebook login */
    	public void loginFB(LoginButton loginButton){
@@ -604,4 +693,44 @@ public class AuthClientActivity extends Activity implements OnClickListener,Text
           });
    	}
    	/* Developer by Leo Ling   Facebook login end */
+
+	@Override
+	public void onConnectionFailed(ConnectionResult result) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void onConnected(Bundle arg0) {
+		// TODO Auto-generated method stub
+
+	}
+	
+
+	@Override
+	public void onConnectionSuspended(int arg0) {
+		// TODO Auto-generated method stub
+	}
+	
+
+	
+
+	private void googlePlusLogout() {
+		if (mGoogleApiClient.isConnected()) {
+			Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
+			mGoogleApiClient.disconnect();
+			mGoogleApiClient.connect();
+			updateProfile(false);
+		}
+	}
+
+	private void updateProfile(boolean isSignedIn) {
+		if (isSignedIn) {
+			
+			//this.signinButton.setText("Log out");
+
+		} else {
+			
+			//this.signinButton.setText("Login with Google");
+		}
+	}
 }

@@ -50,6 +50,6 @@
 	<string name="modify_Page_Title_Text">修改密碼頁面</string>
 	<string name="Signup_Page_Title_Text">一般註冊頁面</string>
 	<string name="QS_Page_Title_Text">快速註冊頁面</string>
-	<string name="FB_Login_Success">Facebook 绑定登入完成</string>
+	<string name="Third_Partner_Login_Success">第三方帳號绑定登入完成</string>
 	<string name="Params_ERROR">参数错误</string>
 </resources>

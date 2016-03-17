@@ -235,7 +235,7 @@ public class AuthHttpClient {
 
     public enum AuthCommandType {
         Login(0), QuickAccount(1), RegisterAccount(2), ChangePassword(3),
-        FacebookLoginRegister(4);
+        FacebookLoginRegister(4),GoogleLoginRegister(5);
 
         private final int AuthTypevalue;
 
@@ -403,6 +403,33 @@ public class AuthHttpClient {
         };
         new Thread(runnable).start();
     }
+	 public void Auth_GoogleLoignRegister(String googleID, String gmail, String gname){
+	        
+	    	Long tsLong = System.currentTimeMillis()/1000;
+	    	String ts = tsLong.toString();
+	        Log.i("gg timestamp", "ts " + ts);
+	        String sign = MD5(AppID +  googleID + ApiKey + ts);
+	        final String UrlAction = "http://belugame.com/api/google/?";
+	
+	        final List<NameValuePair> params = new ArrayList<NameValuePair>();
+	        params.add(new BasicNameValuePair("appid", AppID));
+	        params.add(new BasicNameValuePair("googleid", googleID));
+	        params.add(new BasicNameValuePair("gmail", gmail));
+	        params.add(new BasicNameValuePair("gname", gname));
+	        params.add(new BasicNameValuePair("apikey", ApiKey));
+	        params.add(new BasicNameValuePair("ts", ts));
+	        params.add(new BasicNameValuePair("sign", sign));
+
+	        Runnable runnable = new Runnable() {
+	            @Override
+	            public void run() {
+
+	                httpPOST(AuthCommandType.GoogleLoginRegister, UrlAction,
+	                        params);
+	            }
+	        };
+	        new Thread(runnable).start();
+	    }
 
     public void Auth_QuickAccount() {
 
@@ -433,6 +460,7 @@ public class AuthHttpClient {
         params.add(new BasicNameValuePair("devtype", devtype));
         params.add(new BasicNameValuePair("packid", packid));
         params.add(new BasicNameValuePair("packageid", PackageID));
+        params.add(new BasicNameValuePair("ostype", "1"));
         params.add(new BasicNameValuePair("sign", sign));
 
         Runnable runnable = new Runnable() {
@@ -603,6 +631,11 @@ public class AuthHttpClient {
                 AuthBackDataProc_FacebookLoginRegister(Data);
                 Log.d("AuthBackDataProcess","Case FacebookLoginRegister end");
                 break;
+            case GoogleLoginRegister:
+            	Log.d("AuthBackDataProcess","Case GoogleLoginRegister start");
+                AuthBackDataProc_GoogleLoginRegister(Data);
+                Log.d("AuthBackDataProcess","Case GoogleLoginRegister end");
+                break;
             default:
                 AuthBackDataProc_UnknowType();
                 break;
@@ -675,6 +708,24 @@ public class AuthHttpClient {
             OnAuthEvent(-102,  MainActivity.getString(R.string.Data_Parse_Error_Type), -1, "", "", "");
         }
         Log.i("AuthBackDataProc_FacebookLoginRegister", "end...");
+    }
+    
+    private void AuthBackDataProc_GoogleLoginRegister(String Data) {
+    	Log.i("AuthBackDataProc_GoogleLoginRegister", "Start...");
+        try {
+            JSONObject jObj = new JSONObject(Data);
+            String code = jObj.getString("code");
+            String msg = jObj.getString("message");
+            String uid = jObj.getString("uid");
+            String userid = jObj.getString("QuickReg");
+            String userpwd = jObj.getString("Quickpw");
+            String googleId = jObj.getString("googleid");
+            OnAuthEvent(Integer.parseInt(code), msg, Long.parseLong(uid), userid, userpwd, googleId);
+        } catch (Exception e) {
+        	Log.i("AuthBackDataProc_GoogleLoginRegister", "Data_Parse_Error_Type");
+            OnAuthEvent(-102,  MainActivity.getString(R.string.Data_Parse_Error_Type), -1, "", "", "");
+        }
+        Log.i("AuthBackDataProc_GoogleLoginRegister", "end...");
     }
 
     private void AuthBackDataProc_UnknowType() {

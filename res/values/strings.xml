@@ -53,6 +53,6 @@
     <string name="modify_Page_Title_Text">Modify Password Page</string>
     <string name="Signup_Page_Title_Text">Resgister Page</string>
     <string name="QS_Page_Title_Text">Quick Sign Up Page</string>
-    <string name="FB_Login_Success">Facebook binding login to complete</string>
+    <string name="Third_Partner_Login_Success">Third partner binding login to complete</string>
     <string name="Params_ERROR">params error</string>   
 </resources>
