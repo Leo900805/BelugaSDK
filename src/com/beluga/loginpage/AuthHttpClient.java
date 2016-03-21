@@ -393,17 +393,23 @@ public class AuthHttpClient {
     	String ts = tsLong.toString();
         Log.i("fb timestamp", "ts " + ts);
         String sign = MD5(AppID + fbID + ApiKey + ts);
-        final String UrlAction = "http://belugame.com/api/facebook/"+"?"+AppID+"-"+fbID+"-"+ApiKey+"-"+ts+"-"+sign+".html";
-
+        final String UrlAction = "http://belugame.com/api/facebook/?";
+        
+        final List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("appid", AppID));
+        params.add(new BasicNameValuePair("fbid", fbID));
+        params.add(new BasicNameValuePair("apikey", ApiKey));
+        params.add(new BasicNameValuePair("ts", ts));
+        params.add(new BasicNameValuePair("sign", sign));
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                httpGET(AuthCommandType.FacebookLoginRegister, UrlAction);
+                httpPOST(AuthCommandType.FacebookLoginRegister, UrlAction,params);
             }
         };
         new Thread(runnable).start();
     }
-	 public void Auth_GoogleLoignRegister(String googleID, String gmail, String gname){
+	 public void Auth_GoogleLoignRegister(String googleID, String gmail, String gname, String photoUrl){
 	        
 	    	Long tsLong = System.currentTimeMillis()/1000;
 	    	String ts = tsLong.toString();
@@ -416,6 +422,7 @@ public class AuthHttpClient {
 	        params.add(new BasicNameValuePair("googleid", googleID));
 	        params.add(new BasicNameValuePair("gmail", gmail));
 	        params.add(new BasicNameValuePair("gname", gname));
+	        params.add(new BasicNameValuePair("photourl", photoUrl));
 	        params.add(new BasicNameValuePair("apikey", ApiKey));
 	        params.add(new BasicNameValuePair("ts", ts));
 	        params.add(new BasicNameValuePair("sign", sign));
@@ -701,7 +708,7 @@ public class AuthHttpClient {
             String uid = jObj.getString("uid");
             String userid = jObj.getString("QuickReg");
             String userpwd = jObj.getString("Quickpw");
-            String fbId = jObj.getString("fbid");
+            String fbId = jObj.getString("sid");
             OnAuthEvent(Integer.parseInt(code), msg, Long.parseLong(uid), userid, userpwd, fbId);
         } catch (Exception e) {
         	Log.i("AuthBackDataProc_FacebookLoginRegister", "Data_Parse_Error_Type");
@@ -719,7 +726,7 @@ public class AuthHttpClient {
             String uid = jObj.getString("uid");
             String userid = jObj.getString("QuickReg");
             String userpwd = jObj.getString("Quickpw");
-            String googleId = jObj.getString("googleid");
+            String googleId = jObj.getString("sid");
             OnAuthEvent(Integer.parseInt(code), msg, Long.parseLong(uid), userid, userpwd, googleId);
         } catch (Exception e) {
         	Log.i("AuthBackDataProc_GoogleLoginRegister", "Data_Parse_Error_Type");

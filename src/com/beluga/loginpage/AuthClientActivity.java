@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentSender.SendIntentException;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
@@ -12,7 +11,6 @@ import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -40,13 +38,10 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
-import com.google.android.gms.plus.Plus;
-import com.google.android.gms.plus.model.people.Person;
 
 import org.json.JSONObject;
 
@@ -98,12 +93,10 @@ public class AuthClientActivity extends Activity implements OnClickListener,
  	private GoogleApiClient mGoogleApiClient;
  	
 	private SignInButton signinButton;
-	//private Button signinButton;
-	
-	boolean mExplicitSignOut = false;
-	boolean mInSignInFlow = false; // set to true when you're in the middle of the
-	                               // sign in flow, to know you should not attempt
-	                               // to connect in onStart()
+	private String gId;
+	private String gname;
+	private String gmail;
+	private String gPhotoUrl;
     
     @Override
     protected void onResume() {
@@ -123,10 +116,16 @@ public class AuthClientActivity extends Activity implements OnClickListener,
     @Override
     protected void onStart() {
         super.onStart();
-        if (!mInSignInFlow && !mExplicitSignOut) {
-            // auto sign in
-            mGoogleApiClient.connect();
-        }
+        Log.i("AuthAct", "onStart ...");
+        mGoogleApiClient.connect();
+    }
+    
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mGoogleApiClient.isConnected()) {
+			mGoogleApiClient.disconnect();
+		}
     }
     
 	@Override
@@ -162,22 +161,18 @@ public class AuthClientActivity extends Activity implements OnClickListener,
         
         //Quick register button
         this.quickSignUpBtn = (Button)this.findViewById(R.id.quick_sign_up_btn);
-        Log.i("In login page", "quickSignUpBtn v is " + quickSignUpBtn);
         this.quickSignUpBtn.setOnClickListener(this);
         
         //General register button
         this.signUpBtn = (Button)this.findViewById(R.id.sign_up_btn);
-        Log.i("In login page", "SignUpBtn v is " + this.signUpBtn);
         this.signUpBtn.setOnClickListener(this);
         
         //General login button 
         this.loginBtn = (Button)this.findViewById(R.id.login_btn);
-        Log.i("In login page", "loginBtn v is " + this.loginBtn);
         this.loginBtn.setOnClickListener(this);
         
         //Facebook login button
         this.fbLoginButton = (LoginButton)this.findViewById(R.id.fblogin_button);
-        Log.i("In login page", "fbloginBtn v is " + this.fbLoginButton);
         this.fbLoginButton.setOnClickListener(this);
         
         //Modify password button
@@ -196,7 +191,7 @@ public class AuthClientActivity extends Activity implements OnClickListener,
         //signinButton = (Button) findViewById(R.id.google_sign_in_button);
         signinButton = (SignInButton) findViewById(R.id.google_sign_in_button);
 		signinButton.setOnClickListener(this);
-        
+		
         /*
          * Game Logo setup,
          * if img_GameLogo is 0,
@@ -242,17 +237,6 @@ public class AuthClientActivity extends Activity implements OnClickListener,
         	//auto login
         	authhttpclient.Auth_FacebookLoignRegister(fbId);
         }   
-        
-        if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
-        	   // signed in. Show the "sign out" button and explanation.
-        	   // ...
-        	Log.i("Check google login status", "already logged in");
-        	} else {
-        	   // not signed in. Show the "sign in" button and explanation.
-        	   // ...
-        		Log.i("Check google login status", "already logged out");
-        		
-        	}
     }
     
     //Maintain Dialog show method
@@ -589,44 +573,44 @@ public class AuthClientActivity extends Activity implements OnClickListener,
     private void handleSignInResult(GoogleSignInResult result) {
         Log.d(TAG, "handleSignInResult:" + result.isSuccess());
         if (result.isSuccess()) {
+        	Log.d(TAG, "handleSignInResult: in if condition." );
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = result.getSignInAccount();
-            Log.i(TAG, "gid:"+ acct.getId() + " gmail:"+ acct.getEmail() + " gname:"+ acct.getDisplayName());
-            InformationProcess.saveThirdPartyInfo(acct.getId(), AuthClientActivity.this);
-            authhttpclient.Auth_GoogleLoignRegister(acct.getId(), acct.getEmail(),acct.getDisplayName());
-            updateProfile(true);
+            this.gId = acct.getId();
+            this.gmail = acct.getEmail();
+            this.gname = acct.getDisplayName();
+            this.gPhotoUrl = acct.getPhotoUrl().toString();
+            Log.i(TAG, "gid:"+ this.gId + " gmail:"+ this.gmail + " gname:"+ this.gname+
+            		"photo URL:"+ this.gPhotoUrl);
+            InformationProcess.saveGoogleThirdPartyInfo(acct.getId(), AuthClientActivity.this);
+            authhttpclient.Auth_GoogleLoignRegister(acct.getId(), acct.getEmail(),
+            		acct.getDisplayName(), acct.getPhotoUrl().toString());
         } else {
-            // Signed out, show unauthenticated UI.
-        	updateProfile(false);
-        }
+            
+        	Log.d(TAG, "handleSignInResult: in else condition." );
+        	Log.d(TAG, "handleSignInResult:" + result.isSuccess()+ "Login failed");
+        }    
     }
+    
 
-
-    @Override
+	@Override
     public void onClick(View v) {
         int i = v.getId();
         if (i == R.id.login_btn) {
-        	
             this.PressLogin();
         } else if (i == R.id.modify_btn) {
-
             Intent Changepasswordintent = new Intent();
             Changepasswordintent.setClass(this, Changepassword.class);
             startActivityForResult(Changepasswordintent, 1);
-
         } else if (i == R.id.quick_sign_up_btn) {
-
             Intent Fastregistrationintent = new Intent();
             Fastregistrationintent.setClass(this, Fastregistration.class);
             startActivityForResult(Fastregistrationintent, 1);
-
         } else if (i == R.id.sign_up_btn) {
-
             Intent Registrationintent = new Intent();
             Registrationintent.setClass(this, Registration.class);
             startActivityForResult(Registrationintent, 1);
         }else if (i == R.id.fblogin_button){
-        	
         	this.pressFbButton = true;
         	loginFB(fbLoginButton);
         }else if (i == R.id.google_sign_in_button){
@@ -696,41 +680,27 @@ public class AuthClientActivity extends Activity implements OnClickListener,
 
 	@Override
 	public void onConnectionFailed(ConnectionResult result) {
-		// TODO Auto-generated method stub
+		// TODO Auto-generated method stub		
 	}
+	
 
 	@Override
 	public void onConnected(Bundle arg0) {
 		// TODO Auto-generated method stub
-
+		
+		Log.i("google info", "info :"+InformationProcess.getGoogleThirdPartyInfo(this));
+		if(InformationProcess.getGoogleThirdPartyInfo(this).equals("")){
+			Log.i("google info", "not google info, Please Login google account");
+		}else{
+			Toast.makeText(AuthClientActivity.this, "Conneccted", Toast.LENGTH_LONG).show();
+			signIn();
+		} 
 	}
 	
 
 	@Override
 	public void onConnectionSuspended(int arg0) {
 		// TODO Auto-generated method stub
-	}
-	
-
-	
-
-	private void googlePlusLogout() {
-		if (mGoogleApiClient.isConnected()) {
-			Plus.AccountApi.clearDefaultAccount(mGoogleApiClient);
-			mGoogleApiClient.disconnect();
-			mGoogleApiClient.connect();
-			updateProfile(false);
-		}
-	}
-
-	private void updateProfile(boolean isSignedIn) {
-		if (isSignedIn) {
-			
-			//this.signinButton.setText("Log out");
-
-		} else {
-			
-			//this.signinButton.setText("Login with Google");
-		}
+		mGoogleApiClient.connect();
 	}
 }

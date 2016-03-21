@@ -70,6 +70,21 @@ public class InformationProcess {
         }
         editor.commit();
     }
+	public static void saveGoogleThirdPartyInfo(String info, Activity act){
+	    	
+	    	SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(act);
+	        Editor editor = preferences.edit();
+	        
+	        try {
+	            //String data = encrypt(info, "9@a8i7Az");
+	        	String data = encrypt(info, "BelugaGoogleIdKey");
+	            editor.putString(thirdPartyInfo, URLEncoder.encode(data, "utf-8"));
+	            Settings.System.putString(act.getContentResolver(), thirdPartyInfo, URLEncoder.encode(data, "utf-8"));
+	        } catch (Exception e) {
+	        }
+	        editor.commit();
+	 }
+    
  
     public static void saveUserUid(String uid, Activity act) {
         if (uid.equalsIgnoreCase("") || uid.equalsIgnoreCase("0") || uid == null ) {
@@ -127,6 +142,28 @@ public class InformationProcess {
             }
             getThirdPartyInfo = URLDecoder.decode(getThirdPartyInfo, "utf-8");
             String decThirdPartyInfo = decrypt(getThirdPartyInfo, "9@a8i7Az");
+            return decThirdPartyInfo;
+        } catch (Exception e) {
+
+        }
+        return "";
+    }
+    
+    public static String getGoogleThirdPartyInfo(Activity act)
+    {
+        String getThirdPartyInfo ;
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(act);
+        getThirdPartyInfo = preferences.getString(thirdPartyInfo, "");
+
+        try {
+            if(getThirdPartyInfo.compareTo("")==0){
+            	getThirdPartyInfo = Settings.System.getString(act.getContentResolver(), thirdPartyInfo);
+            }
+            if(getThirdPartyInfo == null){
+            	getThirdPartyInfo = "";
+            }
+            getThirdPartyInfo = URLDecoder.decode(getThirdPartyInfo, "utf-8");
+            String decThirdPartyInfo = decrypt(getThirdPartyInfo, "BelugaGoogleIdKey");
             return decThirdPartyInfo;
         } catch (Exception e) {
 
