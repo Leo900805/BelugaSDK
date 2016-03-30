@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
@@ -71,6 +73,7 @@ public class AuthClientActivity extends Activity implements OnClickListener,
     int EditTextAccountMax = 16;
     int EditTextPassMax = 16;
     private int img_GameLogo;
+    private byte[] GameLogoForByteArray;
 
     //存在資料庫的帳密
     String saveacc = "";
@@ -198,12 +201,17 @@ public class AuthClientActivity extends Activity implements OnClickListener,
          * set default image
          * else set custom image
          */
-        if(this.img_GameLogo == 0){
+        if(this.img_GameLogo == 0 && this.GameLogoForByteArray == null){
             Log.d("login page","img_GameLogo value is"+img_GameLogo);
-        }else{
+        }else if(this.img_GameLogo != 0){
+        	Log.d("login page","img_GameLogo in else if condition");
             this.logoView.setImageResource(this.img_GameLogo);
+        }else{
+        	Log.d("login page","img_GameLogo in else condition");
+        	Bitmap bmp = BitmapFactory.decodeByteArray(this.GameLogoForByteArray, 0, this.GameLogoForByteArray.length);
+        	this.logoView.setImageBitmap(bmp);
         }
-        
+       
         /*
          * Maintain setup
          * inMaintain is true then,
@@ -277,12 +285,18 @@ public class AuthClientActivity extends Activity implements OnClickListener,
         this.img_GameLogo = intent.getIntExtra(Keys.GameLogo.toString(),0);
         Log.i("Login page", "img_GameLogo value is:" + img_GameLogo);
         
+        this.GameLogoForByteArray = intent.getByteArrayExtra(Keys.GameLogoForByteArray.toString());
+        
         //get boolean assign into inMaintain 
         inMaintain = intent.getBooleanExtra(Keys.ActiveMaintainDialog.toString(), false);
         //get dialog title into  dialogTitle global variable  
         dialogTitle = intent.getStringExtra(Keys.DialogTitle.toString());
         //get dialog message into  dialogMessage global variable
         dialogMessage = intent.getStringExtra(Keys.DialogMessage.toString());
+        
+        if(this.GameLogoForByteArray == null){
+        	Log.i("Login page", "GameLogo for byte is" + this.GameLogoForByteArray);
+        }
         
         /*
          * AppID, ApiKey and PackageID is null show "params error" string 

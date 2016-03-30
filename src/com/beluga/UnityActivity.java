@@ -1,6 +1,9 @@
 package com.beluga;
 
 import com.beluga.belugakeys.Keys;
+import com.beluga.payment.iab.InAppBillingActivity;
+import com.beluga.payment.mol.MOLActivity;
+import com.beluga.payment.mycard.MyCardActivity;
 import com.unity3d.player.UnityPlayer;
 import com.unity3d.player.UnityPlayerActivity;
 
@@ -9,7 +12,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-//import android.widget.TextView;
+import android.view.View;
 
 public class UnityActivity extends UnityPlayerActivity{
 	
@@ -103,27 +106,114 @@ public class UnityActivity extends UnityPlayerActivity{
         
     }
  
-	public void StartAuthClient() {
+	public void StartAuthClient(String appid, String apikey, byte[] gameLogo,String packageID,  
+			boolean inMaintain, String dialogTitle, String dialogMessage) {
 			
-		    String appid =  "fanadv3";
-		    String apikey = "4fbc7b551f8ab63d4dadd8694ff261bf";
-		    String packageID = this.getClass().getPackage().getName();
-		    Intent intent; 
-		    boolean inMaintain = false;
-		    String dialogTitle = "Warnings";// if inMaintain is false setDialog title null
-		    String dialogMessage = "server in maintain...";// if inMaintain is false setDialog message null
+			Intent intent; 
+		    //String appid =  "fanadv3";
+		    //String apikey = "4fbc7b551f8ab63d4dadd8694ff261bf";
+		    //String packageID = this.getClass().getPackage().getName();
+		    //boolean inMaintain = false;
+		    //String dialogTitle = "Warnings";// if inMaintain is false setDialog title null
+		    //String dialogMessage = "server in maintain...";// if inMaintain is false setDialog message null
 	
 	        intent = new Intent(this, com.beluga.loginpage.AuthClientActivity.class);
 	        intent.putExtra(Keys.AppID.toString(), appid);
 	        intent.putExtra(Keys.ApiKey.toString(), apikey);
 	        intent.putExtra(Keys.PackageID.toString(), packageID);
 	        //intent.putExtra(Keys.GameLogo.toString(), R.drawable.cbimage);
+	        intent.putExtra(Keys.GameLogoForByteArray.toString(), gameLogo);
 	        intent.putExtra(Keys.ActiveMaintainDialog.toString(), inMaintain);
 	        intent.putExtra(Keys.DialogMessage.toString(), dialogMessage);
 	        intent.putExtra(Keys.DialogTitle.toString(), dialogTitle);
 	        Log.i("pID", packageID);
 	        startActivityForResult(intent, 100);
-	    }
+	}
+	
+	public void startGooglePaymentButtonPress(String SKU_GAS, String base64, String userId,
+			String serverId, String role, String orderId){ 
+		//String SKU_GAS = "beluga.gold";
+		//String base64 = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAn2J6q0hd9FhArBYBcKSJabarKunSudfg/LUAwstUY/6UN581eoXEKBo7U2Kd2IA1GaAAXS3vAx4Nv9DAJrurBNof6JpCaEKjhzHLI8TWRqXh77K9dwM8mNMBnN83pP05pRLOMUz33Q/gd1wpQgFzumjl2ai/wAaIqb2YLCvOCUKPIBz5F4RedIySdMfSvIVsDt1FrIOxmPgyL7PFfU42nJMGle7o01hB+vvcMoOaOJu6Kmjkgbru6X6TRWXFfVXY/27iTbCmF1ASsS6btJgQAZr49Km23lZUlV4T+Po9CFfy04PS+uBXJvleUJPuKQe4GMLtcEfUkhQDZpllUvEI7wIDAQAB";
+		//String UserId = "1030176"; //user id
+		Log.i("Unity Activity", "IAB Start...");
+
+		Intent i = new Intent(this, com.beluga.payment.iab.InAppBillingActivity.class);
+		Bundle b = new Bundle();
+		b.putString(InAppBillingActivity.base64EncodedPublicKey, base64);
+		b.putString(InAppBillingActivity.ItemID, SKU_GAS);
+		b.putString(InAppBillingActivity.User_ID, userId);
+
+	
+		b.putString(InAppBillingActivity.Server, serverId); 
+		b.putString(InAppBillingActivity.Role, role); 
+		b.putString(InAppBillingActivity.Order, orderId);
+		i.putExtras(b);
+		startActivityForResult(i, InAppBillingActivity.GBilling_REQUEST);
+		Log.i("Unity Activity", "IAB end...");
+	}
+	
+	public void startMOLPaymentButtonPress(String user_id, String game_id, String app_id,
+			String PackageID, String server_id, String role) {
+		//String user_id = "1000005"; 
+		//String game_id = "04101786";
+		//String app_id = "herinv";
+		//String PackageID = this.getClass().getPackage().getName();
+		//String server_id = "999";
+		//String role = "leo";
+		Intent i = new Intent(this, MOLActivity.class);
+		Bundle b = new Bundle();
+		b.putString("UserId",user_id);
+		b.putString("gamerID", game_id);
+		b.putString("AppID", app_id);
+		b.putString("PackageID", PackageID);
+		b.putString("ServerID", server_id);
+		b.putString("RoleName", role);
+		i.putExtras(b);
+		startActivity(i);
+	}
+	
+	public void startMyCardSmallPaymentButtonPress(String apikey,String appid, String uid, 
+			String server_id, String role, String itemId, String orderId) {
+		Intent i = new Intent(this, MyCardActivity.class);
+		Bundle b = new Bundle();
+		
+		//String serviceType = MyCardActivity.TYPE_SMALL_PAYMENT;
+		//String apikey = "412c1bd510967dce3b050842a35fae18";
+		//String appid = "kilmasa";
+		//String uid = "1040714";
+		
+		
+		b.putString("type",  MyCardActivity.TYPE_SMALL_PAYMENT); 
+		b.putString(Keys.ApiKey.toString(), apikey);
+		b.putString(Keys.AppID.toString(), appid);
+		b.putString("uid", uid);
+		
+		
+		b.putString("tserver", server_id); 
+		b.putString("trol", role); 
+		b.putString("titem", itemId);
+		b.putString("order", orderId);
+		i.putExtras(b);
+		startActivity(i);
+	}
+	
+	public void startMyCardSerialNumberButtonPress(String apikey,String appid, String uid, 
+			String server_id, String role, String itemId, String orderId) {
+		Intent i = new Intent(this, MyCardActivity.class);
+		Bundle b = new Bundle();
+		
+		b.putString("type", MyCardActivity.TYPE_SERIAL_NUMBER); 
+		b.putString(Keys.ApiKey.toString(), "4fbc7b551f8ab63d4dadd8694ff261bf");
+		b.putString(Keys.AppID.toString(), "fanadv3");
+		b.putString("uid","1000448");
+		
+		b.putString("tserver", server_id); 
+		b.putString("trol", role); 
+		b.putString("titem", itemId);
+		b.putString("order", orderId);
+		i.putExtras(b);
+		startActivity(i);
+	}
 	
 	
 }
