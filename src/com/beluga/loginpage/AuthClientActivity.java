@@ -100,6 +100,8 @@ public class AuthClientActivity extends Activity implements OnClickListener,
 	private String gname;
 	private String gmail;
 	private String gPhotoUrl;
+	
+	//Boolean googleLoginStatus = false;
     
     @Override
     protected void onResume() {
@@ -244,7 +246,7 @@ public class AuthClientActivity extends Activity implements OnClickListener,
         	fbId = InformationProcess.getThirdPartyInfo(this);
         	//auto login
         	authhttpclient.Auth_FacebookLoignRegister(fbId);
-        }   
+        } 
     }
     
     //Maintain Dialog show method
@@ -576,8 +578,15 @@ public class AuthClientActivity extends Activity implements OnClickListener,
                 ex.printStackTrace();
             }
         } else if(requestCode == RC_SIGN_IN){
-        	GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            handleSignInResult(result);
+        	if(resultCode != RESULT_CANCELED){
+        		GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+           	 	Log.i(TAG, "Result status: "+result.getStatus().toString());
+               handleSignInResult(result);
+        	}else{
+        		Log.i("Auth ", "is RESULT_CANCELED");
+        		setResult(Activity.RESULT_OK);
+        	}
+            
         }else{
         	Log.i("Auth ", "else set SetAccountTextFromSave()");
             SetAccountTextFromSave();
@@ -586,6 +595,7 @@ public class AuthClientActivity extends Activity implements OnClickListener,
     }
     private void handleSignInResult(GoogleSignInResult result) {
         Log.d(TAG, "handleSignInResult:" + result.isSuccess());
+        Log.i(TAG, "gResult status: "+result.getStatus().toString());
         if (result.isSuccess()) {
         	Log.d(TAG, "handleSignInResult: in if condition." );
             // Signed in successfully, show authenticated UI.
@@ -599,10 +609,11 @@ public class AuthClientActivity extends Activity implements OnClickListener,
             InformationProcess.saveGoogleThirdPartyInfo(acct.getId(), AuthClientActivity.this);
             authhttpclient.Auth_GoogleLoignRegister(acct.getId(), acct.getEmail(),
             		acct.getDisplayName(), acct.getPhotoUrl().toString());
+            //this.googleLoginStatus = true;
         } else {
-            
         	Log.d(TAG, "handleSignInResult: in else condition." );
         	Log.d(TAG, "handleSignInResult:" + result.isSuccess()+ "Login failed");
+        	//this.googleLoginStatus = false;
         }    
     }
     
@@ -638,7 +649,7 @@ public class AuthClientActivity extends Activity implements OnClickListener,
         startActivityForResult(signInIntent, RC_SIGN_IN);
         Log.d(TAG, "Signin end ....");
     }
-    /* Developer by Leo Ling   Facebook login */
+   
    	public void loginFB(LoginButton loginButton){
    	//public void loginFB(Button loginButton){
    		 
@@ -690,7 +701,7 @@ public class AuthClientActivity extends Activity implements OnClickListener,
    		
           });
    	}
-   	/* Developer by Leo Ling   Facebook login end */
+   
 
 	@Override
 	public void onConnectionFailed(ConnectionResult result) {
@@ -701,7 +712,6 @@ public class AuthClientActivity extends Activity implements OnClickListener,
 	@Override
 	public void onConnected(Bundle arg0) {
 		// TODO Auto-generated method stub
-		
 		Log.i("google info", "info :"+InformationProcess.getGoogleThirdPartyInfo(this));
 		if(InformationProcess.getGoogleThirdPartyInfo(this).equals("")){
 			Log.i("google info", "not google info, Please Login google account");
@@ -709,6 +719,7 @@ public class AuthClientActivity extends Activity implements OnClickListener,
 			Toast.makeText(AuthClientActivity.this, "Conneccted", Toast.LENGTH_LONG).show();
 			signIn();
 		} 
+		Log.i("google info", "info please login google");
 	}
 	
 
