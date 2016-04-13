@@ -122,6 +122,7 @@ public class AuthClientActivity extends Activity implements OnClickListener,
     protected void onStart() {
         super.onStart();
         Log.i("AuthAct", "onStart ...");
+        setButtonEnable(true);
         mGoogleApiClient.connect();
     }
     
@@ -171,20 +172,28 @@ public class AuthClientActivity extends Activity implements OnClickListener,
         //General register button
         this.signUpBtn = (Button)this.findViewById(R.id.sign_up_btn);
         this.signUpBtn.setOnClickListener(this);
-        
+           
         //General login button 
         this.loginBtn = (Button)this.findViewById(R.id.login_btn);
         this.loginBtn.setOnClickListener(this);
-        
+            
         //Facebook login button
         this.fbLoginButton = (LoginButton)this.findViewById(R.id.fblogin_button);
         this.fbLoginButton.setOnClickListener(this);
-        
+            
         //Modify password button
         this.modPwdBtn = (Button)this.findViewById(R.id.modify_btn);
         Log.i("In login page", "modPwdBtn v is " + this.modPwdBtn);
         this.modPwdBtn.setOnClickListener(this);
-        
+              
+        //google button 
+        //signinButton = (Button) findViewById(R.id.google_sign_in_button);
+        signinButton = (SignInButton) findViewById(R.id.google_sign_in_button);
+		signinButton.setOnClickListener(this);
+		
+        //set button enable
+		setButtonEnable(true);
+		
         //Password input Field
         inputpassword = (EditText)this.findViewById(R.id.loginPwdEditText);
         //Account input Field
@@ -192,11 +201,6 @@ public class AuthClientActivity extends Activity implements OnClickListener,
         //Game logo image view
         this.logoView = (ImageView)this.findViewById(R.id.advertView);
         
-        //google button 
-        //signinButton = (Button) findViewById(R.id.google_sign_in_button);
-        signinButton = (SignInButton) findViewById(R.id.google_sign_in_button);
-		signinButton.setOnClickListener(this);
-		
         /*
          * Game Logo setup,
          * if img_GameLogo is 0,
@@ -240,6 +244,7 @@ public class AuthClientActivity extends Activity implements OnClickListener,
         	Log.i("Check fb login status", "already logged out");
         }else{
         	Log.i("Check fb login status", "already logged in");
+        	setButtonEnable(false);
         	//developer Facebook logout setting
         	//LoginManager.getInstance().logOut();
         	//get facebook ID
@@ -622,26 +627,40 @@ public class AuthClientActivity extends Activity implements OnClickListener,
     public void onClick(View v) {
         int i = v.getId();
         if (i == R.id.login_btn) {
+        	setButtonEnable(false);
             this.PressLogin();
         } else if (i == R.id.modify_btn) {
+        	setButtonEnable(false);
             Intent Changepasswordintent = new Intent();
             Changepasswordintent.setClass(this, Changepassword.class);
             startActivityForResult(Changepasswordintent, 1);
         } else if (i == R.id.quick_sign_up_btn) {
+        	setButtonEnable(false);
             Intent Fastregistrationintent = new Intent();
             Fastregistrationintent.setClass(this, Fastregistration.class);
             startActivityForResult(Fastregistrationintent, 1);
         } else if (i == R.id.sign_up_btn) {
+        	setButtonEnable(false);
             Intent Registrationintent = new Intent();
             Registrationintent.setClass(this, Registration.class);
             startActivityForResult(Registrationintent, 1);
         }else if (i == R.id.fblogin_button){
+        	setButtonEnable(false);
         	this.pressFbButton = true;
         	loginFB(fbLoginButton);
         }else if (i == R.id.google_sign_in_button){
+        	setButtonEnable(false);
         	signIn();
         }
     }
+	private void setButtonEnable(Boolean enabled){
+		quickSignUpBtn.setEnabled(enabled);
+		signUpBtn.setEnabled(enabled);
+		loginBtn.setEnabled(enabled);
+		fbLoginButton.setEnabled(enabled);
+		modPwdBtn.setEnabled(enabled);
+		signinButton.setEnabled(enabled);
+	}
     
     private void signIn() {
     	 Log.d(TAG, "Signin start ....");
@@ -717,6 +736,7 @@ public class AuthClientActivity extends Activity implements OnClickListener,
 			Log.i("google info", "not google info, Please Login google account");
 		}else{
 			Toast.makeText(AuthClientActivity.this, "Conneccted", Toast.LENGTH_LONG).show();
+			setButtonEnable(false);
 			signIn();
 		} 
 		Log.i("google info", "info please login google");
