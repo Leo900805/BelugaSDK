@@ -24,9 +24,9 @@ public class InAppBillingActivity extends Activity {
 	
 	String base64 = "";
 	private String mTradeid;
-	private String mReceipt;
-	private String mOrder;
-	private String mOrdersign;
+	//private String mReceipt;
+	//private String mOrder;
+	//private String mOrdersign;
 	private IabHelper mHelper;
 	private String mItemId;
 	private String mUserId;
@@ -71,9 +71,9 @@ public class InAppBillingActivity extends Activity {
 			return;
 		}
 		
-		Log.i(TAG,"base64 = "+base64);
-		Log.i(TAG,"User_Id = "+User_Id);
-		Log.i(TAG,"Item_ID = "+Item_ID);
+		//Log.i(TAG,"base64 = "+base64);
+		//Log.i(TAG,"User_Id = "+User_Id);
+		//Log.i(TAG,"Item_ID = "+Item_ID);
 		
 		
 		BuyItem(base64, User_Id, Item_ID,Role_str,Server_str,Order_str);
@@ -83,12 +83,12 @@ public class InAppBillingActivity extends Activity {
 	
 	private void ShowProgressbar(){
 		try{
-			Log.i("NicePlayGB", "now ProgressDialog.show()");
+			//Log.i("NicePlayGB", "now ProgressDialog.show()");
 			dialog = ProgressDialog.show(InAppBillingActivity.this, "Please wait...", Tools.getStringByName(this, "payingprogressmsg"));
-			Log.i("NicePlayGB", "ProgressDialog.show() end");
+			//Log.i("NicePlayGB", "ProgressDialog.show() end");
 		}catch(Exception e){
-			Log.e("NicePlayGB","Can't show progress bar \n"+ dialog);
-			Log.e("NicePlayGB","Can't show progress bar \n"+e.toString());
+			//Log.e("NicePlayGB","Can't show progress bar \n"+ dialog);
+			//Log.e("NicePlayGB","Can't show progress bar \n"+e.toString());
 		}
 	}
 	private void BuyItem(String base64EncodedPublicKey,String UserId,String ItemID,String Roleid,String Serverid,String Orderid) {
@@ -112,11 +112,11 @@ public class InAppBillingActivity extends Activity {
         if(Orderid != null){
         	b.putString(Order, Orderid);
         }
-        Log.i(TAG,"bundle "+b.toString());
-        Log.i(TAG, "call tradeInfoCreateInNP()");
+        //Log.i(TAG,"bundle "+b.toString());
+        //Log.i(TAG, "call tradeInfoCreateInNP()");
         tradeInfoCreateInNP(b);
         
-        Log.i(TAG, "BuyItem end");
+        //Log.i(TAG, "BuyItem end");
     }
 		
 	private void SetUi(){
@@ -135,40 +135,40 @@ public class InAppBillingActivity extends Activity {
 
 			@Override
 			protected JSONObject doInBackground(Void... params) {
-				Log.i("JSONObject doInBackground:", "call ServerUtilities.getTradeInfoWithGet()" );
+				//Log.i("JSONObject doInBackground:", "call ServerUtilities.getTradeInfoWithGet()" );
 				JSONObject jObj = ServerUtilities.getTradeInfoWithGet(InAppBillingActivity.this,b, ServerUtilities.TradeInfoUrl);
-				Log.i("JSONObject doInBackground:", "ServerUtilities.TradeInfoUrl value:"+ ServerUtilities.TradeInfoUrl );
-				Log.i("JSONObject doInBackground:", "doInBackground jObj value:"+ jObj);
+				//Log.i("JSONObject doInBackground:", "ServerUtilities.TradeInfoUrl value:"+ ServerUtilities.TradeInfoUrl );
+				//Log.i("JSONObject doInBackground:", "doInBackground jObj value:"+ jObj);
 				return jObj;
 			}
 
 			@Override
 			protected void onPostExecute(JSONObject jObj) {
 				super.onPostExecute(jObj);
-				Log.i("onPostExecute:", "onPostExecute process");
+				//Log.i("onPostExecute:", "onPostExecute process");
 				if(jObj == null){
 					sendOnTradeGoogleFinished(-2,"create trade id from server failed");
 					return;
 				}
 				
 				try {
-					Log.d(TAG,"flag line 152");
+					//Log.d(TAG,"flag line 152");
 					mTradeid = jObj.getString("tradeid");
 					
 					int code = jObj.getInt("code");
 					String message = jObj.getString("message");
-					Log.d(TAG,"tradeInfoCreateInNP code = "+code+" ; MESSAGE = "+ message + " ; tradeid is "+mTradeid );
+					//Log.d(TAG,"tradeInfoCreateInNP code = "+code+" ; MESSAGE = "+ message + " ; tradeid is "+mTradeid );
 					if(code != 1){
-						Log.d(TAG,"flag line 159");
+						//Log.d(TAG,"flag line 159");
 						sendOnTradeGoogleFinished(-2,"create trade id from server failed : "+message);
 					}else{
-						Log.d(TAG,"flag line 162");
+						//Log.d(TAG,"flag line 162");
 						PayAppBill();
 					}
-					Log.d(TAG,"flag line 165");
+					//Log.d(TAG,"flag line 165");
 					Log.d(TAG, "msg1:"+jObj.toString());
 				} catch (JSONException e) {
-					Log.d(TAG,"flag line 168");
+					//Log.d(TAG,"flag line 168");
 					e.printStackTrace();
 					sendOnTradeGoogleFinished(-2,"create trade id from server failed"+e.toString());
 				}
@@ -388,19 +388,19 @@ public class InAppBillingActivity extends Activity {
     
     private void verifyReceipt(Purchase purchase) {
     	Bundle b = new Bundle();
-    	mReceipt =purchase.getOrderId();
-    	mOrder = purchase.getOriginalJson();
-    	mOrdersign = purchase.getSignature();
+    	//mReceipt =purchase.getOrderId();
+    	//mOrder = purchase.getOriginalJson();
+    	//mOrdersign = purchase.getSignature();
     	if(mTradeid == null){
     		Log.e(TAG,"Trade id is null");
     		sendOnTradeGoogleFinished(-3, "Trade id is null");
     		return;
     	}
-    	Log.d(TAG,"Trade id is "+mTradeid);
-        b.putString("tradeid", mTradeid);
-        b.putString("receipt", mReceipt);
-        b.putString("order", mOrder);
-        b.putString("ordersign", mOrdersign);
+    	//Log.d(TAG,"Trade id is "+mTradeid);
+        //b.putString("tradeid", mTradeid);
+        //b.putString("receipt", mReceipt);
+        //b.putString("order", mOrder);
+        //b.putString("ordersign", mOrdersign);
         verifyReceiptToServer(b);
     }
 	private void verifyReceiptToServer(final Bundle b) {
@@ -497,9 +497,9 @@ public class InAppBillingActivity extends Activity {
 			b.putString("type", "PAYMENT");
 			//b.putString(Tradeid, mTradeid);
 			b.putString("tradeid", mTradeid);
-			b.putString("receipt", mReceipt);
-			b.putString("order", mOrder);
-			b.putString("ordersign", mOrdersign);
+			//b.putString("receipt", mReceipt);
+			//b.putString("order", mOrder);
+			//b.putString("ordersign", mOrdersign);
 		}
 		intent.putExtras(b);
 		setResult(Activity.RESULT_OK, intent); 

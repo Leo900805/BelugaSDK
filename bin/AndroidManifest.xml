@@ -15,11 +15,11 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="com.android.vending.BILLING" />
-     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
-    
-    
-    
+  	<uses-permission android:name="android.permission.GET_TASKS"  />
+  	
+  	
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -107,6 +107,10 @@
           android:name="com.google.android.gms.auth.api.signin.internal.SignInHubActivity"
 			android:screenOrientation="portrait"
 			android:windowSoftInputMode="stateAlwaysHidden|adjustPan" />
+        
+        
+         <!--meta-data android:name="TD_APP_ID" android:value="Your_app_id" /--> 
+  		 <!--meta-data android:name="TD_CHANNEL_ID" android:value="Your_channel_id" /-->
     </application>
     
     

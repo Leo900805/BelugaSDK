@@ -44,6 +44,8 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+//import com.tendcloud.tenddata.TCAgent;
+import com.tendcloud.tenddata.TalkingDataGA;
 
 import org.json.JSONObject;
 
@@ -140,6 +142,16 @@ public class AuthClientActivity extends Activity implements OnClickListener,
         //Facebook Initialize
         FacebookSdk.sdkInitialize(getApplicationContext()); 
         this.setContentView(R.layout.login_page);
+        
+        //TCAgent.LOG_ON=true;
+        // App ID: 在TalkingData创建应用后，进入数据报表页中，在“系统设置”-“编辑应用”页面里查看App ID。  
+        // 渠道 ID: 是渠道标识符，可通过不同渠道单独追踪数据。
+        //TCAgent.init(this, "您的 App ID", "渠道 ID");
+        //TCAgent.setReportUncaughtExceptions(true);
+        
+         // App ID: 在TalkingData Game Analytics创建应用后会得到App ID。 
+        // 渠道 ID: 是渠道标识符，可通过不同渠道单独追踪数据。
+        //TalkingDataGA.init(this, "CA1F3158884B22B81EB39EEB18DB62F7", "google play");
         
         //deef link...
         AppLinkData.fetchDeferredAppLinkData(this, 
