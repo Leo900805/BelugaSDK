@@ -151,7 +151,7 @@ public class AuthClientActivity extends Activity implements OnClickListener,
         
          // App ID: 在TalkingData Game Analytics创建应用后会得到App ID。 
         // 渠道 ID: 是渠道标识符，可通过不同渠道单独追踪数据。
-        //TalkingDataGA.init(this, "CA1F3158884B22B81EB39EEB18DB62F7", "google play");
+        TalkingDataGA.init(this, "CA1F3158884B22B81EB39EEB18DB62F7", "google play");
         
         //deef link...
         AppLinkData.fetchDeferredAppLinkData(this, 
