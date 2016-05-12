@@ -697,8 +697,8 @@ public class AuthClientActivity extends Activity implements OnClickListener,
 			Log.i("google info", "not google info, Please Login google account");
 		}else{
 			//Toast.makeText(AuthClientActivity.this, "Conneccted", Toast.LENGTH_LONG).show();
-			//setButtonEnable(false);
-			//signIn();
+			setButtonEnable(false);
+			signIn();
 		} 
 		Log.i("google info", "info please login google");
 	}
