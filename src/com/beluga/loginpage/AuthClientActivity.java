@@ -24,16 +24,10 @@ import com.beluga.belugakeys.Keys;
 import com.beluga.loginpage.datacontrol.InformationProcess;
 import com.beluga.loginpage.datacontrol.UsedString;
 import com.facebook.AccessToken;
-import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
-import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
 import com.facebook.appevents.AppEventsLogger;
-import com.facebook.applinks.AppLinkData;
 //import com.facebook.login.LoginManager;
-import com.facebook.login.LoginResult;
+
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -46,8 +40,6 @@ import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 //import com.tendcloud.tenddata.TCAgent;
 import com.tendcloud.tenddata.TalkingDataGA;
-
-import org.json.JSONObject;
 
 import com.beluga.R;
 
@@ -89,10 +81,9 @@ public class AuthClientActivity extends Activity implements OnClickListener,
     String dialogMessage;
     
     //Facebook correlation object declare
-    CallbackManager callbackManager;
-    private AccessToken accessToken;
     boolean pressFbButton = false;
     private String fbId;
+    FacebookInfoManager fbInfoManager;
     
     // Google client to communicate with Google
  	private GoogleApiClient mGoogleApiClient;
@@ -103,7 +94,9 @@ public class AuthClientActivity extends Activity implements OnClickListener,
 	private String gmail;
 	private String gPhotoUrl;
 	
-	//Boolean googleLoginStatus = false;
+	//TalkingData Game Analytics variables
+	private String analytic_APP_ID = null;
+    private String analytic_Channel_ID = null; //custom ID
     
     @Override
     protected void onResume() {
@@ -143,26 +136,8 @@ public class AuthClientActivity extends Activity implements OnClickListener,
         FacebookSdk.sdkInitialize(getApplicationContext()); 
         this.setContentView(R.layout.login_page);
         
-        //TCAgent.LOG_ON=true;
-        // App ID: 在TalkingData创建应用后，进入数据报表页中，在“系统设置”-“编辑应用”页面里查看App ID。  
-        // 渠道 ID: 是渠道标识符，可通过不同渠道单独追踪数据。
-        //TCAgent.init(this, "您的 App ID", "渠道 ID");
-        //TCAgent.setReportUncaughtExceptions(true);
-        
-         // App ID: 在TalkingData Game Analytics创建应用后会得到App ID。 
-        // 渠道 ID: 是渠道标识符，可通过不同渠道单独追踪数据。
-        //TalkingDataGA.init(this, "CA1F3158884B22B81EB39EEB18DB62F7", "google play");
-        
-        //deef link...
-        AppLinkData.fetchDeferredAppLinkData(this, 
-        		  new AppLinkData.CompletionHandler() {
-        		     @Override
-        		     public void onDeferredAppLinkDataFetched(AppLinkData appLinkData) {
-        		         // Process app link data
-        		    	 Log.i("deef link", "...");
-        		     }
-        		 }
-        		);
+         //get external data 
+         GetDataSetting();
         
 	     // Configure sign-in to request the user's ID, email address, and basic
 	     // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
@@ -174,8 +149,10 @@ public class AuthClientActivity extends Activity implements OnClickListener,
 	     		addOnConnectionFailedListener(this).
 	     		addApi(Auth.GOOGLE_SIGN_IN_API, gso).build();
 		  
-        //get external data 
-        GetDataSetting();
+        
+        // App ID: 在TalkingData Game Analytics创建应用后会得到App ID。 
+        // 渠道 ID: 是渠道标识符，可通过不同渠道单独追踪数据。
+        TalkingDataGA.init(this, this.analytic_APP_ID, this.analytic_Channel_ID);
         
         //Quick register button
         this.quickSignUpBtn = (Button)this.findViewById(R.id.quick_sign_up_btn);
@@ -245,6 +222,8 @@ public class AuthClientActivity extends Activity implements OnClickListener,
             SetDefaultText(); //設定text box預設值
         }
         
+        fbInfoManager = new FacebookInfoManager(this, authhttpclient); 
+        
         /*
          * determine facebook whether logout?
          * if getCurrentAccessToken() is null, 
@@ -252,8 +231,11 @@ public class AuthClientActivity extends Activity implements OnClickListener,
          * else, facebook button status is login
          * then auto use faccebook login 
          */
+        
         if (AccessToken.getCurrentAccessToken() == null) {
+        //if (fbInfoManager.getAccessToken().getCurrentAccessToken() == null) {
         	Log.i("Check fb login status", "already logged out");
+        	setButtonEnable(true);
         }else{
         	Log.i("Check fb login status", "already logged in");
         	setButtonEnable(false);
@@ -261,9 +243,11 @@ public class AuthClientActivity extends Activity implements OnClickListener,
         	//LoginManager.getInstance().logOut();
         	//get facebook ID
         	fbId = InformationProcess.getThirdPartyInfo(this);
+        	Log.i("Check fb login status", "fbID :"+ fbId);
         	//auto login
         	authhttpclient.Auth_FacebookLoignRegister(fbId);
         } 
+        
     }
     
     //Maintain Dialog show method
@@ -313,8 +297,15 @@ public class AuthClientActivity extends Activity implements OnClickListener,
         //get dialog message into  dialogMessage global variable
         dialogMessage = intent.getStringExtra(Keys.DialogMessage.toString());
         
+        this.analytic_APP_ID = intent.getStringExtra(Keys.AnalyticAppID.toString());
+        this.analytic_Channel_ID = intent.getStringExtra(Keys.AnalyticChannelID.toString());
+        
+        if(this.analytic_APP_ID == null && this.analytic_Channel_ID == null){
+        	Log.i(TAG, "Please input analytic_APP_ID and analytic_Channel_ID.");
+        }
+        
         if(this.GameLogoForByteArray == null){
-        	Log.i("Login page", "GameLogo for byte is" + this.GameLogoForByteArray);
+        	Log.i("TAG", "GameLogo for byte is" + this.GameLogoForByteArray);
         }
         
         /*
@@ -333,8 +324,7 @@ public class AuthClientActivity extends Activity implements OnClickListener,
          */
         if(AuthHttpClient.ApiKey != null){
             if(AuthHttpClient.ApiKey.compareTo("") != 0){
-                Log.d(TAG,AuthHttpClient.ApiKey
-                        .substring(AuthHttpClient.ApiKey.length() - 4
+                Log.d(TAG,AuthHttpClient.ApiKey.substring(AuthHttpClient.ApiKey.length() - 4
                                 , AuthHttpClient.ApiKey.length()));
             }else{
                 Log.e(TAG, " ApiKey is empty ");
@@ -389,7 +379,7 @@ public class AuthClientActivity extends Activity implements OnClickListener,
     }
     
     //按下登入鈕呼叫的地方
-    public void PressLogin()
+    private void PressLogin()
     {
         String accid = inputaccount.getText().toString();
         String accpwd = inputpassword.getText().toString();
@@ -554,7 +544,16 @@ public class AuthClientActivity extends Activity implements OnClickListener,
         /* Developer by Leo Ling   Facebook login */
     		if(this.pressFbButton == true){
     			this.pressFbButton = false;
-    			callbackManager.onActivityResult(requestCode, resultCode, data);
+    			this.fbInfoManager.getCallbackManager().onActivityResult(requestCode, resultCode, data);
+    			
+    			if (AccessToken.getCurrentAccessToken() == null) {
+    		        //if (fbInfoManager.getAccessToken().getCurrentAccessToken() == null) {
+    		        	Log.i("Check fb login status", "already logged out");
+    		        	setButtonEnable(true);
+    		     }else{
+    		    	 setButtonEnable(false);
+    		     }
+    			
     		}
     	/* Developer by Leo Ling   Facebook login end */
         if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
@@ -659,7 +658,8 @@ public class AuthClientActivity extends Activity implements OnClickListener,
         }else if (i == R.id.fblogin_button){
         	setButtonEnable(false);
         	this.pressFbButton = true;
-        	loginFB(fbLoginButton);
+        	//loginFB(fbLoginButton);
+        	this.fbInfoManager.loginWithFacebook(fbLoginButton);
         }else if (i == R.id.google_sign_in_button){
         	setButtonEnable(false);
         	signIn();
@@ -681,58 +681,7 @@ public class AuthClientActivity extends Activity implements OnClickListener,
         Log.d(TAG, "Signin end ....");
     }
    
-   	public void loginFB(LoginButton loginButton){
-   	//public void loginFB(Button loginButton){
-   		 
-   		 //宣告callback Manager
-          callbackManager = CallbackManager.Factory.create();
-          loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-              //登入成功
-              @Override
-              public void onSuccess(LoginResult loginResult) {
-                  //accessToken之後或許還會用到 先存起來
-                  accessToken = loginResult.getAccessToken();
-                  Log.d("FB","access token got.");
-                  
-                  //send request and call graph api
-                  GraphRequest request = GraphRequest.newMeRequest(accessToken, 
-                          new GraphRequest.GraphJSONObjectCallback() {
-                             //當RESPONSE回來的時候
-   							@Override
-   							public void onCompleted(JSONObject object, GraphResponse response) {
-   								// TODO Auto-generated method stub
-   								//讀出姓名 ID FB個人頁面連結
-   	                            Log.d("FB","complete");
-   	                            fbId = object.optString("id");
-   	                            Log.d("FB",fbId);
-   	                            InformationProcess.saveThirdPartyInfo(fbId, AuthClientActivity.this);
-   	                            authhttpclient.Auth_FacebookLoignRegister(fbId);        
-   							}
-                     });
-                  //包入你想要得到的資料 送出request
-                  Bundle parameters = new Bundle();
-                  parameters.putString("fields", "id");
-                  request.setParameters(parameters);
-                  request.executeAsync();
-              }
-
-              //登入取消
-              @Override
-              public void onCancel() {
-                  // App code
-                  Log.d("FB","CANCEL");
-              }
-
-            //登入失敗
-	   		@Override
-	   		public void onError(FacebookException error) {
-	   			// TODO Auto-generated method stub
-	   			Log.d("FB",error.toString());
-	   		}
-   		
-          });
-   	}
-   
+ 
 
 	@Override
 	public void onConnectionFailed(ConnectionResult result) {
@@ -747,9 +696,9 @@ public class AuthClientActivity extends Activity implements OnClickListener,
 		if(InformationProcess.getGoogleThirdPartyInfo(this).equals("")){
 			Log.i("google info", "not google info, Please Login google account");
 		}else{
-			Toast.makeText(AuthClientActivity.this, "Conneccted", Toast.LENGTH_LONG).show();
-			setButtonEnable(false);
-			signIn();
+			//Toast.makeText(AuthClientActivity.this, "Conneccted", Toast.LENGTH_LONG).show();
+			//setButtonEnable(false);
+			//signIn();
 		} 
 		Log.i("google info", "info please login google");
 	}
