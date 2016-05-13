@@ -34,10 +34,10 @@ public final class ServerUtilities {
     private static final int BACKOFF_MILLI_SECONDS = 2000;
     private static final Random random = new Random();
  
-	public static String TradeInfoUrl = "http://api.belugame.com/IAP/GoogleIAPCreate";
-	public static String VerifyReceiptUrl = "http://api.belugame.com/IAP/Receipt";
+    protected static String TradeInfoUrl = "http://api.belugame.com/IAP/GoogleIAPCreate";
+    protected static String VerifyReceiptUrl = "http://api.belugame.com/IAP/Receipt";
 	
-    public static JSONObject getTradeInfoWithGet(final Context context, Bundle b, final String url) {
+    protected static JSONObject getTradeInfoWithGet(final Context context, Bundle b, final String url) {
     	Log.i("ServerUtilities", "getTradeInfoWithGet start");
     	
     	Log.i("ServerUtilities", "call generateHttpGetURL()");
@@ -184,32 +184,6 @@ public final class ServerUtilities {
     	return sb.toString();
     }
     
-    
-//    private static JSONObject parseHttpConnectionResult(HttpURLConnection conn) throws IOException {
-//    	BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
-//    	String line, result;
-//    	StringBuilder sb = new StringBuilder();
-//    	
-//    	try {
-//    		while((line = reader.readLine()) != null) {
-//    			sb.append(line+"\n");
-//    		}
-//        	reader.close();
-//        	result = sb.toString();
-//    	}
-//    	catch (IOException e) {
-//    		throw e;
-//    	}
-//    	
-//    	try {
-//    		JSONObject JSONObj = new JSONObject(result);
-//    		return JSONObj;
-//    	}
-//    	catch (JSONException e) {
-//    		e.printStackTrace();
-//    	}
-//    	return null;
-//    }
     
     private static String MD5(String str)  
     {  

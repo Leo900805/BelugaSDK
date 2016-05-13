@@ -48,23 +48,23 @@ import javax.net.ssl.HttpsURLConnection;
 public class AuthHttpClient {
 	
 	//Global variable
-    Activity MainActivity;
-    OnAuthEventListener AuthEventListener;
-    public static String AppID = "";
-    public static String ApiKey = "";
-    public static String ApiUrl = "";
-    public static String PackageID = "";
-    public static String version="10405121054";
+    private Activity MainActivity;
+    protected OnAuthEventListener AuthEventListener;
+    protected static String AppID = "";
+    protected static String ApiKey = "";
+    protected static String ApiUrl = "";
+    protected static String PackageID = "";
+    protected static String version="10405121054";
 
     private ProgressDialog loadingProgress;
     
     //AuthHttpClient Constructor
-    public AuthHttpClient(Activity act) {
+    protected AuthHttpClient(Activity act) {
         MainActivity = act;
     }
     
     //Check API whether exists 
-    public boolean isApiInfoExists() {
+    private boolean isApiInfoExists() {
         if (AppID.length() == 0) {
             return false;
         }
@@ -78,7 +78,7 @@ public class AuthHttpClient {
     }
 
     //Create OnAuthEventListener interface 
-    public interface OnAuthEventListener {
+    protected interface OnAuthEventListener {
         public void onProcessDoneEvent(int Code, String Message, Long uid, String Account, String Pwd);
         public void onProcessDoneEvent(int Code, String Message, Long uid, String Account, String Pwd, String accountBound);
     }
@@ -97,13 +97,13 @@ public class AuthHttpClient {
     }
     
     //Method AuthEventListener(); 
-    public void AuthEventListener(OnAuthEventListener onAuthEventListener) {
+    protected void AuthEventListener(OnAuthEventListener onAuthEventListener) {
 
         AuthEventListener = onAuthEventListener;
     }
 
     //Check Internet whether available
-    public boolean isInternetAvailable() {
+    private boolean isInternetAvailable() {
         ConnectivityManager manager = (ConnectivityManager) MainActivity
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
 
@@ -190,29 +190,6 @@ public class AuthHttpClient {
             OnAuthEvent(-100, "HttpPostError", -1, "", "");
         }
     }
-    private void httpGET(AuthCommandType t, String url){
-        try {
-        	 
-            // create HttpClient
-            HttpClient httpclient = new DefaultHttpClient();
-
-            // make GET request to the given URL
-            HttpResponse httpResponse = httpclient.execute(new HttpGet(url));
-
-            // receive response as inputStream
-            String strResult = EntityUtils.toString(httpResponse.getEntity());
-            Log.d("httpGet", "Result:"+strResult);
-            
-            Message msg = new Message();
-            Bundle data = new Bundle();
-            data.putString("AuthValue", strResult);
-            data.putInt("AuthType", t.getIntValue());
-            msg.setData(data);
-            HttpPostHandler.sendMessage(msg);
-        } catch (Exception e) {
-            Log.d("InputStream", e.getLocalizedMessage());
-        }
-    }
     
     Handler HttpPostHandler = new Handler() {
         @Override
@@ -233,7 +210,7 @@ public class AuthHttpClient {
         }
     };
 
-    public enum AuthCommandType {
+    private enum AuthCommandType {
         Login(0), QuickAccount(1), RegisterAccount(2), ChangePassword(3),
         FacebookLoginRegister(4),GoogleLoginRegister(5);
 
@@ -249,7 +226,7 @@ public class AuthHttpClient {
     }
 
     //MD5 encrypt
-    public static String MD5(String str) {
+    private static String MD5(String str) {
         MessageDigest md5 = null;
         try {
             md5 = MessageDigest.getInstance("MD5");
@@ -316,7 +293,7 @@ public class AuthHttpClient {
     }
     
     //Check Account Length
-    public static boolean isAccountRuleLength(String target) {
+    protected static boolean isAccountRuleLength(String target) {
 
         if (target.length() < 6 || target.length() > 32) {
             return false;
@@ -325,7 +302,7 @@ public class AuthHttpClient {
     }
 
   
-    public void Auth_UserLogin(String UserID, String UserPassword) {
+    protected void Auth_UserLogin(String UserID, String UserPassword) {
         
         UserID = UserID.trim();
         
@@ -387,7 +364,7 @@ public class AuthHttpClient {
     }
 
     //Facebook login and Register
-    public void Auth_FacebookLoignRegister(String fbID){
+    protected void Auth_FacebookLoignRegister(String fbID){
         
     	Long tsLong = System.currentTimeMillis()/1000;
     	String ts = tsLong.toString();
@@ -409,7 +386,7 @@ public class AuthHttpClient {
         };
         new Thread(runnable).start();
     }
-	 public void Auth_GoogleLoignRegister(String googleID, String gmail, String gname, String photoUrl){
+	 protected void Auth_GoogleLoignRegister(String googleID, String gmail, String gname, String photoUrl){
 	        
 	    	Long tsLong = System.currentTimeMillis()/1000;
 	    	String ts = tsLong.toString();
@@ -438,7 +415,7 @@ public class AuthHttpClient {
 	        new Thread(runnable).start();
 	    }
 
-    public void Auth_QuickAccount() {
+    protected void Auth_QuickAccount() {
 
         if (!isApiInfoExists()) {
             
@@ -482,7 +459,7 @@ public class AuthHttpClient {
     }
 
 
-    public void Auth_RegisterAccount(String UserID, String UserPassword) {
+    protected void Auth_RegisterAccount(String UserID, String UserPassword) {
         UserID = UserID.trim();
         UserPassword = UserPassword.trim();
 
@@ -553,7 +530,7 @@ public class AuthHttpClient {
 
     }
 
-    public void Auth_ChangePassword(String UserID, String OldPassword,
+    protected void Auth_ChangePassword(String UserID, String OldPassword,
                                     String NewPassword) {
         UserID = UserID.trim();
         OldPassword = OldPassword.trim();

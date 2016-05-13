@@ -78,15 +78,9 @@ public class UnityActivity extends UnityPlayerActivity{
     }
  
 	public void StartAuthClient(String UnityGameObj, String UnityMethod, String appid, String apikey, byte[] gameLogo,String packageID,  
-			boolean inMaintain, String dialogTitle, String dialogMessage) {
+			boolean inMaintain, String dialogTitle, String dialogMessage, String analytic_APP_ID, String analytic_Channel_ID) {
 			
 			Intent intent; 
-		    //String appid =  "fanadv3";
-		    //String apikey = "4fbc7b551f8ab63d4dadd8694ff261bf";
-		    //String packageID = this.getClass().getPackage().getName();
-		    //boolean inMaintain = false;
-		    //String dialogTitle = "Warnings";// if inMaintain is false setDialog title null
-		    //String dialogMessage = "server in maintain...";// if inMaintain is false setDialog message null
 			this.unityGameObjName = UnityGameObj;
 			this.unityMethod = UnityMethod;
 	        intent = new Intent(this, com.beluga.loginpage.AuthClientActivity.class);
@@ -98,6 +92,8 @@ public class UnityActivity extends UnityPlayerActivity{
 	        intent.putExtra(Keys.ActiveMaintainDialog.toString(), inMaintain);
 	        intent.putExtra(Keys.DialogMessage.toString(), dialogMessage);
 	        intent.putExtra(Keys.DialogTitle.toString(), dialogTitle);
+	        intent.putExtra(Keys.AnalyticAppID.toString(), analytic_APP_ID);
+	        intent.putExtra(Keys.AnalyticChannelID.toString(), analytic_Channel_ID);
 	        Log.i("pID", packageID);
 	        startActivityForResult(intent, 100);
 	}

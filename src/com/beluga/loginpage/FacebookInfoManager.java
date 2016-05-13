@@ -17,12 +17,11 @@ import android.util.Log;
 
 public class FacebookInfoManager {
 	
-	CallbackManager callbackManager;
-	AccessToken accessToken;
-	AuthHttpClient authhttpclient;
-	Activity act;
-	JSONObject jsonObject;
-	String FaceboookId;
+	private CallbackManager callbackManager;
+	private AccessToken accessToken;
+	private AuthHttpClient authhttpclient;
+	private Activity act;
+	private String FaceboookId;
 	
 	protected FacebookInfoManager(Activity act, AuthHttpClient authhttpclient){
 		this.act = act;

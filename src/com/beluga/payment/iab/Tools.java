@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.util.Log;
 
 public class Tools {
-	public static String getStringByName(Activity act ,String name){
+	protected static String getStringByName(Activity act ,String name){
 		Log.i("class Tools name:", ""+ name);
 		Log.i("class Tools name:", ""+ act.getPackageName());
 		//Log.i("class Tools name:", ""+ act.getApplicationContext().getPackageName());

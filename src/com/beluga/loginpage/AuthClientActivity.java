@@ -38,7 +38,6 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
-//import com.tendcloud.tenddata.TCAgent;
 import com.tendcloud.tenddata.TalkingDataGA;
 
 import com.beluga.R;
@@ -52,38 +51,38 @@ public class AuthClientActivity extends Activity implements OnClickListener,
 	private static final int RC_SIGN_IN = 0;
 	
     //密碼元件
-    public EditText inputpassword;
+    private EditText inputpassword;
     //帳號元件
-    public EditText inputaccount;
-    public Button quickSignUpBtn;
-    public Button signUpBtn;
-    public Button modPwdBtn;
-    public LoginButton fbLoginButton;
-    public Button loginBtn;
-    public ImageView logoView;
+    private EditText inputaccount;
+    private Button quickSignUpBtn;
+    private Button signUpBtn;
+    private Button modPwdBtn;
+    private LoginButton fbLoginButton;
+    private Button loginBtn;
+    private ImageView logoView;
 
     //Edit控制
-    int EditEnd;
-    int EditTextAccountMax = 16;
-    int EditTextPassMax = 16;
+    private int EditEnd;
+    private int EditTextAccountMax = 16;
+    private int EditTextPassMax = 16;
     private int img_GameLogo;
     private byte[] GameLogoForByteArray;
 
     //存在資料庫的帳密
-    String saveacc = "";
-    String savepwd = "";
+    private String saveacc = "";
+    private String savepwd = "";
 
     //Server control correlation object declare
-    AuthHttpClient authhttpclient;
+    private AuthHttpClient authhttpclient;
     private final static String TAG = "AuthClient";
-    boolean inMaintain;
-    String dialogTitle;
-    String dialogMessage;
+    private boolean inMaintain;
+    private String dialogTitle;
+    private String dialogMessage;
     
     //Facebook correlation object declare
-    boolean pressFbButton = false;
+    private boolean pressFbButton = false;
     private String fbId;
-    FacebookInfoManager fbInfoManager;
+    private FacebookInfoManager fbInfoManager;
     
     // Google client to communicate with Google
  	private GoogleApiClient mGoogleApiClient;
@@ -93,6 +92,8 @@ public class AuthClientActivity extends Activity implements OnClickListener,
 	private String gname;
 	private String gmail;
 	private String gPhotoUrl;
+	private int cancelLogin = -1;
+	private GoogleSignInResult result;
 	
 	//TalkingData Game Analytics variables
 	private String analytic_APP_ID = null;
@@ -176,7 +177,7 @@ public class AuthClientActivity extends Activity implements OnClickListener,
         this.modPwdBtn.setOnClickListener(this);
               
         //google button 
-        //signinButton = (Button) findViewById(R.id.google_sign_in_button);
+        
         signinButton = (SignInButton) findViewById(R.id.google_sign_in_button);
 		signinButton.setOnClickListener(this);
 		
@@ -460,6 +461,7 @@ public class AuthClientActivity extends Activity implements OnClickListener,
 
         }
     }
+    
     private void SetPasswordShowable(boolean show) {
         if(show){
             inputpassword.setTransformationMethod(HideReturnsTransformationMethod
@@ -476,13 +478,14 @@ public class AuthClientActivity extends Activity implements OnClickListener,
     }
 
     //存成功的帳密
-    public void SaveAccountPassword(String accid,String accpwd)
+    private void SaveAccountPassword(String accid,String accpwd)
     {
         if(accid.length() > 0 && accpwd.length() > 0)
         {
         	InformationProcess.saveAccountPassword(accid, accpwd, this);
         }
     }
+    
     private void SetAccountTextFromSave()
     {
         GetAccountAndPasswordFromData();
@@ -512,6 +515,7 @@ public class AuthClientActivity extends Activity implements OnClickListener,
             SetPasswordShowable(false);
         }
     }
+    
     //回到遊戲 並回傳帳號與uid
     private void SetFinish(String thisuserid,String thisuid,String token,String thispwd)
     {
@@ -552,10 +556,10 @@ public class AuthClientActivity extends Activity implements OnClickListener,
     		        	setButtonEnable(true);
     		     }else{
     		    	 setButtonEnable(false);
-    		     }
-    			
+    		     }	
     		}
     	/* Developer by Leo Ling   Facebook login end */
+    		
         if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
         	Log.i("Auth ", "requestCode == 1 && resultCode == Activity.RESULT_OK");
             try
@@ -595,12 +599,15 @@ public class AuthClientActivity extends Activity implements OnClickListener,
             }
         } else if(requestCode == RC_SIGN_IN){
         	if(resultCode != RESULT_CANCELED){
-        		GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-           	 	Log.i(TAG, "Result status: "+result.getStatus().toString());
-               handleSignInResult(result);
+        		result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+           	 	Log.i(TAG, "Result status in if:"+result.getStatus().toString());
+           	    this.cancelLogin = resultCode;
+           	    Log.i(TAG, "Result code in if status: "+ resultCode);
+                handleSignInResult(result);
         	}else{
         		Log.i("Auth ", "is RESULT_CANCELED");
-        		setResult(Activity.RESULT_OK);
+        		Log.i(TAG, "Result code in else status: "+ resultCode);
+        		this.cancelLogin = resultCode;
         	}
             
         }else{
@@ -609,6 +616,7 @@ public class AuthClientActivity extends Activity implements OnClickListener,
         }
         Log.i("Auth ", "end...");
     }
+    
     private void handleSignInResult(GoogleSignInResult result) {
         Log.d(TAG, "handleSignInResult:" + result.isSuccess());
         Log.i(TAG, "gResult status: "+result.getStatus().toString());
@@ -633,7 +641,6 @@ public class AuthClientActivity extends Activity implements OnClickListener,
         }    
     }
     
-
 	@Override
     public void onClick(View v) {
         int i = v.getId();
@@ -665,6 +672,7 @@ public class AuthClientActivity extends Activity implements OnClickListener,
         	signIn();
         }
     }
+	
 	private void setButtonEnable(Boolean enabled){
 		quickSignUpBtn.setEnabled(enabled);
 		signUpBtn.setEnabled(enabled);
@@ -681,14 +689,11 @@ public class AuthClientActivity extends Activity implements OnClickListener,
         Log.d(TAG, "Signin end ....");
     }
    
- 
-
 	@Override
 	public void onConnectionFailed(ConnectionResult result) {
 		// TODO Auto-generated method stub		
 	}
 	
-
 	@Override
 	public void onConnected(Bundle arg0) {
 		// TODO Auto-generated method stub
@@ -696,17 +701,25 @@ public class AuthClientActivity extends Activity implements OnClickListener,
 		if(InformationProcess.getGoogleThirdPartyInfo(this).equals("")){
 			Log.i("google info", "not google info, Please Login google account");
 		}else{
-			//Toast.makeText(AuthClientActivity.this, "Conneccted", Toast.LENGTH_LONG).show();
-			setButtonEnable(false);
-			signIn();
+			if(this.cancelLogin != RESULT_CANCELED){
+				setButtonEnable(false);
+				signIn();
+			}else{
+				Log.i("google login status", "canccel login");
+			}
 		} 
-		Log.i("google info", "info please login google");
 	}
 	
-
 	@Override
 	public void onConnectionSuspended(int arg0) {
 		// TODO Auto-generated method stub
 		mGoogleApiClient.connect();
+	}
+
+	@Override
+	public void onBackPressed() {
+		// TODO Auto-generated method stub
+		super.onBackPressed();
+		Log.i("onBackPressed", "BackPressed...");
 	}
 }

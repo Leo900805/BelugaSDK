@@ -22,10 +22,10 @@ import com.beluga.R;
  */
 public class Fastregistration extends Activity implements OnClickListener{
 
-    EditText inputaccount,inputpassword;
-    AuthHttpClient authhttpclient,authhttpclient_confirm;
-    public Button qsModpwdBtn, qsReturnBtn, qsComfirmBtn;
-    public CheckBox checkBox;
+    private EditText inputaccount,inputpassword;
+    private AuthHttpClient authhttpclient,authhttpclient_confirm;
+    private Button qsModpwdBtn, qsReturnBtn, qsComfirmBtn;
+    private CheckBox checkBox;
 
 
     @Override
@@ -85,7 +85,7 @@ public class Fastregistration extends Activity implements OnClickListener{
         });
     }
 
-    public void AccountConfirm()
+    private void AccountConfirm()
     {
         CreateHttpClientConfirm();
         authhttpclient_confirm.Auth_RegisterAccount(inputaccount.getText().toString(), inputpassword.getText().toString());

@@ -22,7 +22,7 @@ import android.widget.RelativeLayout;
 
 public class InAppBillingActivity extends Activity {
 	
-	String base64 = "";
+	private String base64 = "";
 	private String mTradeid;
 	//private String mReceipt;
 	//private String mOrder;
@@ -32,8 +32,8 @@ public class InAppBillingActivity extends Activity {
 	private String mUserId;
 	private String TAG = "Beluga IAB";
 	private boolean afterPurchase = false;
-	ProgressDialog dialog;
-	int RC_REQUEST = 10001;
+	private ProgressDialog dialog;
+	private int RC_REQUEST = 10001;
 	public static int GBilling_REQUEST = 100;
 	public static String base64EncodedPublicKey = "base64EncodedPublicKey";
 	public static String User_ID = "u";

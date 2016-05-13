@@ -19,10 +19,10 @@ import com.beluga.R;
  */
 public class Changepassword extends Activity implements OnClickListener{
 
-    EditText  inputpassword ,inputnewpassword,inputdeterminepassword;
-    TextView inputaccount;
-    AuthHttpClient authhttpclient;
-    Button modReturnBtn, modComirmBtn;
+    private EditText  inputpassword ,inputnewpassword,inputdeterminepassword;
+    private TextView inputaccount;
+    private AuthHttpClient authhttpclient;
+    private Button modReturnBtn, modComirmBtn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,7 +52,7 @@ public class Changepassword extends Activity implements OnClickListener{
     }
 
 
-    public void ChangeAccountPassword()
+    private void ChangeAccountPassword()
     {
        
         authhttpclient = new AuthHttpClient(this);

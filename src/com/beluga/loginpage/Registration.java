@@ -22,11 +22,11 @@ import com.beluga.R;
  */
 public class Registration extends Activity implements OnClickListener {
 
-    EditText inputaccount,inputpassword,inputdeterminepassword;
+    private EditText inputaccount,inputpassword,inputdeterminepassword;
    
-    AuthHttpClient authhttpclient;
-    public Button signUpComfirmBtn, signUpReturnBtn;
-    public CheckBox checkBox;
+    private AuthHttpClient authhttpclient;
+    private Button signUpComfirmBtn, signUpReturnBtn;
+    private CheckBox checkBox;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,7 +134,6 @@ public class Registration extends Activity implements OnClickListener {
             getParent().setResult(Activity.RESULT_OK, resultdata);
         }
         finish();
-
     }
 
 }

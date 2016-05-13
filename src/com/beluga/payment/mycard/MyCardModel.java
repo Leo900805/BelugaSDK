@@ -8,10 +8,10 @@ import android.os.Bundle;
 import android.provider.Settings.Secure;
 
 public class MyCardModel {
-	public static String AppId = "";
-	public static String ApiKey = "";
-	public static String SerialNumberURL = "http://api.belugame.com/MyCardPayment/InGamePurchase";
-	public static String SmallPaymentURL = "http://api.belugame.com/MyCardPayment/CPStart";
+	protected static String AppId = "";
+	protected static String ApiKey = "";
+	protected static String SerialNumberURL = "http://api.belugame.com/MyCardPayment/InGamePurchase";
+	protected static String SmallPaymentURL = "http://api.belugame.com/MyCardPayment/CPStart";
 	
 	private static final HashMap<String, String> urlMap; 
 	static
@@ -19,14 +19,14 @@ public class MyCardModel {
 		urlMap = new HashMap<String, String>();
 	}
 	
-	public static String getTypeURL(String type) {
+	protected static String getTypeURL(String type) {
 		if(urlMap.isEmpty()){
 			urlMap.put("type_serial_number", SerialNumberURL);
 	    	urlMap.put("type_small_payment", SmallPaymentURL);
 		}
 		return urlMap.get(type);
 	}
-	public static Bundle getParams(Context context, String uid) {
+	protected static Bundle getParams(Context context, String uid) {
 		Bundle b = new Bundle();
 		b.putString("appid", AppId);
 		b.putString("devid", getDeviceId(context));
