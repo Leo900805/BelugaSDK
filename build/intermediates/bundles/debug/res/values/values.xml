@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="holo_blue_bright">#ff00ddff</color>
+    <color name="holo_green_light">#ff99cc00</color>
+    <color name="holo_orange_light">#ffffbb33</color>
+    <color name="holo_red_light">#ffff4444</color>
+    <color name="mb_blue">#ff0099cc</color>
+    <color name="mb_blue_dark">#ff00719b</color>
+    <color name="mb_gray">#ffdedede</color>
+    <color name="mb_green">#ff99cc00</color>
+    <color name="mb_green_dark">#4c898e</color>
+    <color name="mb_green_genoa">#20534e</color>
+    <color name="mb_purple">#ffaa66cc</color>
+    <color name="mb_purple_dark">#ff8855aa</color>
+    <color name="mb_red">#ffff4444</color>
+    <color name="mb_red_dark">#ffcd3a3a</color>
+    <color name="mb_white">#ffffff</color>
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="mb_corner_radius_2">2dp</dimen>
+    <dimen name="mb_corner_radius_4">4dp</dimen>
+    <dimen name="mb_height_30">30dp</dimen>
+    <dimen name="mb_height_4">4dp</dimen>
+    <dimen name="mb_height_40">40dp</dimen>
+    <dimen name="mb_height_46">46dp</dimen>
+    <dimen name="mb_height_56">56dp</dimen>
+    <dimen name="mb_height_8">8dp</dimen>
+    <dimen name="mb_width_100">100dp</dimen>
+    <dimen name="mb_width_150">150dp</dimen>
+    <dimen name="mb_width_200">200dp</dimen>
+    <dimen name="mb_width_400">400dp</dimen>
+    <dimen name="mb_width_70">70dp</dimen>
+    <integer name="mb_animation">500</integer>
+    <string name="Ac_Has_Been_Baned_Type">The account has been baned (In violation of the game rules)</string>
+    <string name="Ac_Has_Been_Disabled_Type">The account has been disabled</string>
+    <string name="Ac_Has_Been_Used_Type">The account has been used</string>
+    <string name="Ac_Length_Err_Type">Account length error</string>
+    <string name="Ac_Only_Char_And_Num_Type">Account number can only use English and Numbers</string>
+    <string name="Ac_Or_Pwd_Err_Type">Account or password error</string>
+    <string name="Ac_Or_Pwd_Length_Err_Type">Account or password length error</string>
+    <string name="Ac_With_Illegal_Char_Type">Account with illegal characters</string>
+    <string name="Appid_Or_Apikey_Err_Type">Appid or Apikey error</string>
+    <string name="Change_Pwd_Or_Contact_Customer_Service_Type">Password Error, Please login successful one after change the password again or contact customer service commissioner</string>
+    <string name="Checksum_Err_Type">Checksum error</string>
+    <string name="Comfirm_New_Pwd_Type">Comfirm new password</string>
+    <string name="Confirm_Button_Text">Confirm</string>
+    <string name="Data_Analysis_Err_Type">Data analysis error</string>
+    <string name="Data_Parse_Error_Type">Data Parse Error</string>
+    <string name="Enter_Ac_Type">Account</string>
+    <string name="Enter_New_Pwd_Type">New password</string>
+    <string name="Enter_Pwd_Type">Password</string>
+    <string name="I_Agree_and_Read_Type">I agree and have read</string>
+    <string name="Login_Button_Text">Login</string>
+    <string name="Login_Page_Passsword_Text">Password</string>
+    <string name="Login_Page_Title_Text">Login Page</string>
+    <string name="Login_Page_Username_Text">Username</string>
+    <string name="Membership_Policy_Type">Membership Policy </string>
+    <string name="Modify_Button_Text">Modify Password</string>
+    <string name="Network_Connection_Failure_Type">Network connection failure</string>
+    <string name="New_Password_Only_Char_And_Num_Type">The new password can only use Charaters and Numbers</string>
+    <string name="New_Pwd_Length_Err_Type">The new password length error</string>
+    <string name="New_Pwd_With_Illegal_Char_Type">The new password is illegal characters</string>
+    <string name="Old_Password_Length_Err_Type">The old password length error</string>
+    <string name="Old_Password_Only_Char_And_Num_Type">The old password can only use Charaters and Numbers</string>
+    <string name="Params_ERROR">params error</string>
+    <string name="Program_Err_Type">Program error</string>
+    <string name="Pwd_Length_Err_Set_Num_And_char_Type">The password length error, Please set over 6 digits number or charater</string>
+    <string name="Pwd_Length_Err_Type">Password length error</string>
+    <string name="Pwd_Not_Match_Type">Password not match</string>
+    <string name="Pwd_Only_Char_And_Num_Type">The password can only use English and Numbers</string>
+    <string name="Pwd_With_Illegal_Char_Type">Password is illegal characters</string>
+    <string name="QS_Page_Title_Text">Quick Sign Up Page</string>
+    <string name="Quick_Sign_Up_Button_Text">Quick Sign Up</string>
+    <string name="Return_Button_Text">Return</string>
+    <string name="Sign_Up_Button_Text">Sign Up</string>
+    <string name="Signup_Page_Title_Text">Resgister Page</string>
+    <string name="Success_Change_Pwd_Type">Modify the success</string>
+    <string name="Success_Login_Type">Success Login</string>
+    <string name="Success_Quick_Reg_Type">Success fast register</string>
+    <string name="Success_Register_Type">Registration Successful</string>
+    <string name="System_Err_Type">System error</string>
+    <string name="Third_Partner_Login_Success">Third partner binding login to complete</string>
+    <string name="Write_DB_failed_Type">System error, write DB failure</string>
+    <string name="Wrong_AppID_Type">Wrong AppID</string>
+    <string name="app_id">1054015187996860</string>
+    <string name="app_name">Beluga SDK</string>
+    <string name="content_description">customer Game Logo or advert</string>
+    <string name="modify_Page_Title_Text">Modify Password Page</string>
+    <style name="AppBaseTheme" parent="android:Theme.Light">
+        <!--
+            Theme customizations available in newer API levels can go in
+            res/values-vXX/styles.xml, while customizations related to
+            backward-compatibility can go here.
+        -->
+    </style>
+    <style name="AppTheme" parent="AppBaseTheme">
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+    </style>
+</resources>

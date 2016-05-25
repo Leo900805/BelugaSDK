@@ -55,4 +55,7 @@
     <string name="QS_Page_Title_Text">Quick Sign Up Page</string>
     <string name="Third_Partner_Login_Success">Third partner binding login to complete</string>
     <string name="Params_ERROR">params error</string>   
+    <string name="pwd_SHOW_Text">SHOW</string>
+    <string name="pwd_HIDE_Text">HIDE</string>
+    <string name="FAB_LABEL_TEXT">Login Mode >>> </string>
 </resources>

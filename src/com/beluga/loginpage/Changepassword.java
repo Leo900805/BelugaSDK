@@ -3,10 +3,14 @@ package com.beluga.loginpage;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,18 +22,26 @@ import com.beluga.R;
  * Created by Leo on 2015/10/5.
  */
 public class Changepassword extends Activity implements OnClickListener{
-
+	
+	final static int DELAY_TIME = 650; 
     private EditText  inputpassword ,inputnewpassword,inputdeterminepassword;
     private TextView inputaccount;
     private AuthHttpClient authhttpclient;
-    private Button modReturnBtn, modComirmBtn;
+    private ImageButton modReturnBtn, modComirmBtn;
+    private Animation selectedMoveLeft, selectedMoveRight,scaleHide;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.setContentView(R.layout.modify_password_page);
-        this.modComirmBtn = (Button)this.findViewById(R.id.modcomfirmbtn);
+        this.setContentView(R.layout.modify_pwd_page_v2);
+        
+        selectedMoveLeft = AnimationUtils.loadAnimation(this, R.anim.anim_selected_move_left_effect);
+        selectedMoveRight= AnimationUtils.loadAnimation(this, R.anim.anim_selected_move_right_effect);
+        this.scaleHide = AnimationUtils.loadAnimation(this, R.anim.anim_scale_hide);
+        
+        this.modComirmBtn = (ImageButton)this.findViewById(R.id.modcomfirmbtn);
         this.modComirmBtn.setOnClickListener(this);
-        this.modReturnBtn = (Button)this.findViewById(R.id.modreturnbtn);
+        this.modReturnBtn = (ImageButton)this.findViewById(R.id.modreturnbtn);
         this.modReturnBtn.setOnClickListener(this);
         inputpassword = (EditText)this.findViewById(R.id.modpwdeditText);
         inputaccount =  (TextView)this.findViewById(R.id.modacctextView);
@@ -44,7 +56,18 @@ public class Changepassword extends Activity implements OnClickListener{
     public void onClick(View v) {
         int i = v.getId();
         if (i == R.id.modreturnbtn) {
-            finish();
+        	this.modReturnBtn.startAnimation(selectedMoveRight);
+        	this.modComirmBtn.startAnimation(scaleHide);
+        	
+        	final Handler handler = new Handler();
+       	 	handler.postDelayed(new Runnable() {
+       	     @Override
+       	     public void run() {
+       	         // Do something after 700ms
+       	    	//unlock can't edit and click
+       	    	finish();
+       	     }
+       	 	}, DELAY_TIME);
 
         } else if (i == R.id.modcomfirmbtn) {
             ChangeAccountPassword();
@@ -65,7 +88,19 @@ public class Changepassword extends Activity implements OnClickListener{
                     Toast.makeText(Changepassword.this, Message, Toast.LENGTH_LONG).show();
                 }else if(Code == 1){
                     Toast.makeText(Changepassword.this, CodeStr, Toast.LENGTH_LONG).show();
-                    SetFinish(inputaccount.getText().toString(),inputnewpassword.getText().toString());
+                    modComirmBtn.startAnimation(selectedMoveLeft);
+                    modReturnBtn.startAnimation(scaleHide);
+                	
+                	final Handler handler = new Handler();
+               	 	handler.postDelayed(new Runnable() {
+               	     @Override
+               	     public void run() {
+               	         // Do something after 700ms
+               	    	//unlock can't edit and click
+               	    	SetFinish(inputaccount.getText().toString(),inputnewpassword.getText().toString());
+               	     }
+               	 	}, DELAY_TIME);
+                    
                 }else{
                     Toast.makeText(Changepassword.this, CodeStr, Toast.LENGTH_LONG).show();
                 }

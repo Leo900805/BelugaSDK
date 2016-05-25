@@ -52,4 +52,7 @@
 	<string name="QS_Page_Title_Text">快速註冊頁面</string>
 	<string name="Third_Partner_Login_Success">第三方帳號绑定登入完成</string>
 	<string name="Params_ERROR">参数错误</string>
+	<string name="pwd_SHOW_Text">显示</string>
+    <string name="pwd_HIDE_Text">隐藏</string>
+    <string name="FAB_LABEL_TEXT">注册方式  >>> </string>
 </resources>

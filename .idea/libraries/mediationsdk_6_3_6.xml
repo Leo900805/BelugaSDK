@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="mediationsdk-6.3.6">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/libs/mediationsdk-6.3.6.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

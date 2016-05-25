@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" 
+    android:background="@drawable/blue_gradient_bg"
+    tools:context=".Changepassword">
+    
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="550dp"
+        android:background="@drawable/beluga_background_v5" >
+        
+      
+         <LinearLayout
+            android:orientation="vertical"
+           android:layout_width="match_parent"
+            android:layout_height="350dp"
+            android:layout_marginTop="100dp"
+            android:id="@+id/contextSideLinearLayout"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_weight="0.33">
+
+   
+
+                <TextView
+                    android:layout_width="90dp"
+                    android:layout_height="31dp"
+                    android:id="@+id/modaccTextView"
+                    android:text="@string/Enter_Ac_Type"
+                    android:textColor="#6ba2af"
+                    android:textAlignment="textStart"
+                    android:textStyle="bold"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:id="@+id/modacctextView"
+                    android:textSize="20dp" />
+
+
+                <TextView
+                    android:layout_width="90dp"
+                    android:layout_height="31dp"
+                    android:id="@+id/modpwdTextView"
+                    android:text="@string/Enter_Pwd_Type"
+                    android:textColor="#6ba2af"
+                    android:textAlignment="textStart"
+                    android:textStyle="bold"
+                    android:textSize="20dp" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:inputType="textPassword"
+                    android:ems="10"
+                    android:id="@+id/modpwdeditText"
+                    android:hint="@string/Enter_Pwd_Type"
+                    android:background="@drawable/edit_text_default_bg2"
+                    android:paddingLeft="10dp" />
+
+                <TextView
+                    android:layout_width="150dp"
+                    android:layout_height="31dp"
+                    android:id="@+id/modnewpwdTextView"
+                    android:text="@string/Enter_New_Pwd_Type"
+                    android:textColor="#6ba2af"
+                    android:textAlignment="textStart"
+                    android:textStyle="bold"
+                    android:textSize="20dp" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:inputType="textPassword"
+                    android:ems="10"
+                    android:id="@+id/modnewpwdeditText"
+                    android:hint="@string/Enter_New_Pwd_Type"
+                    android:background="@drawable/edit_text_default_bg2"
+                    android:paddingLeft="10dp" />
+
+                <TextView
+                    android:layout_width="300dp"
+                    android:layout_height="31dp"
+                    android:id="@+id/modretypepwdTextView"
+                    android:text="@string/Comfirm_New_Pwd_Type"
+                    android:textColor="#6ba2af"
+                    android:textAlignment="textStart"
+                    android:textStyle="bold"
+                    android:textSize="20dp" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:inputType="textPassword"
+                    android:ems="10"
+                    android:id="@+id/modretypepwdeditText"
+                    android:hint="@string/Comfirm_New_Pwd_Type"
+                    android:background="@drawable/edit_text_default_bg2"
+                    android:paddingLeft="10dp" />
+
+                
+              
+            	</LinearLayout>
+            	
+            
+    </RelativeLayout>
+    
+    		<ImageButton
+    		    android:id="@+id/modreturnbtn"
+    		    android:layout_width="66dp"
+    		    android:layout_height="66dp"
+    		    android:layout_alignParentBottom="true"
+    		    android:layout_alignParentLeft="true"
+    		    android:layout_marginBottom="25dp"
+    		    android:layout_marginLeft="50dp"
+    		    android:background="@drawable/return_circle_btn"
+    		    android:src="@drawable/return_pic"
+    		    android:text="+"
+    		    android:textAlignment="center" />
+
+         		<ImageButton
+         		    android:id="@+id/modcomfirmbtn"
+         		    android:layout_width="66dp"
+         		    android:layout_height="66dp"
+         		    android:layout_alignParentBottom="true"
+         		    android:layout_alignParentRight="true"
+         		    android:layout_marginBottom="25dp"
+         		    android:layout_marginRight="50dp"
+         		    android:background="@drawable/circle"
+         		    android:src="@drawable/ic_done"
+         		    android:text="+"
+         		    android:textAlignment="center" />
+
+</RelativeLayout>

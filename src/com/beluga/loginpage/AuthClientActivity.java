@@ -1,5 +1,13 @@
 package com.beluga.loginpage;
 
+import android.animation.Animator;
+import android.animation.Animator.AnimatorListener;
+import android.animation.AnimatorInflater;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
+import android.animation.ValueAnimator.AnimatorUpdateListener;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -13,11 +21,20 @@ import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.AnticipateInterpolator;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.OvershootInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.beluga.belugakeys.Keys;
@@ -40,6 +57,9 @@ import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.tendcloud.tenddata.TalkingDataGA;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.beluga.R;
 
 /**
@@ -54,12 +74,20 @@ public class AuthClientActivity extends Activity implements OnClickListener,
     private EditText inputpassword;
     //帳號元件
     private EditText inputaccount;
-    private Button quickSignUpBtn;
-    private Button signUpBtn;
-    private Button modPwdBtn;
+    //private Button quickSignUpBtn;
+    //private Button signUpBtn;
+    //private Button modPwdBtn;
     private LoginButton fbLoginButton;
     private Button loginBtn;
     private ImageView logoView;
+    //private Button menuFabBtn;
+    private Button pwdShowableBtn;
+    private View mMenuLayout;
+    
+    private ImageButton menuFabBtn, quickSignUpBtn, signUpBtn, 
+    					modPwdBtn, signinButton;  
+    
+    private Boolean isSelectedFabBtn = false;
 
     //Edit控制
     private int EditEnd;
@@ -87,7 +115,7 @@ public class AuthClientActivity extends Activity implements OnClickListener,
     // Google client to communicate with Google
  	private GoogleApiClient mGoogleApiClient;
  	
-	private SignInButton signinButton;
+	//private SignInButton signinButton;
 	private String gId;
 	private String gname;
 	private String gmail;
@@ -98,6 +126,15 @@ public class AuthClientActivity extends Activity implements OnClickListener,
 	//TalkingData Game Analytics variables
 	private String analytic_APP_ID = null;
     private String analytic_Channel_ID = null; //custom ID
+    
+    private TextView loginPageTextView, fabBtnLabel;
+    private LinearLayout loginPageLinearLayout;
+    
+    //Animation declare
+    private Animation rotateShow, rotateHide,
+    				  scaleShow, scaleHide, scaleShowForFabBtn,  scaleHideForFabBtn,
+    				  translateShow;
+    
     
     @Override
     protected void onResume() {
@@ -120,6 +157,16 @@ public class AuthClientActivity extends Activity implements OnClickListener,
         Log.i("AuthAct", "onStart ...");
         setButtonEnable(true);
         mGoogleApiClient.connect();
+        
+        
+        if(this.isSelectedFabBtn == true){
+        	//menu still open, so input account, password and login button set enabled false 
+        	this.inputaccount.setEnabled(false);
+    		this.inputpassword.setEnabled(false);
+    		this.loginBtn.setEnabled(false);
+    		
+        	hideMenu();
+        } 
     }
     
     @Override
@@ -135,7 +182,7 @@ public class AuthClientActivity extends Activity implements OnClickListener,
         super.onCreate(savedInstanceState);
         //Facebook Initialize
         FacebookSdk.sdkInitialize(getApplicationContext()); 
-        this.setContentView(R.layout.login_page);
+        this.setContentView(R.layout.login_page_v2);
         
          //get external data 
          GetDataSetting();
@@ -155,41 +202,94 @@ public class AuthClientActivity extends Activity implements OnClickListener,
         // 渠道 ID: 是渠道标识符，可通过不同渠道单独追踪数据。
         TalkingDataGA.init(this, this.analytic_APP_ID, this.analytic_Channel_ID);
         
+        this.rotateShow = AnimationUtils.loadAnimation(this, R.anim.anin_rotate_show);
+        this.rotateHide = AnimationUtils.loadAnimation(this, R.anim.anim_rotae_hide);
+        this.scaleShow = AnimationUtils.loadAnimation(this, R.anim.anim_scale_show);
+        this.scaleHide = AnimationUtils.loadAnimation(this, R.anim.anim_scale_hide);
+        this.translateShow = AnimationUtils.loadAnimation(this, R.anim.anim_translate_show);
+        this.scaleShowForFabBtn = AnimationUtils.loadAnimation(this, R.anim.anim_scale_show2);
+        this.scaleHideForFabBtn = AnimationUtils.loadAnimation(this, R.anim.anim_scale_hide2);
+        
+        fabBtnLabel = (TextView)this.findViewById(R.id.fab_label); 
+        fabBtnLabel.setVisibility(View.INVISIBLE);
+      
+        
+        //floating button menu
+        this.menuFabBtn = (ImageButton)this.findViewById(R.id.fab);
+        this.menuFabBtn.setOnClickListener(this);
+        this.menuFabBtn.setVisibility(View.INVISIBLE);
+        //this.menuFabBtn.setAnimation(scaleShow);
+        
+        this.mMenuLayout = findViewById(R.id.menu_layout);
+        //this.belugaMenu = (FloatingActionsMenu) this.findViewById(R.id.beluga_menu);
+        
         //Quick register button
-        this.quickSignUpBtn = (Button)this.findViewById(R.id.quick_sign_up_btn);
+        this.quickSignUpBtn = (ImageButton)this.findViewById(R.id.quick_sign_up_btn);
         this.quickSignUpBtn.setOnClickListener(this);
         
         //General register button
-        this.signUpBtn = (Button)this.findViewById(R.id.sign_up_btn);
+        this.signUpBtn = (ImageButton)this.findViewById(R.id.sign_up_btn);
         this.signUpBtn.setOnClickListener(this);
            
         //General login button 
         this.loginBtn = (Button)this.findViewById(R.id.login_btn);
         this.loginBtn.setOnClickListener(this);
+        this.loginBtn.setVisibility(View.INVISIBLE);
+        //this.loginBtn.startAnimation(scaleShow);
             
         //Facebook login button
         this.fbLoginButton = (LoginButton)this.findViewById(R.id.fblogin_button);
         this.fbLoginButton.setOnClickListener(this);
+        
             
         //Modify password button
-        this.modPwdBtn = (Button)this.findViewById(R.id.modify_btn);
+        this.modPwdBtn = (ImageButton)this.findViewById(R.id.modify_btn);
         Log.i("In login page", "modPwdBtn v is " + this.modPwdBtn);
         this.modPwdBtn.setOnClickListener(this);
               
         //google button 
         
-        signinButton = (SignInButton) findViewById(R.id.google_sign_in_button);
+        signinButton = (ImageButton) findViewById(R.id.google_sign_in_button);
 		signinButton.setOnClickListener(this);
 		
-        //set button enable
-		setButtonEnable(true);
+		pwdShowableBtn = (Button)this.findViewById(R.id.pwd_button);
+		pwdShowableBtn.setOnClickListener(this);
+		pwdShowableBtn.setVisibility(View.INVISIBLE);
 		
+        //set button enable
+		//setButtonEnable(true);
+		
+		//Game logo image view
+        this.logoView = (ImageView)this.findViewById(R.id.advertView);
+        this.logoView.setVisibility(View.INVISIBLE);
         //Password input Field
         inputpassword = (EditText)this.findViewById(R.id.loginPwdEditText);
+        this.inputpassword.setVisibility(View.INVISIBLE);
         //Account input Field
         inputaccount =  (EditText)this.findViewById(R.id.loginAccEditText);
-        //Game logo image view
-        this.logoView = (ImageView)this.findViewById(R.id.advertView);
+        this.inputaccount.setVisibility(View.INVISIBLE);
+        
+       
+   	        //loginPageTextView.setVisibility(View.VISIBLE);
+   	    	menuFabBtn.setVisibility(View.VISIBLE);
+   	    	inputaccount.setVisibility(View.VISIBLE);
+   	    	logoView.setVisibility(View.VISIBLE);
+   	    	inputpassword.setVisibility(View.VISIBLE);
+   	    	loginBtn.setVisibility(View.VISIBLE);
+   	    	logoView.setVisibility(View.VISIBLE);
+   	    	pwdShowableBtn.setVisibility(View.VISIBLE);
+   	    	fabBtnLabel.setVisibility(View.VISIBLE);
+   	    	
+   	    	//loginPageTextView.startAnimation(translateShow);
+   	    	fabBtnLabel.startAnimation(translateShow);
+   	    	menuFabBtn.startAnimation(scaleShow);
+   	    	inputaccount.startAnimation(translateShow);
+   	    	logoView.startAnimation(translateShow);
+   	    	inputpassword.setAnimation(translateShow);
+   	    	pwdShowableBtn.setAnimation(translateShow);
+   	    	loginBtn.startAnimation(scaleShow);
+   	    	logoView.startAnimation(translateShow);
+   	 
         
         /*
          * Game Logo setup,
@@ -645,32 +745,138 @@ public class AuthClientActivity extends Activity implements OnClickListener,
     public void onClick(View v) {
         int i = v.getId();
         if (i == R.id.login_btn) {
-        	setButtonEnable(false);
+        	//setButtonEnable(false);
             this.PressLogin();
         } else if (i == R.id.modify_btn) {
-        	setButtonEnable(false);
+        	//setButtonEnable(false);
             Intent Changepasswordintent = new Intent();
             Changepasswordintent.setClass(this, Changepassword.class);
             startActivityForResult(Changepasswordintent, 1);
         } else if (i == R.id.quick_sign_up_btn) {
-        	setButtonEnable(false);
+        	//setButtonEnable(false);
             Intent Fastregistrationintent = new Intent();
             Fastregistrationintent.setClass(this, Fastregistration.class);
             startActivityForResult(Fastregistrationintent, 1);
         } else if (i == R.id.sign_up_btn) {
-        	setButtonEnable(false);
+        	//setButtonEnable(false);
             Intent Registrationintent = new Intent();
             Registrationintent.setClass(this, Registration.class);
             startActivityForResult(Registrationintent, 1);
         }else if (i == R.id.fblogin_button){
-        	setButtonEnable(false);
+        	//setButtonEnable(false);
         	this.pressFbButton = true;
         	//loginFB(fbLoginButton);
         	this.fbInfoManager.loginWithFacebook(fbLoginButton);
         }else if (i == R.id.google_sign_in_button){
-        	setButtonEnable(false);
+        	//setButtonEnable(false);
         	signIn();
+        }else if(i == R.id.fab){
+        	
+        	Log.i("Click", "click fab...");
+        	 if (this.isSelectedFabBtn == true) {
+        		 Log.i("Click", "click fab hide...");
+        		 hideMenu();
+             } else {
+            	 Log.i("Click", "click fab show...");
+                 showMenu();
+             } 
+             
+        }else if(i == R.id.pwd_button){
+        	
+        	
+        	 if (v.isSelected()) {
+        		 Log.i("Click", "is hide password...");
+        		 pwdShowableBtn.setText(R.string.pwd_SHOW_Text);
+        		 SetPasswordShowable(false);
+             } else {
+            	 Log.i("Click", "is show password...");
+            	 pwdShowableBtn.setText(R.string.pwd_HIDE_Text);
+            	 SetPasswordShowable(true);
+             }
+             v.setSelected(!v.isSelected());     
         }
+    }
+	private void showMenu() {
+		
+		this.inputaccount.setEnabled(false);
+		this.inputpassword.setEnabled(false);
+		this.loginBtn.setEnabled(false);
+		this.isSelectedFabBtn = true;
+		
+		fabBtnLabel.startAnimation(scaleHide);
+		fabBtnLabel.setVisibility(View.INVISIBLE);
+		this.menuFabBtn.startAnimation(rotateShow);
+	   	this.signUpBtn.startAnimation(scaleShow);
+	   	this.fbLoginButton.startAnimation(scaleShow);
+	   	this.signinButton.startAnimation(scaleShow);
+	   	this.modPwdBtn.startAnimation(scaleShow);
+	   	this.quickSignUpBtn.startAnimation(scaleShow);
+        mMenuLayout.setVisibility(View.VISIBLE);
+        mMenuLayout.startAnimation(scaleShowForFabBtn);
+        
+/*
+        List<Animator> animList = new ArrayList<>();
+
+        for (int i = 0, len = mArcLayout.getChildCount(); i < len; i++) {
+            animList.add(createShowItemAnimator(mArcLayout.getChildAt(i)));
+        }
+
+        AnimatorSet animSet = new AnimatorSet();
+        animSet.setDuration(400);
+        animSet.setInterpolator(new OvershootInterpolator());
+        animSet.playTogether(animList);
+        animSet.start();
+*/        
+    }
+	
+	private void hideMenu() {
+		/*
+        List<Animator> animList = new ArrayList<>();
+        
+  
+        for (int i = mArcLayout.getChildCount() - 1; i >= 0; i--) {
+            animList.add(createHideItemAnimator(mArcLayout.getChildAt(i)));
+        }
+
+      AnimatorSet animSet = new AnimatorSet();
+        animSet.setDuration(400);
+        animSet.setInterpolator(new AnticipateInterpolator());
+        animSet.playTogether(animList);
+        animSet.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                mMenuLayout.setVisibility(View.INVISIBLE);
+            }
+        });
+        animSet.start();
+        */
+        //mMenuLayout.startAnimation(scaleHideForFabBtn);
+		this.isSelectedFabBtn = false;
+		this.signUpBtn.startAnimation(scaleHide);
+   	 	this.fbLoginButton.startAnimation(scaleHide);
+   	 	this.signinButton.startAnimation(scaleHide);
+   	 	this.modPwdBtn.startAnimation(scaleHide);
+   	 	this.quickSignUpBtn.startAnimation(scaleHide);
+   	 	
+   	
+   	 	final Handler handler = new Handler();
+   	 	handler.postDelayed(new Runnable() {
+   	     @Override
+   	     public void run() {
+   	         // Do something after 700ms
+   	    	//unlock can't edit and click
+       		 inputaccount.setEnabled(true);
+       		 inputpassword.setEnabled(true);
+       		 loginBtn.setEnabled(true);
+       		 
+       		 fabBtnLabel.startAnimation(translateShow);
+   	    	 menuFabBtn.startAnimation(rotateHide);
+   	    	 mMenuLayout.setVisibility(View.INVISIBLE);
+   	     }
+   	 	}, 700);
+        
+        
     }
 	
 	private void setButtonEnable(Boolean enabled){
@@ -717,9 +923,25 @@ public class AuthClientActivity extends Activity implements OnClickListener,
 	}
 
 	@Override
-	public void onBackPressed() {
-		// TODO Auto-generated method stub
-		super.onBackPressed();
-		Log.i("onBackPressed", "BackPressed...");
-	}
+    public boolean onKeyDown(int keyCode, KeyEvent event) 
+   {
+        if ((keyCode == KeyEvent.KEYCODE_BACK)) 
+        {
+        	Log.i("Back Pressed", "Back Pressed...");
+    		if(this.isSelectedFabBtn == true){
+    			Log.i("onBackPressed", "isSelectedFabBtn :"+isSelectedFabBtn );
+            	//menu still open, so input account, password and login button set enabled false 
+            	this.inputaccount.setEnabled(false);
+        		this.inputpassword.setEnabled(false);
+        		this.loginBtn.setEnabled(false);
+        		
+            	hideMenu();
+            }else{
+            	Log.i("onBackPressed", "isSelectedFabBtn :"+isSelectedFabBtn );
+            	finish();
+            }
+            return false; 
+        }
+        return super.onKeyDown(keyCode, event);
+   }
 }

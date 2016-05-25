@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="3"><dataSet config="main"><source path="G:\Users\deskuser\workspace\BelugaSDK\assets"/><source path="G:\Users\deskuser\workspace\BelugaSDK\build\generated\assets\shaders\debug"/></dataSet><dataSet config="debug"><source path="G:\Users\deskuser\workspace\BelugaSDK\build-types\debug\assets"/></dataSet></merger>

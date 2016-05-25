@@ -4,13 +4,17 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.beluga.loginpage.AuthHttpClient.OnAuthEventListener;
@@ -22,20 +26,28 @@ import com.beluga.R;
  */
 public class Fastregistration extends Activity implements OnClickListener{
 
+	final static int DELAY_TIME = 650; 
     private EditText inputaccount,inputpassword;
     private AuthHttpClient authhttpclient,authhttpclient_confirm;
-    private Button qsModpwdBtn, qsReturnBtn, qsComfirmBtn;
+    private ImageButton qsReturnBtn, qsComfirmBtn;
+    private Button qsModpwdBtn;
     private CheckBox checkBox;
-
+    private Animation selectedMoveLeft, selectedMoveRight,scaleHide;
+    
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        this.setContentView(R.layout.quick_sign_up_page);
-        this.qsComfirmBtn = (Button)this.findViewById(R.id.qscomfirmbtn);
+        this.setContentView(R.layout.quick_sign_up_page_v2);
+    
+        selectedMoveLeft = AnimationUtils.loadAnimation(this, R.anim.anim_selected_move_left_effect);
+        selectedMoveRight= AnimationUtils.loadAnimation(this, R.anim.anim_selected_move_right_effect);
+        this.scaleHide = AnimationUtils.loadAnimation(this, R.anim.anim_scale_hide);
+        
+        this.qsComfirmBtn = (ImageButton)this.findViewById(R.id.qscomfirmbtn);
         this.qsComfirmBtn.setOnClickListener(this);
-        this.qsReturnBtn = (Button)this.findViewById(R.id.qsreturnbtn);
+        this.qsReturnBtn = (ImageButton)this.findViewById(R.id.qsreturnbtn);
         this.qsReturnBtn.setOnClickListener(this);
         this.qsModpwdBtn = (Button)this.findViewById(R.id.qsmodbtn);
         this.qsModpwdBtn.setOnClickListener(this);
@@ -106,7 +118,20 @@ public class Fastregistration extends Activity implements OnClickListener{
                 } else if (Code == 1) {
                     Toast.makeText(Fastregistration.this, CodeStr, Toast.LENGTH_LONG).show();
                     InformationProcess.saveUserUid(Long.toString(uid), Fastregistration.this);
-                    SetFinish(inputaccount.getText().toString(), inputpassword.getText().toString());
+                    
+                    qsComfirmBtn.startAnimation(selectedMoveLeft);
+                	qsReturnBtn.startAnimation(scaleHide);
+                	
+                	final Handler handler = new Handler();
+               	 	handler.postDelayed(new Runnable() {
+               	     @Override
+               	     public void run() {
+               	         // Do something after 700ms
+               	    	//unlock can't edit and click
+               	    	SetFinish(inputaccount.getText().toString(), inputpassword.getText().toString());
+               	     }
+               	 	}, DELAY_TIME);
+                    
                 } else {
                     Toast.makeText(Fastregistration.this, CodeStr, Toast.LENGTH_LONG).show();
                 }
@@ -132,11 +157,28 @@ public class Fastregistration extends Activity implements OnClickListener{
             startActivity(intent);
 
         } else if (i == R.id.qscomfirmbtn) {
-            AccountConfirm();
-
+        	
+        	AccountConfirm();
+        	
         } else if (i == R.id.qsreturnbtn) {
+        	
         	Log.i("fastReg return", "finish() start");
-            finish();
+            
+            this.qsReturnBtn.startAnimation(selectedMoveRight);
+        	this.qsComfirmBtn.startAnimation(scaleHide);
+        	
+        	final Handler handler = new Handler();
+       	 	handler.postDelayed(new Runnable() {
+       	     @Override
+       	     public void run() {
+       	         // Do something after 700ms
+       	    	//unlock can't edit and click
+       	    	finish();
+       	     }
+       	 	}, DELAY_TIME);
+            
+            
+            
             Log.i("fastReg return", "finish() end");
 
         } else if (i == R.id.qsmodbtn) {

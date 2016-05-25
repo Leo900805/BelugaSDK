@@ -4,13 +4,17 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.beluga.loginpage.AuthHttpClient.OnAuthEventListener;
@@ -21,24 +25,30 @@ import com.beluga.R;
  * Created by Leo on 2015/10/5.
  */
 public class Registration extends Activity implements OnClickListener {
+	
+	final static int DELAY_TIME = 650; 
 
     private EditText inputaccount,inputpassword,inputdeterminepassword;
    
     private AuthHttpClient authhttpclient;
-    private Button signUpComfirmBtn, signUpReturnBtn;
+    private ImageButton signUpComfirmBtn, signUpReturnBtn;
     private CheckBox checkBox;
+    private Animation selectedMoveLeft, selectedMoveRight,scaleHide;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.setContentView(R.layout.sign_up_page);
-
+        this.setContentView(R.layout.sign_up_v2);
+        
+        selectedMoveLeft = AnimationUtils.loadAnimation(this, R.anim.anim_selected_move_left_effect);
+        selectedMoveRight= AnimationUtils.loadAnimation(this, R.anim.anim_selected_move_right_effect);
+        this.scaleHide = AnimationUtils.loadAnimation(this, R.anim.anim_scale_hide);
         inputpassword = (EditText)this.findViewById(R.id.signuppwdeditText);
         inputaccount = (EditText)this.findViewById(R.id.signupacctextView);
         inputdeterminepassword = (EditText)this.findViewById(R.id.signupnewpwdeditText);
-        this.signUpComfirmBtn = (Button)this.findViewById(R.id.signupcomfirmbtn);
+        this.signUpComfirmBtn = (ImageButton)this.findViewById(R.id.signupcomfirmbtn);
         this.signUpComfirmBtn.setOnClickListener(this);
-        this.signUpReturnBtn = (Button)this.findViewById(R.id.signupreturnbtn);
+        this.signUpReturnBtn = (ImageButton)this.findViewById(R.id.signupreturnbtn);
         this.signUpReturnBtn.setOnClickListener(this);
         this.checkBox = (CheckBox)this.findViewById(R.id.signupcheckBox);
         String source= this.getString(R.string.I_Agree_and_Read_Type)+ "<u><font color='red'>"+
@@ -60,7 +70,18 @@ public class Registration extends Activity implements OnClickListener {
             startActivity(intent);
 
         } else if (i == R.id.signupreturnbtn) {
-            finish();
+        	this.signUpReturnBtn.startAnimation(selectedMoveRight);
+        	this.signUpComfirmBtn.startAnimation(scaleHide);
+        	
+        	final Handler handler = new Handler();
+       	 	handler.postDelayed(new Runnable() {
+       	     @Override
+       	     public void run() {
+       	         // Do something after 700ms
+       	    	//unlock can't edit and click
+       	    	finish();
+       	     }
+       	 	}, DELAY_TIME);
 
         } else if (i == R.id.signupcomfirmbtn) {/* Changed by Leo Ling */
             if (inputaccount.getText().toString().compareTo("") == 0) {
@@ -103,8 +124,21 @@ public class Registration extends Activity implements OnClickListener {
                             .toString(), inputpassword.getText().toString(), Registration.this);
                     InformationProcess.saveUserUid(Long.toString(uid),
                             Registration.this);
-                    SetFinish(inputaccount.getText().toString(), inputpassword
-                            .getText().toString());
+                    
+                    signUpComfirmBtn.startAnimation(selectedMoveLeft);
+                    signUpReturnBtn.startAnimation(scaleHide);
+                	
+                	final Handler handler = new Handler();
+               	 	handler.postDelayed(new Runnable() {
+               	     @Override
+               	     public void run() {
+               	         // Do something after 700ms
+               	    	//unlock can't edit and click
+               	    	SetFinish(inputaccount.getText().toString(), inputpassword
+                                .getText().toString());
+               	     }
+               	 	}, DELAY_TIME);
+                    
                 }else{
                     Toast.makeText(Registration.this, CodeStr, Toast.LENGTH_LONG).show();
                 }

@@ -46,25 +46,27 @@ public class UnityActivity extends UnityPlayerActivity{
                     String useruid = bundle.getString("userid");
                     String userpwd = bundle.getString("pwd");
                     String thirdPartnerId = bundle.getString("token");
+                    
+                    Log.i("sent to unity Login", "UID:" + uid + "\nuseruid: " + useruid + "\n"+ "\nthirdPartnerId: " + thirdPartnerId + "\n");
                    
                     UnityPlayer.UnitySendMessage(unityGameObjName,unityMethod
                     		,"Login info :\nLogin User UID:"+uid +"\nuseruid: "+useruid+"\npwd:"+userpwd+"\nthirdPartnerId:"+thirdPartnerId);
 
-                    Log.i("AuthClient", "UID:" + uid + "\nuseruid: " + useruid + "\n"+ "\nthirdPartnerId: " + thirdPartnerId + "\n");
+                    
                 }else if(type.equals("PAYMENT") ){
                 	Log.i("Main Demo", "Is "+ type + "do else if condition...");
-                	String tid = bundle.getString("tradeid");
-    	            String r = bundle.getString("receipt");
-    	            String o = bundle.getString("order");
-    	            String os = bundle.getString("ordersign");
-    	            Log.i("ActivityResult trade id", tid);
-    	            Log.i("ActivityResult receipt", r);
-    	            Log.i("ActivityResult order", o);
-    	            Log.i("ActivityResult orderSign", os);
+    	           
     	            
+    	            String tid = bundle.getString("tradeid");
+                	int code = bundle.getInt("code");
+                	String m = bundle.getString("message");
+                	Log.i("sent to unity payment","trade id: \n"+ tid +"\n"+
+    	            			"code: \n"+ code +"\n"+
+    	            			"message:\n"+m+"\n" );
     	            UnityPlayer.UnitySendMessage(unityGameObjName,unityMethod
-                    		,"Receipt info :\ntrade id: \n"+ tid +"\n"+ "receipt: \n"+ r +"\n"+"order:\n"+o+"\n" );
-    	          
+                    		,"Receipt info :\ntrade id: \n"+ tid +"\n"+
+    	            			"code: \n"+ code +"\n"+
+    	            			"message:\n"+m+"\n"); 
                 }
                 
             }
