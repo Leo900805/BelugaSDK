@@ -54,5 +54,5 @@
 	<string name="Params_ERROR">参数错误</string>
 	<string name="pwd_SHOW_Text">显示</string>
     <string name="pwd_HIDE_Text">隐藏</string>
-    <string name="FAB_LABEL_TEXT">注册方式  >>> </string>
+    <string name="FAB_LABEL_TEXT">注册方式</string>
 </resources>

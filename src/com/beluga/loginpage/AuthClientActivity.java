@@ -12,6 +12,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -182,7 +183,17 @@ public class AuthClientActivity extends Activity implements OnClickListener,
         super.onCreate(savedInstanceState);
         //Facebook Initialize
         FacebookSdk.sdkInitialize(getApplicationContext()); 
-        this.setContentView(R.layout.login_page_v2);
+        
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            //Toast.makeText(this, "landscape", Toast.LENGTH_SHORT).show();
+        	this.scaleShowForFabBtn = AnimationUtils.loadAnimation(this, R.anim.anim_scale__landscape_show);
+            this.setContentView(R.layout.login_page_landscape);
+        } else if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
+            //Toast.makeText(this, "portrait", Toast.LENGTH_SHORT).show();
+            this.scaleShowForFabBtn = AnimationUtils.loadAnimation(this, R.anim.anim_scale_show2);
+            this.setContentView(R.layout.login_page_v2);
+        }
+        
         
          //get external data 
          GetDataSetting();
@@ -207,8 +218,8 @@ public class AuthClientActivity extends Activity implements OnClickListener,
         this.scaleShow = AnimationUtils.loadAnimation(this, R.anim.anim_scale_show);
         this.scaleHide = AnimationUtils.loadAnimation(this, R.anim.anim_scale_hide);
         this.translateShow = AnimationUtils.loadAnimation(this, R.anim.anim_translate_show);
-        this.scaleShowForFabBtn = AnimationUtils.loadAnimation(this, R.anim.anim_scale_show2);
-        this.scaleHideForFabBtn = AnimationUtils.loadAnimation(this, R.anim.anim_scale_hide2);
+        
+        //this.scaleHideForFabBtn = AnimationUtils.loadAnimation(this, R.anim.anim_scale_hide2);
         
         fabBtnLabel = (TextView)this.findViewById(R.id.fab_label); 
         fabBtnLabel.setVisibility(View.INVISIBLE);
