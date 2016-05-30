@@ -21,6 +21,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -61,6 +62,9 @@ import com.tendcloud.tenddata.TalkingDataGA;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Context;
+import android.telephony.TelephonyManager;
+
 import com.beluga.R;
 
 /**
@@ -70,6 +74,8 @@ public class AuthClientActivity extends Activity implements OnClickListener,
 		TextWatcher, ConnectionCallbacks,OnConnectionFailedListener{
 	
 	private static final int RC_SIGN_IN = 0;
+	
+	
 	
     //密碼元件
     private EditText inputpassword;
@@ -184,6 +190,24 @@ public class AuthClientActivity extends Activity implements OnClickListener,
         //Facebook Initialize
         FacebookSdk.sdkInitialize(getApplicationContext()); 
         
+        // 取得螢幕解析度
+        DisplayMetrics dm = new DisplayMetrics();
+        this.getWindowManager().getDefaultDisplay().getMetrics(dm);
+        float density  = dm.density;
+        //int vWidth = dm.widthPixels;
+        //int vHeight = dm.heightPixels;
+        //Log.i("this phone size:",vWidth+"*"+vHeight);
+        
+        //String px = dm.widthPixels + " x " + dm.heightPixels;
+        //String dp = dm.xdpi  + " x " + dm.ydpi;
+        
+        //(int)(dm.widthPixels * density + 0.5f);  // 螢幕寬（px，如：480px）
+        //(int)(dm.heightPixels * density + 0.5f);  // 螢幕高（px，如：800px）
+        Log.i("this phone height px size:", ""+(int)(dm.heightPixels * density + 0.5f));
+        Log.i("this phone width px size:", ""+ (int)(dm.widthPixels * density + 0.5f));
+        //Log.i("this phone dp size:", dp);
+       
+        
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             //Toast.makeText(this, "landscape", Toast.LENGTH_SHORT).show();
         	this.scaleShowForFabBtn = AnimationUtils.loadAnimation(this, R.anim.anim_scale__landscape_show);
@@ -191,7 +215,12 @@ public class AuthClientActivity extends Activity implements OnClickListener,
         } else if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
             //Toast.makeText(this, "portrait", Toast.LENGTH_SHORT).show();
             this.scaleShowForFabBtn = AnimationUtils.loadAnimation(this, R.anim.anim_scale_show2);
-            this.setContentView(R.layout.login_page_v2);
+            if(dm.heightPixels > 1200){
+            	this.setContentView(R.layout.login_page_large_size);
+            }else{
+            	this.setContentView(R.layout.login_page_v2);
+            }
+            
         }
         
         

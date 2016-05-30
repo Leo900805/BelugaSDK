@@ -8,16 +8,16 @@
     
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="550dp"
+        android:layout_height="match_parent"
         android:background="@drawable/beluga_background_v5" >
         
-      
          <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="fill_parent"
-            android:layout_height="400dp"
-            android:id="@+id/contextSideLinearLayout"
-            android:layout_marginTop="100dp">
+             android:id="@+id/contextSideLinearLayout"
+             android:layout_width="fill_parent"
+             android:layout_height="400dp"
+             android:layout_centerInParent="true"
+             android:layout_marginTop="100dp"
+             android:orientation="vertical" >
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -31,6 +31,7 @@
                     android:id="@+id/signupacctextViewTextView"
                     android:layout_width="90dp"
                     android:layout_height="31dp"
+                    android:layout_marginLeft="10dp"
                     android:text="@string/Enter_Ac_Type"
                     android:textAlignment="textStart"
                     android:textColor="#6ba2af"
@@ -41,7 +42,9 @@
                     android:id="@+id/signupacctextView"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:background="@drawable/edit_text_default_bg2"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    
                     android:hint="@string/Enter_Ac_Type"
                     android:paddingLeft="10dp" />
 
@@ -53,19 +56,22 @@
                     android:textAlignment="textStart"
                     android:textColor="#6ba2af"
                     android:textSize="20dp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold" 
+                    android:layout_marginLeft="10dp"/>
 
                 <EditText
                     android:id="@+id/signuppwdeditText"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:background="@drawable/edit_text_default_bg2"
+                    
                     android:ems="10"
                     android:hint="@string/Enter_Pwd_Type"
                     android:inputType="textPassword"
                     android:maxLength="20"
                     android:paddingLeft="10dp"
-                    android:singleLine="true" />
+                    android:singleLine="true" 
+                     android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"/>
 
                 <TextView
                     android:id="@+id/signupnewpwdTextView"
@@ -75,19 +81,22 @@
                     android:textAlignment="textStart"
                     android:textColor="#6ba2af"
                     android:textSize="20dp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold" 
+                    android:layout_marginLeft="10dp"/>
 
                 <EditText
                     android:id="@+id/signupnewpwdeditText"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:background="@drawable/edit_text_default_bg2"
+                   
                     android:ems="10"
                     android:hint="@string/Comfirm_New_Pwd_Type"
                     android:inputType="textPassword"
                     android:maxHeight="20dp"
                     android:paddingLeft="10dp"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                     android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp" />
 
                 <CheckBox
                     android:id="@+id/signupcheckBox"
@@ -95,7 +104,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:checked="true"
-                    android:textColor="#000000" />
+                    android:textColor="#000000" 
+                     android:layout_marginLeft="10dp"
+                    />
             </LinearLayout>
         </LinearLayout>
             	
