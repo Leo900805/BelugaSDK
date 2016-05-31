@@ -116,12 +116,12 @@
     
     		<ImageButton
     		    android:id="@+id/signupreturnbtn"
-    		    android:layout_width="66dp"
-    		    android:layout_height="66dp"
+    		    android:layout_width="86dp"
+    		    android:layout_height="86dp"
     		    android:layout_alignParentBottom="true"
     		    android:layout_alignParentLeft="true"
     		    android:layout_marginBottom="25dp"
-    		    android:layout_marginLeft="50dp"
+    		    android:layout_marginLeft="100dp"
     		    android:background="@drawable/return_circle_btn"
     		    android:src="@drawable/return_pic"
     		    android:text="+"
@@ -129,12 +129,12 @@
 
          		<ImageButton
          		    android:id="@+id/signupcomfirmbtn"
-         		    android:layout_width="66dp"
-         		    android:layout_height="66dp"
+         		    android:layout_width="86dp"
+         		    android:layout_height="86dp"
          		    android:layout_alignParentBottom="true"
          		    android:layout_alignParentRight="true"
          		    android:layout_marginBottom="25dp"
-         		    android:layout_marginRight="50dp"
+         		    android:layout_marginRight="100dp"
          		    android:background="@drawable/circle"
          		    android:src="@drawable/ic_done"
          		    android:text="+"

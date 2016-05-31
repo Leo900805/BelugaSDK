@@ -2,10 +2,12 @@ package com.beluga.loginpage;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Html;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -27,6 +29,8 @@ import com.beluga.R;
 public class Fastregistration extends Activity implements OnClickListener{
 
 	final static int DELAY_TIME = 650; 
+	private static final float CONSTANT_INCHES = 7;
+	
     private EditText inputaccount,inputpassword;
     private AuthHttpClient authhttpclient,authhttpclient_confirm;
     private ImageButton qsReturnBtn, qsComfirmBtn;
@@ -38,8 +42,24 @@ public class Fastregistration extends Activity implements OnClickListener{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        
+        Point point = new Point();  
+        getWindowManager().getDefaultDisplay().getRealSize(point);  
+        DisplayMetrics dm = getResources().getDisplayMetrics();  
+        double x = Math.pow(point.x/ dm.xdpi, 2);  
+        double y = Math.pow(point.y / dm.ydpi, 2);  
+        double screenInches = Math.sqrt(x + y);  
+        Log.d("sign up OnCreate", "Screen inches : " + screenInches); 
+        
 
-        this.setContentView(R.layout.quick_sign_up_page_v2);
+        if(screenInches > CONSTANT_INCHES){
+        	this.setContentView(R.layout.quick_sign_up_page_large_size);
+        }else{
+        	this.setContentView(R.layout.quick_sign_up_page_v2);
+        }
+
+        
     
         selectedMoveLeft = AnimationUtils.loadAnimation(this, R.anim.anim_selected_move_left_effect);
         selectedMoveRight= AnimationUtils.loadAnimation(this, R.anim.anim_selected_move_right_effect);

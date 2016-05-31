@@ -15,6 +15,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
@@ -74,7 +75,7 @@ public class AuthClientActivity extends Activity implements OnClickListener,
 		TextWatcher, ConnectionCallbacks,OnConnectionFailedListener{
 	
 	private static final int RC_SIGN_IN = 0;
-	
+	private static final float CONSTANT_INCHES = 7;
 	
 	
     //密碼元件
@@ -190,32 +191,32 @@ public class AuthClientActivity extends Activity implements OnClickListener,
         //Facebook Initialize
         FacebookSdk.sdkInitialize(getApplicationContext()); 
         
-        // 取得螢幕解析度
-        DisplayMetrics dm = new DisplayMetrics();
-        this.getWindowManager().getDefaultDisplay().getMetrics(dm);
-        float density  = dm.density;
-        //int vWidth = dm.widthPixels;
-        //int vHeight = dm.heightPixels;
-        //Log.i("this phone size:",vWidth+"*"+vHeight);
         
-        //String px = dm.widthPixels + " x " + dm.heightPixels;
-        //String dp = dm.xdpi  + " x " + dm.ydpi;
+        Point point = new Point();  
+        getWindowManager().getDefaultDisplay().getRealSize(point);  
+        DisplayMetrics dm = getResources().getDisplayMetrics();  
+        double x = Math.pow(point.x/ dm.xdpi, 2);  
+        double y = Math.pow(point.y / dm.ydpi, 2);  
+        double screenInches = Math.sqrt(x + y);  
+        Log.d(TAG, "Screen inches : " + screenInches); 
         
-        //(int)(dm.widthPixels * density + 0.5f);  // 螢幕寬（px，如：480px）
-        //(int)(dm.heightPixels * density + 0.5f);  // 螢幕高（px，如：800px）
-        Log.i("this phone height px size:", ""+(int)(dm.heightPixels * density + 0.5f));
-        Log.i("this phone width px size:", ""+ (int)(dm.widthPixels * density + 0.5f));
-        //Log.i("this phone dp size:", dp);
-       
+
         
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             //Toast.makeText(this, "landscape", Toast.LENGTH_SHORT).show();
-        	this.scaleShowForFabBtn = AnimationUtils.loadAnimation(this, R.anim.anim_scale__landscape_show);
-            this.setContentView(R.layout.login_page_landscape);
+        	//this.scaleShowForFabBtn = AnimationUtils.loadAnimation(this, R.anim.anim_scale__landscape_show);
+            
+            if(screenInches > CONSTANT_INCHES){
+            	this.setContentView(R.layout.login_page_landscape_large_size);
+            }else{
+            	this.setContentView(R.layout.login_page_landscape);
+            }
+            
+            
         } else if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
             //Toast.makeText(this, "portrait", Toast.LENGTH_SHORT).show();
-            this.scaleShowForFabBtn = AnimationUtils.loadAnimation(this, R.anim.anim_scale_show2);
-            if(dm.heightPixels > 1200){
+           
+            if(screenInches > CONSTANT_INCHES){
             	this.setContentView(R.layout.login_page_large_size);
             }else{
             	this.setContentView(R.layout.login_page_v2);
@@ -241,7 +242,7 @@ public class AuthClientActivity extends Activity implements OnClickListener,
         // App ID: 在TalkingData Game Analytics创建应用后会得到App ID。 
         // 渠道 ID: 是渠道标识符，可通过不同渠道单独追踪数据。
         TalkingDataGA.init(this, this.analytic_APP_ID, this.analytic_Channel_ID);
-        
+        this.scaleShowForFabBtn = AnimationUtils.loadAnimation(this, R.anim.anim_scale_show2);
         this.rotateShow = AnimationUtils.loadAnimation(this, R.anim.anin_rotate_show);
         this.rotateHide = AnimationUtils.loadAnimation(this, R.anim.anim_rotae_hide);
         this.scaleShow = AnimationUtils.loadAnimation(this, R.anim.anim_scale_show);
