@@ -2,7 +2,6 @@ package com.beluga.loginpage;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,15 +13,16 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.beluga.loginpage.AuthHttpClient.OnAuthEventListener;
 import com.beluga.loginpage.datacontrol.InformationProcess;
 import com.beluga.loginpage.datacontrol.UsedString;
+import com.beluga.loginpage.datacontrol.GameBackground;
 import com.beluga.R;
 /**
  * Created by Leo on 2015/10/5.
@@ -38,7 +38,8 @@ public class Registration extends Activity implements OnClickListener {
     private ImageButton signUpComfirmBtn, signUpReturnBtn;
     private CheckBox checkBox;
     private Animation selectedMoveLeft, selectedMoveRight,scaleHide;
-
+    private RelativeLayout registerSideRelativeLayout;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +60,8 @@ public class Registration extends Activity implements OnClickListener {
         	this.setContentView(R.layout.sign_up_v2);
         }
         
-        
+        this.registerSideRelativeLayout = (RelativeLayout)findViewById(R.id.signup_bg_side);
+        this.registerSideRelativeLayout.setBackgroundResource(GameBackground.GAME_BACKGROUND);
         selectedMoveLeft = AnimationUtils.loadAnimation(this, R.anim.anim_selected_move_left_effect);
         selectedMoveRight= AnimationUtils.loadAnimation(this, R.anim.anim_selected_move_right_effect);
         this.scaleHide = AnimationUtils.loadAnimation(this, R.anim.anim_scale_hide);

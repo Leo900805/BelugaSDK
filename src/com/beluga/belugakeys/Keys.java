@@ -12,7 +12,6 @@ public enum Keys {
     DialogTitle,
     DialogMessage,
     GameLogoForByteArray,
-    AnalyticAppID,
-    AnalyticChannelID
+    GameBackground
 }
 

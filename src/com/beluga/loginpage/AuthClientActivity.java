@@ -25,11 +25,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.beluga.belugakeys.Keys;
+import com.beluga.loginpage.datacontrol.GameBackground;
 import com.beluga.loginpage.datacontrol.InformationProcess;
 import com.beluga.loginpage.datacontrol.UsedString;
 import com.facebook.AccessToken;
@@ -81,6 +82,7 @@ public class AuthClientActivity extends Activity implements OnClickListener,
     private int EditTextAccountMax = 16;
     private int EditTextPassMax = 16;
     private int img_GameLogo;
+    private int img_GameBackground;
     private byte[] GameLogoForByteArray;
 
     //存在資料庫的帳密
@@ -116,6 +118,8 @@ public class AuthClientActivity extends Activity implements OnClickListener,
     private Animation rotateShow, rotateHide,
     				  scaleShow, scaleHide, 
     				  scaleShowForFabBtn, translateShow;
+    
+    private RelativeLayout loginSideRelativeLayout;
     
     
     @Override
@@ -208,8 +212,7 @@ public class AuthClientActivity extends Activity implements OnClickListener,
 	     mGoogleApiClient = new GoogleApiClient.Builder(this).addConnectionCallbacks(this).
 	     		addOnConnectionFailedListener(this).
 	     		addApi(Auth.GOOGLE_SIGN_IN_API, gso).build();
-		  
-        
+		
         this.scaleShowForFabBtn = AnimationUtils.loadAnimation(this, R.anim.anim_scale_show2);
         this.rotateShow = AnimationUtils.loadAnimation(this, R.anim.anin_rotate_show);
         this.rotateHide = AnimationUtils.loadAnimation(this, R.anim.anim_rotae_hide);
@@ -396,6 +399,17 @@ public class AuthClientActivity extends Activity implements OnClickListener,
         dialogTitle = intent.getStringExtra(Keys.DialogTitle.toString());
         //get dialog message into  dialogMessage global variable
         dialogMessage = intent.getStringExtra(Keys.DialogMessage.toString());
+        
+        //set game background
+        this.img_GameBackground = intent.getIntExtra(Keys.GameBackground.toString(),0);
+        if(this.img_GameBackground == 0){
+        	GameBackground.setBackgroundResource(R.drawable.blue_gradient_bg);
+        }else{
+        	GameBackground.setBackgroundResource(R.drawable.bg_pic);
+        }
+        this.loginSideRelativeLayout = (RelativeLayout)findViewById(R.id.loginSideLinearLayout);
+        this.loginSideRelativeLayout.setBackgroundResource(GameBackground.GAME_BACKGROUND);
+		
         
         if(this.GameLogoForByteArray == null){
         	Log.i("TAG", "GameLogo for byte is" + this.GameLogoForByteArray);
@@ -805,45 +819,11 @@ public class AuthClientActivity extends Activity implements OnClickListener,
 	   	this.quickSignUpBtn.startAnimation(scaleShow);
         mMenuLayout.setVisibility(View.VISIBLE);
         mMenuLayout.startAnimation(scaleShowForFabBtn);
-        
-/*
-        List<Animator> animList = new ArrayList<>();
-
-        for (int i = 0, len = mArcLayout.getChildCount(); i < len; i++) {
-            animList.add(createShowItemAnimator(mArcLayout.getChildAt(i)));
-        }
-
-        AnimatorSet animSet = new AnimatorSet();
-        animSet.setDuration(400);
-        animSet.setInterpolator(new OvershootInterpolator());
-        animSet.playTogether(animList);
-        animSet.start();
-*/        
+                
     }
 	
 	private void hideMenu() {
-		/*
-        List<Animator> animList = new ArrayList<>();
-        
-  
-        for (int i = mArcLayout.getChildCount() - 1; i >= 0; i--) {
-            animList.add(createHideItemAnimator(mArcLayout.getChildAt(i)));
-        }
-
-      AnimatorSet animSet = new AnimatorSet();
-        animSet.setDuration(400);
-        animSet.setInterpolator(new AnticipateInterpolator());
-        animSet.playTogether(animList);
-        animSet.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                mMenuLayout.setVisibility(View.INVISIBLE);
-            }
-        });
-        animSet.start();
-        */
-        //mMenuLayout.startAnimation(scaleHideForFabBtn);
+		
 		this.isSelectedFabBtn = false;
 		this.signUpBtn.startAnimation(scaleHide);
    	 	this.fbLoginButton.startAnimation(scaleHide);

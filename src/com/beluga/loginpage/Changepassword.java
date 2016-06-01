@@ -11,15 +11,16 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.beluga.loginpage.AuthHttpClient.OnAuthEventListener;
 import com.beluga.loginpage.datacontrol.InformationProcess;
 import com.beluga.loginpage.datacontrol.UsedString;
+import com.beluga.loginpage.datacontrol.GameBackground;
 import com.beluga.R;
 /**
  * Created by Leo on 2015/10/5.
@@ -34,6 +35,7 @@ public class Changepassword extends Activity implements OnClickListener{
     private AuthHttpClient authhttpclient;
     private ImageButton modReturnBtn, modComirmBtn;
     private Animation selectedMoveLeft, selectedMoveRight,scaleHide;
+    private RelativeLayout modifyPwdRelativeLayout;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +57,8 @@ public class Changepassword extends Activity implements OnClickListener{
         	this.setContentView(R.layout.modify_pwd_page_v2);
         }
         
-        
+        this.modifyPwdRelativeLayout = (RelativeLayout)findViewById(R.id.modify_bg_side);
+        this.modifyPwdRelativeLayout.setBackgroundResource(GameBackground.GAME_BACKGROUND);
         selectedMoveLeft = AnimationUtils.loadAnimation(this, R.anim.anim_selected_move_left_effect);
         selectedMoveRight= AnimationUtils.loadAnimation(this, R.anim.anim_selected_move_right_effect);
         this.scaleHide = AnimationUtils.loadAnimation(this, R.anim.anim_scale_hide);

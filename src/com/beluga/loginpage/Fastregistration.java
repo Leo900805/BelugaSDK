@@ -17,9 +17,11 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.beluga.loginpage.AuthHttpClient.OnAuthEventListener;
+import com.beluga.loginpage.datacontrol.GameBackground;
 import com.beluga.loginpage.datacontrol.InformationProcess;
 import com.beluga.loginpage.datacontrol.UsedString;
 import com.beluga.R;
@@ -37,7 +39,7 @@ public class Fastregistration extends Activity implements OnClickListener{
     private Button qsModpwdBtn;
     private CheckBox checkBox;
     private Animation selectedMoveLeft, selectedMoveRight,scaleHide;
-    
+    private RelativeLayout qSignUpRelativeLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,10 +62,12 @@ public class Fastregistration extends Activity implements OnClickListener{
         }
 
         
-    
         selectedMoveLeft = AnimationUtils.loadAnimation(this, R.anim.anim_selected_move_left_effect);
         selectedMoveRight= AnimationUtils.loadAnimation(this, R.anim.anim_selected_move_right_effect);
         this.scaleHide = AnimationUtils.loadAnimation(this, R.anim.anim_scale_hide);
+        
+        this.qSignUpRelativeLayout = (RelativeLayout)findViewById(R.id.quick_sign_up_bg_side);
+        qSignUpRelativeLayout.setBackgroundResource(GameBackground.GAME_BACKGROUND);
         
         this.qsComfirmBtn = (ImageButton)this.findViewById(R.id.qscomfirmbtn);
         this.qsComfirmBtn.setOnClickListener(this);
