@@ -77,7 +77,6 @@
                     android:layout_width="61dp"
                     android:layout_height="44dp"
                     android:layout_weight="1"
-                    
                     android:text="@string/pwd_SHOW_Text"
                     android:textSize="10dp" />
 
@@ -138,7 +137,8 @@
                     android:layout_marginRight="35dp"
                     android:background="@drawable/mod_circle_bg"
                     android:src="@drawable/w_mod"
-                    android:textColor="#FFFFFF" />
+                    android:textColor="#FFFFFF" 
+                    android:contentDescription=""/>
                 
                 
 
@@ -146,7 +146,7 @@
                 android:id="@+id/fblogin_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Login with Facebook"
+                android:text="@string/FB_BUTTON_LABEL_TEXT"
                 android:textAlignment="gravity"
                 android:textSize="15sp" 
                 android:layout_alignParentBottom="true"
@@ -154,7 +154,7 @@
       	    	android:layout_marginBottom="295dp"
       	    	android:layout_marginRight="90dp"
       	    	android:textColor="@color/secondary_text"
-            	     android:background="@drawable/label_bg"/>
+            	android:background="@drawable/label_bg"/>
             
             <com.facebook.login.widget.LoginButton
                 android:id="@+id/fblogin_button"
@@ -170,7 +170,7 @@
 	                android:id="@+id/google_sign_in_tv"
 	                android:layout_width="wrap_content"
 	                android:layout_height="wrap_content"
-	                android:text="Login with Google"
+	                android:text="@string/GG_BUTTON_LABEL_TEXT"
 	                android:textAlignment="gravity"
 	                android:textSize="15sp" 
 	                android:layout_alignParentBottom="true"

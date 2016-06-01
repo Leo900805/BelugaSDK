@@ -1,13 +1,5 @@
 package com.beluga.loginpage;
 
-import android.animation.Animator;
-import android.animation.Animator.AnimatorListener;
-import android.animation.AnimatorInflater;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
-import android.animation.ValueAnimator.AnimatorUpdateListener;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -29,9 +21,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.AnticipateInterpolator;
-import android.view.animation.LinearInterpolator;
-import android.view.animation.OvershootInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -54,17 +43,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
-import com.tendcloud.tenddata.TalkingDataGA;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import android.content.Context;
-import android.telephony.TelephonyManager;
 
 import com.beluga.R;
 
@@ -76,19 +57,17 @@ public class AuthClientActivity extends Activity implements OnClickListener,
 	
 	private static final int RC_SIGN_IN = 0;
 	private static final float CONSTANT_INCHES = 7;
+	private int cancelLogin = -1;
 	
 	
     //密碼元件
     private EditText inputpassword;
     //帳號元件
     private EditText inputaccount;
-    //private Button quickSignUpBtn;
-    //private Button signUpBtn;
-    //private Button modPwdBtn;
+   
     private LoginButton fbLoginButton;
     private Button loginBtn;
     private ImageView logoView;
-    //private Button menuFabBtn;
     private Button pwdShowableBtn;
     private View mMenuLayout;
     
@@ -128,20 +107,15 @@ public class AuthClientActivity extends Activity implements OnClickListener,
 	private String gname;
 	private String gmail;
 	private String gPhotoUrl;
-	private int cancelLogin = -1;
-	private GoogleSignInResult result;
 	
-	//TalkingData Game Analytics variables
-	private String analytic_APP_ID = null;
-    private String analytic_Channel_ID = null; //custom ID
+	private GoogleSignInResult result;
     
-    private TextView loginPageTextView, fabBtnLabel;
-    private LinearLayout loginPageLinearLayout;
+    private TextView fabBtnLabel;
     
     //Animation declare
     private Animation rotateShow, rotateHide,
-    				  scaleShow, scaleHide, scaleShowForFabBtn,  scaleHideForFabBtn,
-    				  translateShow;
+    				  scaleShow, scaleHide, 
+    				  scaleShowForFabBtn, translateShow;
     
     
     @Override
@@ -203,8 +177,6 @@ public class AuthClientActivity extends Activity implements OnClickListener,
 
         
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            //Toast.makeText(this, "landscape", Toast.LENGTH_SHORT).show();
-        	//this.scaleShowForFabBtn = AnimationUtils.loadAnimation(this, R.anim.anim_scale__landscape_show);
             
             if(screenInches > CONSTANT_INCHES){
             	this.setContentView(R.layout.login_page_landscape_large_size);
@@ -214,7 +186,6 @@ public class AuthClientActivity extends Activity implements OnClickListener,
             
             
         } else if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
-            //Toast.makeText(this, "portrait", Toast.LENGTH_SHORT).show();
            
             if(screenInches > CONSTANT_INCHES){
             	this.setContentView(R.layout.login_page_large_size);
@@ -239,17 +210,12 @@ public class AuthClientActivity extends Activity implements OnClickListener,
 	     		addApi(Auth.GOOGLE_SIGN_IN_API, gso).build();
 		  
         
-        // App ID: 在TalkingData Game Analytics创建应用后会得到App ID。 
-        // 渠道 ID: 是渠道标识符，可通过不同渠道单独追踪数据。
-        TalkingDataGA.init(this, this.analytic_APP_ID, this.analytic_Channel_ID);
         this.scaleShowForFabBtn = AnimationUtils.loadAnimation(this, R.anim.anim_scale_show2);
         this.rotateShow = AnimationUtils.loadAnimation(this, R.anim.anin_rotate_show);
         this.rotateHide = AnimationUtils.loadAnimation(this, R.anim.anim_rotae_hide);
         this.scaleShow = AnimationUtils.loadAnimation(this, R.anim.anim_scale_show);
         this.scaleHide = AnimationUtils.loadAnimation(this, R.anim.anim_scale_hide);
         this.translateShow = AnimationUtils.loadAnimation(this, R.anim.anim_translate_show);
-        
-        //this.scaleHideForFabBtn = AnimationUtils.loadAnimation(this, R.anim.anim_scale_hide2);
         
         fabBtnLabel = (TextView)this.findViewById(R.id.fab_label); 
         fabBtnLabel.setVisibility(View.INVISIBLE);
@@ -259,10 +225,8 @@ public class AuthClientActivity extends Activity implements OnClickListener,
         this.menuFabBtn = (ImageButton)this.findViewById(R.id.fab);
         this.menuFabBtn.setOnClickListener(this);
         this.menuFabBtn.setVisibility(View.INVISIBLE);
-        //this.menuFabBtn.setAnimation(scaleShow);
         
         this.mMenuLayout = findViewById(R.id.menu_layout);
-        //this.belugaMenu = (FloatingActionsMenu) this.findViewById(R.id.beluga_menu);
         
         //Quick register button
         this.quickSignUpBtn = (ImageButton)this.findViewById(R.id.quick_sign_up_btn);
@@ -289,16 +253,12 @@ public class AuthClientActivity extends Activity implements OnClickListener,
         this.modPwdBtn.setOnClickListener(this);
               
         //google button 
-        
         signinButton = (ImageButton) findViewById(R.id.google_sign_in_button);
 		signinButton.setOnClickListener(this);
 		
 		pwdShowableBtn = (Button)this.findViewById(R.id.pwd_button);
 		pwdShowableBtn.setOnClickListener(this);
 		pwdShowableBtn.setVisibility(View.INVISIBLE);
-		
-        //set button enable
-		//setButtonEnable(true);
 		
 		//Game logo image view
         this.logoView = (ImageView)this.findViewById(R.id.advertView);
@@ -311,7 +271,6 @@ public class AuthClientActivity extends Activity implements OnClickListener,
         this.inputaccount.setVisibility(View.INVISIBLE);
         
        
-   	        //loginPageTextView.setVisibility(View.VISIBLE);
    	    	menuFabBtn.setVisibility(View.VISIBLE);
    	    	inputaccount.setVisibility(View.VISIBLE);
    	    	logoView.setVisibility(View.VISIBLE);
@@ -321,7 +280,6 @@ public class AuthClientActivity extends Activity implements OnClickListener,
    	    	pwdShowableBtn.setVisibility(View.VISIBLE);
    	    	fabBtnLabel.setVisibility(View.VISIBLE);
    	    	
-   	    	//loginPageTextView.startAnimation(translateShow);
    	    	fabBtnLabel.startAnimation(translateShow);
    	    	menuFabBtn.startAnimation(scaleShow);
    	    	inputaccount.startAnimation(translateShow);
@@ -438,13 +396,6 @@ public class AuthClientActivity extends Activity implements OnClickListener,
         dialogTitle = intent.getStringExtra(Keys.DialogTitle.toString());
         //get dialog message into  dialogMessage global variable
         dialogMessage = intent.getStringExtra(Keys.DialogMessage.toString());
-        
-        this.analytic_APP_ID = intent.getStringExtra(Keys.AnalyticAppID.toString());
-        this.analytic_Channel_ID = intent.getStringExtra(Keys.AnalyticChannelID.toString());
-        
-        if(this.analytic_APP_ID == null && this.analytic_Channel_ID == null){
-        	Log.i(TAG, "Please input analytic_APP_ID and analytic_Channel_ID.");
-        }
         
         if(this.GameLogoForByteArray == null){
         	Log.i("TAG", "GameLogo for byte is" + this.GameLogoForByteArray);

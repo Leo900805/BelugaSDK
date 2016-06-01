@@ -8,6 +8,5 @@
 	<classpathentry exported="true" kind="lib" path="libs/classes.jar"/>
 	<classpathentry exported="true" kind="lib" path="G:/Users/deskuser/workspace/BelugaSDK/libs/org.apache.http.legacy.jar"/>
 	<classpathentry exported="true" kind="lib" path="G:/Users/deskuser/workspace/BelugaSDK/libs/mediationsdk-6.3.6.jar"/>
-	<classpathentry exported="true" kind="lib" path="G:/Users/deskuser/workspace/BelugaSDK/libs/Game_Analytics_SDK_Android_3.2.4.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

@@ -1072,6 +1072,8 @@ containing a value of this type.
         public static int Enter_New_Pwd_Type=0x7f07003e;
         public static int Enter_Pwd_Type=0x7f07003d;
         public static int FAB_LABEL_TEXT=0x7f070072;
+        public static int FB_BUTTON_LABEL_TEXT=0x7f070073;
+        public static int GG_BUTTON_LABEL_TEXT=0x7f070074;
         public static int I_Agree_and_Read_Type=0x7f070041;
         public static int Login_Button_Text=0x7f070062;
         public static int Login_Page_Passsword_Text=0x7f07006a;
@@ -1106,8 +1108,8 @@ containing a value of this type.
         public static int Write_DB_failed_Type=0x7f07004c;
         public static int Wrong_AppID_Type=0x7f070044;
         public static int accept=0x7f070002;
-        public static int app_id=0x7f070074;
-        public static int app_name=0x7f070073;
+        public static int app_id=0x7f070076;
+        public static int app_name=0x7f070075;
         /**  Brand name for Facebook [DO NOT TRANSLATE] 
          */
         public static int auth_google_play_services_client_facebook_display_name=0x7f070007;
@@ -1239,7 +1241,7 @@ containing a value of this type.
         /**  Long form sign-in button text [CHAR LIMIT=30] 
          */
         public static int common_signin_button_text_long=0x7f070023;
-        public static int content_description=0x7f070075;
+        public static int content_description=0x7f070077;
         public static int create_calendar_message=0x7f070005;
         public static int create_calendar_title=0x7f070004;
         public static int decline=0x7f070003;

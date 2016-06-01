@@ -12,7 +12,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 
 public class UnityActivity extends UnityPlayerActivity{
 	
@@ -80,7 +79,7 @@ public class UnityActivity extends UnityPlayerActivity{
     }
  
 	public void StartAuthClient(String UnityGameObj, String UnityMethod, String appid, String apikey, byte[] gameLogo,String packageID,  
-			boolean inMaintain, String dialogTitle, String dialogMessage, String analytic_APP_ID, String analytic_Channel_ID) {
+			boolean inMaintain, String dialogTitle, String dialogMessage) {
 			
 			Intent intent; 
 			this.unityGameObjName = UnityGameObj;
@@ -94,8 +93,6 @@ public class UnityActivity extends UnityPlayerActivity{
 	        intent.putExtra(Keys.ActiveMaintainDialog.toString(), inMaintain);
 	        intent.putExtra(Keys.DialogMessage.toString(), dialogMessage);
 	        intent.putExtra(Keys.DialogTitle.toString(), dialogTitle);
-	        intent.putExtra(Keys.AnalyticAppID.toString(), analytic_APP_ID);
-	        intent.putExtra(Keys.AnalyticChannelID.toString(), analytic_Channel_ID);
 	        Log.i("pID", packageID);
 	        startActivityForResult(intent, 100);
 	}
