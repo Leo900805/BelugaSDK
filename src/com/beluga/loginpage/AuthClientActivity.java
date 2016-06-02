@@ -374,12 +374,22 @@ public class AuthClientActivity extends Activity implements OnClickListener,
     
     //get external data method 
     private void GetDataSetting(){
-        String APIUrl = "http://api.belugame.com/api/";
+        //String APIUrl = "http://api.belugame.com/api/";
         Log.d("tag", "versionCode :" + AuthHttpClient.version);
         //讀取外部參數
         Intent intent = getIntent();
+        
+        AuthHttpClient.AuthChannel = intent.getIntExtra(Keys.AuthChannel.toString(),0);
         //assign Api Url into AuthHttpClient.ApiUrl
-        AuthHttpClient.ApiUrl = APIUrl;
+        if(AuthHttpClient.AuthChannel == AuthHttpClient.LOW_AUTH){
+        	AuthHttpClient.ApiUrl = "http://api.belugame.com/api/";
+        }else if(AuthHttpClient.AuthChannel == AuthHttpClient.STRONG_AUTH){
+        	AuthHttpClient.ApiUrl = "http://games.belugame.com/api/";
+        }else{
+        	Log.d("TAG", "AuthChannel is " + AuthHttpClient.AuthChannel+". This auth channel does not exist.");
+        }
+
+        
         //get App ID assign into AuthHttpClient.AppID
         AuthHttpClient.AppID = intent.getStringExtra(Keys.AppID.toString());
         //get App Key assign into AuthHttpClient.ApiKey
@@ -458,7 +468,7 @@ public class AuthClientActivity extends Activity implements OnClickListener,
                         Toast.makeText(AuthClientActivity.this, CodeStr, Toast.LENGTH_LONG).show();
                         SaveAccountPassword(inputaccount.getText().toString(), inputpassword.getText().toString());
                         InformationProcess.saveUserUid(Long.toString(uid), AuthClientActivity.this);
-                        SetFinish(inputaccount.getText().toString(), uid.toString(), token, inputpassword.getText().toString());
+                        SetFinish(inputaccount.getText().toString(), uid.toString(), token, inputpassword.getText().toString(), null);
                     } else {
                         Toast.makeText(AuthClientActivity.this, CodeStr, Toast.LENGTH_LONG).show();
                     }
@@ -477,10 +487,20 @@ public class AuthClientActivity extends Activity implements OnClickListener,
                     	Log.i("info", "Uid:"+ uid +", Account:"+ Account);
                         Toast.makeText(AuthClientActivity.this, CodeStr, Toast.LENGTH_LONG).show();
                         InformationProcess.saveUserUid(Long.toString(uid), AuthClientActivity.this);
-                        SetFinish(Account, uid.toString(), accountBound, Pwd);
+                        SetFinish(Account, uid.toString(), "", Pwd, accountBound);
                     } else {
                         Toast.makeText(AuthClientActivity.this, CodeStr, Toast.LENGTH_LONG).show();
                     }
+				}
+
+				@Override
+				public void onProcessDoneEvent(int Code, String token) {
+					// TODO Auto-generated method stub
+					if (Code == 1){
+						SetFinish(null, null, token, null, null);
+					}else{
+						Toast.makeText(AuthClientActivity.this, "Auth false...", Toast.LENGTH_LONG).show();
+					}
 				}
             });
     }
@@ -623,7 +643,7 @@ public class AuthClientActivity extends Activity implements OnClickListener,
     }
     
     //回到遊戲 並回傳帳號與uid
-    private void SetFinish(String thisuserid,String thisuid,String token,String thispwd)
+    private void SetFinish(String thisuserid,String thisuid,String token,String thispwd, String accountBound)
     {
         Intent resultdata = new Intent();
         Bundle bundle = new Bundle();
@@ -631,7 +651,9 @@ public class AuthClientActivity extends Activity implements OnClickListener,
         bundle.putString("userid", thisuserid);
         bundle.putString("uid", thisuid);
         bundle.putString("pwd", thispwd);
+        bundle.putString("accountBound", accountBound);
         bundle.putString("token", token);
+        
         resultdata.putExtras(bundle);
         setResult(Activity.RESULT_OK, resultdata); //回傳RESULT_OK
 

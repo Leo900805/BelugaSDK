@@ -18,14 +18,13 @@ import com.beluga.R;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.conn.ssl.X509HostnameVerifier;
+import org.apache.http.conn.util.InetAddressUtils;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.SingleClientConnManager;
 import org.apache.http.message.BasicNameValuePair;
@@ -33,8 +32,11 @@ import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 
+import java.net.InetAddress;
+import java.net.NetworkInterface;
 import java.security.MessageDigest;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 
 import javax.net.ssl.HostnameVerifier;
@@ -46,10 +48,14 @@ import javax.net.ssl.HttpsURLConnection;
 @SuppressLint("HandlerLeak")
 @SuppressWarnings("deprecation")
 public class AuthHttpClient {
+	//channel
+	public final static int LOW_AUTH = 1;
+	public final static int STRONG_AUTH = 2;
 	
 	//Global variable
     private Activity MainActivity;
     protected OnAuthEventListener AuthEventListener;
+    protected static int AuthChannel;
     protected static String AppID = "";
     protected static String ApiKey = "";
     protected static String ApiUrl = "";
@@ -81,6 +87,7 @@ public class AuthHttpClient {
     protected interface OnAuthEventListener {
         public void onProcessDoneEvent(int Code, String Message, Long uid, String Account, String Pwd);
         public void onProcessDoneEvent(int Code, String Message, Long uid, String Account, String Pwd, String accountBound);
+        public void onProcessDoneEvent(int Code, String token);
     }
 
     //For general Auth Event
@@ -93,6 +100,12 @@ public class AuthHttpClient {
     private void OnAuthEvent(int Code, String Message, long i, String Account,String Pwd, String accountBound) {
         if (AuthEventListener != null) {
             AuthEventListener.onProcessDoneEvent(Code, Message, i, Account, Pwd, accountBound);
+        }
+    }
+    //For the Strong Auth Event
+    private void OnAuthEvent(int Code, String token) {
+        if (AuthEventListener != null) {
+            AuthEventListener.onProcessDoneEvent(Code, token);
         }
     }
     
@@ -141,11 +154,15 @@ public class AuthHttpClient {
                 loadingProgress.show();
             }
         });
-
+        
+        
         HttpPost post = new HttpPost(url);
         try {
+        	
             DefaultHttpClient httpClient;
+            
             if (url.indexOf("https") == 0) {
+            	
                 SchemeRegistry registry = new SchemeRegistry();
                 // SSL All Allow
                 HostnameVerifier hostnameVerifier = org.apache.http.conn.ssl.SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER;
@@ -158,6 +175,7 @@ public class AuthHttpClient {
                 // Set verifier
                 HttpsURLConnection.setDefaultHostnameVerifier(hostnameVerifier);
             } else {
+            	
                 httpClient = new DefaultHttpClient();
             }
           
@@ -169,8 +187,10 @@ public class AuthHttpClient {
             
             HttpResponse httpResponse = httpClient.execute(post);
             
+            
+            
             if (httpResponse.getStatusLine().getStatusCode() == 200) {
-               
+            	
                 String strResult = EntityUtils.toString(httpResponse.getEntity());
                 
                 Message msg = new Message();
@@ -181,7 +201,9 @@ public class AuthHttpClient {
                 msg.setData(data);
                 
                 HttpPostHandler.sendMessage(msg);
+                
             } else {
+            	
                 OnAuthEvent(-101, "ServerHttpStatusError"
                         + httpResponse.getStatusLine().getStatusCode(), -1, "", "");
             }
@@ -300,7 +322,29 @@ public class AuthHttpClient {
         }
         return true;
     }
-
+    
+    protected String getIP(){
+    	String ip = null;
+    	try {
+     	   for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
+     	              NetworkInterface intf = (NetworkInterface) en.nextElement();
+     	              
+     	              for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
+     	            	  
+     	                  InetAddress inetAddress = (InetAddress) enumIpAddr.nextElement();
+     	                  if (!inetAddress.isLoopbackAddress() && InetAddressUtils.isIPv4Address(ip = inetAddress.getHostAddress())) {
+     	                	  Log.i("ip", "ip is :"+ ip );
+     	                	  return ip;
+     	                  }
+     	              }
+     	          }
+     	  } catch (Exception e) {
+     	   Log.e("------------", e.toString());
+     	  }
+		return ip;
+    }
+    
+    
   
     protected void Auth_UserLogin(String UserID, String UserPassword) {
         
@@ -335,32 +379,43 @@ public class AuthHttpClient {
             OnAuthEvent(-2, MainActivity.getString(R.string.Network_Connection_Failure_Type), -1, "", "");
             return;
         }
-
-        final String UrlAction = "MemberLogin";
-			/*
+        
+        String url = null;
+        if(AuthChannel == AuthHttpClient.LOW_AUTH){
+        	url = "MemberLogin";
+        }else if (AuthChannel == AuthHttpClient.STRONG_AUTH){
+        	url = "MemberLogin/?";
+        }
+        
+        final String UrlAction = url;
+        final List<NameValuePair> params = new ArrayList<NameValuePair>();
+        
+        	/*
 			 * appid userid pwd devid sign
 			 */
-        String devid = Secure.getString(MainActivity.getContentResolver(),
-                Secure.ANDROID_ID);
-        // apikey+appid+userid+pwd+apikey
-        String sign = MD5(ApiKey + AppID + UserID + UserPassword + ApiKey );
-        final List<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("appid", AppID));
-        params.add(new BasicNameValuePair("userid", UserID));
-        params.add(new BasicNameValuePair("pwd", UserPassword));
-        params.add(new BasicNameValuePair("devid", devid));
-        params.add(new BasicNameValuePair("packageid", PackageID));
-        Log.i("login funciuon", PackageID);
-        params.add(new BasicNameValuePair("sign", sign));
-
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                httpPOST(AuthCommandType.Login, ApiUrl + UrlAction, params);
-
-            }
-        };
-        new Thread(runnable).start();
+	        String devid = Secure.getString(MainActivity.getContentResolver(), Secure.ANDROID_ID);
+	        String devtype = getDeviceName();
+	        String ip = getIP();
+	           
+	        // apikey+appid+userid+pwd+apikey
+	        String sign = MD5(ApiKey + AppID + UserID + UserPassword + ApiKey );    
+	        params.add(new BasicNameValuePair("appid", AppID));
+	        params.add(new BasicNameValuePair("userid", UserID));
+	        params.add(new BasicNameValuePair("pwd", UserPassword));
+	        params.add(new BasicNameValuePair("devid", devid));
+	        params.add(new BasicNameValuePair("sign", sign));
+	        params.add(new BasicNameValuePair("clientip", ip));
+	        params.add(new BasicNameValuePair("devtype", devtype));
+	        params.add(new BasicNameValuePair("ostype", "1"));
+        
+	        Runnable runnable = new Runnable() {
+	            @Override
+	            public void run() {
+	            	
+	                httpPOST(AuthCommandType.Login, ApiUrl + UrlAction, params);
+	            }
+	         };
+	         new Thread(runnable).start();
     }
 
     //Facebook login and Register
@@ -517,7 +572,6 @@ public class AuthHttpClient {
         params.add(new BasicNameValuePair("devtype", devtype));
         params.add(new BasicNameValuePair("ostype", "1"));
         params.add(new BasicNameValuePair("packid", packid));
-        params.add(new BasicNameValuePair("packageid", PackageID));
         params.add(new BasicNameValuePair("sign", sign));
 
         Runnable runnable = new Runnable() {
@@ -629,10 +683,23 @@ public class AuthHttpClient {
     private void AuthBackDataProc_Login(String Data) {
         try {
             JSONObject jObj = new JSONObject(Data);
-            String code = jObj.getString("Code");
-            String msg = jObj.getString("Message");
-            String uid = jObj.getString("uid");
-            OnAuthEvent(Integer.parseInt(code), msg, Long.parseLong(uid), "","");
+            
+            //here add token...
+            if(AuthChannel == AuthHttpClient.LOW_AUTH){
+            	
+            	String code = jObj.getString("Code");
+                String msg = jObj.getString("Message");
+                String uid = jObj.getString("uid");
+            	OnAuthEvent(Integer.parseInt(code), msg, Long.parseLong(uid), "","");
+            	
+            }else if(AuthChannel == AuthHttpClient.STRONG_AUTH){
+            	
+            	String code = jObj.getString("Code");
+                String token = jObj.getString("Token");
+            	OnAuthEvent(Integer.parseInt(code), token );
+            	
+            }
+            
         } catch (Exception e) {
             OnAuthEvent(-102,  MainActivity.getString(R.string.Data_Parse_Error_Type), -1, "", "");
         }

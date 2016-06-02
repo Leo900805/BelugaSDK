@@ -137,6 +137,12 @@ public class Changepassword extends Activity implements OnClickListener{
 				// TODO Auto-generated method stub
 				
 			}
+
+			@Override
+			public void onProcessDoneEvent(int Code, String token) {
+				// TODO Auto-generated method stub
+				
+			}
         });
         
         authhttpclient.Auth_ChangePassword(this.inputaccount.getText().toString(),this.inputpassword.getText().toString(),this.inputdeterminepassword.getText().toString());

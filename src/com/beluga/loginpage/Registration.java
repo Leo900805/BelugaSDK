@@ -172,6 +172,12 @@ public class Registration extends Activity implements OnClickListener {
 				// TODO Auto-generated method stub
 				
 			}
+
+			@Override
+			public void onProcessDoneEvent(int Code, String token) {
+				// TODO Auto-generated method stub
+				
+			}
         });
     }
 

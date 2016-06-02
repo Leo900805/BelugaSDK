@@ -12,6 +12,7 @@ public enum Keys {
     DialogTitle,
     DialogMessage,
     GameLogoForByteArray,
-    GameBackground
+    GameBackground,
+    AuthChannel
 }
 
