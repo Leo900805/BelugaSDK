@@ -384,7 +384,7 @@ public class AuthClientActivity extends Activity implements OnClickListener,
         if(AuthHttpClient.AuthChannel == AuthHttpClient.LOW_AUTH){
         	AuthHttpClient.ApiUrl = "http://api.belugame.com/api/";
         }else if(AuthHttpClient.AuthChannel == AuthHttpClient.STRONG_AUTH){
-        	AuthHttpClient.ApiUrl = "http://games.belugame.com/api/";
+        	AuthHttpClient.ApiUrl = "https://games.belugame.com/api/";
         }else{
         	Log.d("TAG", "AuthChannel is " + AuthHttpClient.AuthChannel+". This auth channel does not exist.");
         }
@@ -419,6 +419,9 @@ public class AuthClientActivity extends Activity implements OnClickListener,
         }
         this.loginSideRelativeLayout = (RelativeLayout)findViewById(R.id.loginSideLinearLayout);
         this.loginSideRelativeLayout.setBackgroundResource(GameBackground.GAME_BACKGROUND);
+        
+        
+        
 		
         
         if(this.GameLogoForByteArray == null){

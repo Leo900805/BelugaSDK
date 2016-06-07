@@ -6,4 +6,6 @@ public class GameBackground {
 	public static void setBackgroundResource(int res){
 		GAME_BACKGROUND = res;
     }
+	
+
 }

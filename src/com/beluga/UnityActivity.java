@@ -78,17 +78,17 @@ public class UnityActivity extends UnityPlayerActivity{
         
     }
  
-	public void StartAuthClient(String UnityGameObj, String UnityMethod, String appid, String apikey, byte[] gameLogo,String packageID,  
-			boolean inMaintain, String dialogTitle, String dialogMessage) {
+	public void StartAuthClient(String UnityGameObj, String UnityMethod, int authChannel,String appid, String apikey,  
+								byte[] gameLogo, String packageID,  boolean inMaintain, String dialogTitle, String dialogMessage) {
 			
 			Intent intent; 
 			this.unityGameObjName = UnityGameObj;
 			this.unityMethod = UnityMethod;
 	        intent = new Intent(this, com.beluga.loginpage.AuthClientActivity.class);
+	        intent.putExtra(Keys.AuthChannel.toString(), authChannel);
 	        intent.putExtra(Keys.AppID.toString(), appid);
 	        intent.putExtra(Keys.ApiKey.toString(), apikey);
 	        intent.putExtra(Keys.PackageID.toString(), packageID);
-	        //intent.putExtra(Keys.GameLogo.toString(), R.drawable.cbimage);
 	        intent.putExtra(Keys.GameLogoForByteArray.toString(), gameLogo);
 	        intent.putExtra(Keys.ActiveMaintainDialog.toString(), inMaintain);
 	        intent.putExtra(Keys.DialogMessage.toString(), dialogMessage);

@@ -119,7 +119,7 @@ public class AuthHttpClient {
     private boolean isInternetAvailable() {
         ConnectivityManager manager = (ConnectivityManager) MainActivity
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
-
+        
         if(manager == null)	return false;
 
         NetworkInfo Wifi = manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
@@ -162,7 +162,7 @@ public class AuthHttpClient {
             DefaultHttpClient httpClient;
             
             if (url.indexOf("https") == 0) {
-            	
+            	Log.i("httpClient", "in if condition:" + url.indexOf("https"));
                 SchemeRegistry registry = new SchemeRegistry();
                 // SSL All Allow
                 HostnameVerifier hostnameVerifier = org.apache.http.conn.ssl.SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER;
@@ -665,14 +665,10 @@ public class AuthHttpClient {
                 AuthBackDataProc_ChangePassword(Data);
                 break;
             case FacebookLoginRegister:
-            	Log.d("AuthBackDataProcess","Case FacebookLoginRegister start");
                 AuthBackDataProc_FacebookLoginRegister(Data);
-                Log.d("AuthBackDataProcess","Case FacebookLoginRegister end");
                 break;
             case GoogleLoginRegister:
-            	Log.d("AuthBackDataProcess","Case GoogleLoginRegister start");
                 AuthBackDataProc_GoogleLoginRegister(Data);
-                Log.d("AuthBackDataProcess","Case GoogleLoginRegister end");
                 break;
             default:
                 AuthBackDataProc_UnknowType();
