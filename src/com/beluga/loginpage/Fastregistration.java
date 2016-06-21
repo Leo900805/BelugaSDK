@@ -82,6 +82,8 @@ public class Fastregistration extends Activity implements OnClickListener{
                 this.getString(R.string.Membership_Policy_Type)+ "</font></u>";
         checkBox.setText(Html.fromHtml(source));
         checkBox.setOnClickListener(this);
+        
+        
         CreateHttpClient();
         authhttpclient.Auth_QuickAccount();
     }
@@ -117,19 +119,13 @@ public class Fastregistration extends Activity implements OnClickListener{
 				// TODO Auto-generated method stub
 				
 			}
-
-			@Override
-			public void onProcessDoneEvent(int Code, String token) {
-				// TODO Auto-generated method stub
-				
-			}
-
         });
     }
 
     private void AccountConfirm()
     {
         CreateHttpClientConfirm();
+        Log.i("Fast regis", "line 128");
         authhttpclient_confirm.Auth_RegisterAccount(inputaccount.getText().toString(), inputpassword.getText().toString());
     }
 
@@ -173,12 +169,6 @@ public class Fastregistration extends Activity implements OnClickListener{
 				// TODO Auto-generated method stub
 				
 			}
-
-			@Override
-			public void onProcessDoneEvent(int Code, String token) {
-				// TODO Auto-generated method stub
-				
-			}
         });
     }
 
@@ -193,7 +183,7 @@ public class Fastregistration extends Activity implements OnClickListener{
             startActivity(intent);
 
         } else if (i == R.id.qscomfirmbtn) {
-        	
+        	Log.i("fast regis", "comfirm clicked...");
         	AccountConfirm();
         	
         } else if (i == R.id.qsreturnbtn) {

@@ -16,13 +16,22 @@ import android.util.Log;
 public class UnityActivity extends UnityPlayerActivity{
 	
 	
-	Context mContext = null;
+	static Context mContext = null;
+	//static String unityGameObjName;
+	//static String unityMethod;
 	String unityGameObjName;
 	String unityMethod;
+	static Activity act;
+	
+	static String  Appid, Apikey, PackageID, DialogTitle, DialogMessage;  
+	static boolean InMaintain;
+	static int AuthChannel;  
+	static byte[] GameLogo;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = this;
+        act = this;
     }
 
     @Override
@@ -80,22 +89,104 @@ public class UnityActivity extends UnityPlayerActivity{
  
 	public void StartAuthClient(String UnityGameObj, String UnityMethod, int authChannel,String appid, String apikey,  
 								byte[] gameLogo, String packageID,  boolean inMaintain, String dialogTitle, String dialogMessage) {
-			
+			Log.i("UnityActivity", "StartAuthClient...");
 			Intent intent; 
 			this.unityGameObjName = UnityGameObj;
 			this.unityMethod = UnityMethod;
+			//unityGameObjName = UnityGameObj;
+			//unityMethod = UnityMethod;
 	        intent = new Intent(this, com.beluga.loginpage.AuthClientActivity.class);
 	        intent.putExtra(Keys.AuthChannel.toString(), authChannel);
 	        intent.putExtra(Keys.AppID.toString(), appid);
 	        intent.putExtra(Keys.ApiKey.toString(), apikey);
 	        intent.putExtra(Keys.PackageID.toString(), packageID);
-	        intent.putExtra(Keys.GameLogoForByteArray.toString(), gameLogo);
+	        intent.putExtra(Keys.GameLogoForByteArray.toString(), gameLogo);//
 	        intent.putExtra(Keys.ActiveMaintainDialog.toString(), inMaintain);
 	        intent.putExtra(Keys.DialogMessage.toString(), dialogMessage);
 	        intent.putExtra(Keys.DialogTitle.toString(), dialogTitle);
 	        Log.i("pID", packageID);
 	        startActivityForResult(intent, 100);
+	        //act.startActivityForResult(intent, 100);
+	        //startActivity(intent);
 	}
+	
+	/*
+	public static void StartAuthClient(String UnityGameObj, String UnityMethod, int authChannel,String appid, String apikey,  
+			byte[] gameLogo, String packageID,  boolean inMaintain, String dialogTitle, String dialogMessage) {
+				Log.i("UnityActivity", "StartAuthClient...");
+				Intent intent; 
+				//this.unityGameObjName = UnityGameObj;
+				//this.unityMethod = UnityMethod;
+				unityGameObjName = UnityGameObj;
+				unityMethod = UnityMethod;
+				intent = new Intent(mContext, com.beluga.loginpage.AuthClientActivity.class);
+				intent.putExtra(Keys.AuthChannel.toString(), authChannel);
+				intent.putExtra(Keys.AppID.toString(), appid);
+				intent.putExtra(Keys.ApiKey.toString(), apikey);
+				intent.putExtra(Keys.PackageID.toString(), packageID);
+				intent.putExtra(Keys.GameLogoForByteArray.toString(), gameLogo);//
+				intent.putExtra(Keys.ActiveMaintainDialog.toString(), inMaintain);
+				intent.putExtra(Keys.DialogMessage.toString(), dialogMessage);
+				intent.putExtra(Keys.DialogTitle.toString(), dialogTitle);
+				Log.i("pID", packageID);
+				//startActivityForResult(intent, 100);
+				act.startActivityForResult(intent, 100);
+				//startActivity(intent);
+		}
+*/
+    /*
+    public static void setArgs(String UnityGameObj, String UnityMethod, int authChannel,String appid, String apikey,  
+			byte[] gameLogo, String packageID,  boolean inMaintain, String dialogTitle, String dialogMessage) {
+			Log.i("UnityActivity", "setArgs...");
+			
+			unityGameObjName = UnityGameObj;
+			Log.i("UnityActivity", "setArgs unityGameObjName"+ unityGameObjName);
+			unityMethod = UnityMethod;
+			Log.i("UnityActivity", "setArgs unityMethod"+ unityMethod);
+			Appid = appid; 
+			Log.i("UnityActivity", "setArgs Appid"+ Appid);
+			Apikey =apikey;
+			Log.i("UnityActivity", "setArgs Apikey"+ Apikey);
+			PackageID= packageID;
+			Log.i("UnityActivity", "setArgs PackageID"+ PackageID);
+			DialogTitle=dialogTitle;
+			Log.i("UnityActivity", "setArgs DialogTitle"+ DialogTitle);
+			DialogMessage= dialogMessage;  
+			Log.i("UnityActivity", "setArgs DialogMessage"+ DialogMessage);
+			InMaintain = inMaintain;
+			//Log.i("UnityActivity", "setArgs unityMethod"+ unityMethod);
+			AuthChannel = authChannel;  
+			//Log.i("UnityActivity", "setArgs unityMethod"+ unityMethod);
+			GameLogo = gameLogo;
+			//Log.i("UnityActivity", "setArgs unityMethod"+ unityMethod);
+			
+    }
+    */
+    /*
+    public void StartAuthClient() {
+		Log.i("UnityActivity", "StartAuthClient...");
+		Intent intent; 
+		//this.unityGameObjName = UnityGameObj;
+		//this.unityMethod = UnityMethod;
+		//unityGameObjName = UnityGameObj;
+		//unityMethod = UnityMethod;
+		intent = new Intent(this, com.beluga.loginpage.AuthClientActivity.class);
+		intent.putExtra(Keys.AuthChannel.toString(), AuthChannel);
+		Log.i("UnityActivity", "StartAuthClient Appid"+ Appid);
+		intent.putExtra(Keys.AppID.toString(), Appid);
+		Log.i("UnityActivity", "StartAuthClient Apikey"+ Apikey);
+		intent.putExtra(Keys.ApiKey.toString(), Apikey);
+		intent.putExtra(Keys.PackageID.toString(), PackageID);
+		intent.putExtra(Keys.GameLogoForByteArray.toString(), GameLogo);//
+		intent.putExtra(Keys.ActiveMaintainDialog.toString(), InMaintain);
+		intent.putExtra(Keys.DialogMessage.toString(), DialogMessage);
+		intent.putExtra(Keys.DialogTitle.toString(), DialogTitle);
+		//Log.i("pID", packageID);
+		startActivityForResult(intent, 100);
+		//act.startActivityForResult(intent, 100);
+		//startActivity(intent);
+    }
+	*/
 	
 	public void startGooglePaymentButtonPress(String UnityGameObj, String UnityMethod, String SKU_GAS, String base64, String userId,
 			String serverId, String role, String orderId){ 

@@ -85,9 +85,9 @@ public class AuthHttpClient {
 
     //Create OnAuthEventListener interface 
     protected interface OnAuthEventListener {
-        public void onProcessDoneEvent(int Code, String Message, Long uid, String Account, String Pwd);
+        public void onProcessDoneEvent(int Code, String Message, Long uid, String Account, String token);
         public void onProcessDoneEvent(int Code, String Message, Long uid, String Account, String Pwd, String accountBound);
-        public void onProcessDoneEvent(int Code, String token);
+        //public void onProcessDoneEvent(int Code, String token, int uid, String Account, String Pwd);
     }
 
     //For general Auth Event
@@ -103,12 +103,13 @@ public class AuthHttpClient {
         }
     }
     //For the Strong Auth Event
+    /*
     private void OnAuthEvent(int Code, String token) {
         if (AuthEventListener != null) {
             AuthEventListener.onProcessDoneEvent(Code, token);
         }
     }
-    
+    */
     //Method AuthEventListener(); 
     protected void AuthEventListener(OnAuthEventListener onAuthEventListener) {
 
@@ -482,7 +483,16 @@ public class AuthHttpClient {
             OnAuthEvent(-500, MainActivity.getString(R.string.Network_Connection_Failure_Type), -1, "", "");
             return;
         }
-        final String UrlAction = "MemberMake";
+        
+       // String url = null;
+        //if(AuthChannel == AuthHttpClient.LOW_AUTH){
+      
+        	//url = "http://api.belugame.com/api/MemberMake";
+        //}else if (AuthChannel == AuthHttpClient.STRONG_AUTH){
+        	//url = "MemberMake/?";
+        //}
+        //default
+        final String UrlAction = "http://api.belugame.com/api/MemberMake";
 
         String devid = Secure.getString(MainActivity.getContentResolver(),
                 Secure.ANDROID_ID);
@@ -493,6 +503,8 @@ public class AuthHttpClient {
         System.out.println("packid ----" + packid);
         String sign = MD5(ApiKey + AppID + devid + ApiKey);
         System.out.println("sign ----" + sign);
+        String ip = getIP();
+        
         final List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("appid", AppID));
         params.add(new BasicNameValuePair("devid", devid));
@@ -500,13 +512,14 @@ public class AuthHttpClient {
         params.add(new BasicNameValuePair("packid", packid));
         params.add(new BasicNameValuePair("packageid", PackageID));
         params.add(new BasicNameValuePair("ostype", "1"));
+        params.add(new BasicNameValuePair("clientip", ip));
         params.add(new BasicNameValuePair("sign", sign));
 
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
 
-                httpPOST(AuthCommandType.QuickAccount, ApiUrl + UrlAction,
+                httpPOST(AuthCommandType.QuickAccount, UrlAction,
                         params);
             }
         };
@@ -549,8 +562,16 @@ public class AuthHttpClient {
             return;
         }
 
-        final String UrlAction = "MemberCreate";
-
+        
+        
+        String url = null;
+        if(AuthChannel == AuthHttpClient.LOW_AUTH){
+        	url = "MemberCreate";
+        }else if (AuthChannel == AuthHttpClient.STRONG_AUTH){
+        	url = "MemberCreate/?";
+        }
+        
+        final String UrlAction = url;
         String devid = Secure.getString(MainActivity.getContentResolver(),
                 Secure.ANDROID_ID);
         String devtype = "";
@@ -562,7 +583,8 @@ public class AuthHttpClient {
             // TODO Auto-generated catch block
             // e.printStackTrace();
         }
-
+        String ip = getIP();
+        
         String sign = MD5(ApiKey + AppID + UserID + devid + ApiKey);
         final List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("appid", AppID));
@@ -572,6 +594,7 @@ public class AuthHttpClient {
         params.add(new BasicNameValuePair("devtype", devtype));
         params.add(new BasicNameValuePair("ostype", "1"));
         params.add(new BasicNameValuePair("packid", packid));
+        params.add(new BasicNameValuePair("clientip", ip));
         params.add(new BasicNameValuePair("sign", sign));
 
         Runnable runnable = new Runnable() {
@@ -692,11 +715,14 @@ public class AuthHttpClient {
             	
             	String code = jObj.getString("Code");
                 String token = jObj.getString("Token");
-            	OnAuthEvent(Integer.parseInt(code), token );
+                String msg = jObj.getString("Message");
+                String uid = jObj.getString("UID");
+            	OnAuthEvent(Integer.parseInt(code), msg, Long.parseLong(uid), "",token);
             	
             }
             
         } catch (Exception e) {
+        	Log.i(" AuthBackDataProc_Login", "Data_Parse_Error_Type :"+MainActivity.getString(R.string.Data_Parse_Error_Type));
             OnAuthEvent(-102,  MainActivity.getString(R.string.Data_Parse_Error_Type), -1, "", "");
         }
 
@@ -705,13 +731,16 @@ public class AuthHttpClient {
     private void AuthBackDataProc_QuickAccount(String Data) {
         try {
             JSONObject jObj = new JSONObject(Data);
+            
             String code = jObj.getString("Code");
             String msg = jObj.getString("Message");
             String uid = jObj.getString("useruid");
             String userid = jObj.getString("userid");
             String userpwd = jObj.getString("upd");
             OnAuthEvent(Integer.parseInt(code), msg, Long.parseLong(uid), userid, userpwd);
+            
         } catch (Exception e) {
+        	Log.i(" AuthBackDataProc_QuickAccount", "Data_Parse_Error_Type :"+MainActivity.getString(R.string.Data_Parse_Error_Type));
             OnAuthEvent(-102,  MainActivity.getString(R.string.Data_Parse_Error_Type), -1, "", "");
         }
     }
@@ -719,11 +748,27 @@ public class AuthHttpClient {
     private void AuthBackDataProc_RegisterAccount(String Data) {
         try {
             JSONObject jObj = new JSONObject(Data);
-            String code = jObj.getString("Code");
-            String msg = jObj.getString("Message");
-            String uid = jObj.getString("uid");
-            OnAuthEvent(Integer.parseInt(code), msg, Long.parseLong(uid), "", "");
+            
+            
+			if(AuthChannel == AuthHttpClient.LOW_AUTH){
+			            	
+				String code = jObj.getString("Code");
+			    String msg = jObj.getString("Message");
+			    String uid = jObj.getString("uid");
+			    OnAuthEvent(Integer.parseInt(code), msg, Long.parseLong(uid), "", "");
+            	
+            }else if(AuthChannel == AuthHttpClient.STRONG_AUTH){
+            	
+            	String code = jObj.getString("Code");
+    		    String msg = jObj.getString("Message");
+    		    String uid = jObj.getString("UID");
+                String token = jObj.getString("Token");
+            	OnAuthEvent(Integer.parseInt(code), msg, Long.parseLong(uid), "", token);
+            	
+            }
+            
         } catch (Exception e) {
+        	Log.i(" AuthBackDataProc_RegisterAccount", "Data_Parse_Error_Type :"+MainActivity.getString(R.string.Data_Parse_Error_Type));
             OnAuthEvent(-102,  MainActivity.getString(R.string.Data_Parse_Error_Type), -1, "", "");
         }
     }
@@ -735,6 +780,7 @@ public class AuthHttpClient {
             String msg = jObj.getString("Message");
             OnAuthEvent(Integer.parseInt(code), msg, 0, "", "");
         } catch (Exception e) {
+        	
             OnAuthEvent(-102,  MainActivity.getString(R.string.Data_Parse_Error_Type), -1, "", "");
         }
     }

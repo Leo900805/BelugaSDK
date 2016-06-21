@@ -119,7 +119,7 @@ public class Registration extends Activity implements OnClickListener {
                 authhttpclient.Auth_RegisterAccount(inputaccount.getText().toString(),
                         inputpassword.getText().toString());
             } else {
-                //Toast.makeText(Registration.this, "撖Ⅳ�Ⅱ隤�蝣潔��詨�", Toast.LENGTH_LONG)
+                
                 Toast.makeText(Registration.this,
                         this.getString(R.string.Pwd_Not_Match_Type),
                         Toast.LENGTH_LONG).show();
@@ -134,34 +134,34 @@ public class Registration extends Activity implements OnClickListener {
         authhttpclient = new AuthHttpClient(this);
        
         authhttpclient.AuthEventListener(new OnAuthEventListener() {
-            public void onProcessDoneEvent(int Code, String Message, Long uid,
-                                           String Account, String Pwd) {
+            public void onProcessDoneEvent(int Code, String Message, Long uid, String Account, String token) {
+            	
+            	final String regisToken = token;
                 String CodeStr = UsedString.getFastRegistrationGenerateString(getApplicationContext(), Code);
                 if(CodeStr.compareTo("") == 0 && Code != 1){
                     //Looper.prepare();
                     Toast.makeText(Registration.this, Message, Toast.LENGTH_SHORT).show();
                     //Looper.loop();
                 }else if(Code == 1){
-                    InformationProcess.saveAccountPassword(inputaccount.getText()
-                            .toString(), inputpassword.getText().toString(), Registration.this);
-                    InformationProcess.saveUserUid(Long.toString(uid),
-                            Registration.this);
+                    InformationProcess.saveAccountPassword(inputaccount.getText().toString(), inputpassword.getText().toString(), Registration.this);
+                    InformationProcess.saveUserUid(Long.toString(uid), Registration.this);
                     
                     signUpComfirmBtn.startAnimation(selectedMoveLeft);
                     signUpReturnBtn.startAnimation(scaleHide);
                 	
                 	final Handler handler = new Handler();
                	 	handler.postDelayed(new Runnable() {
+               	 	
                	     @Override
                	     public void run() {
                	         // Do something after 700ms
                	    	//unlock can't edit and click
-               	    	SetFinish(inputaccount.getText().toString(), inputpassword
-                                .getText().toString());
+               	    	SetFinish(inputaccount.getText().toString(), inputpassword.getText().toString(), regisToken);
                	     }
                	 	}, DELAY_TIME);
                     
                 }else{
+                	Log.i("Regis", "CodeStr is "+CodeStr );
                     Toast.makeText(Registration.this, CodeStr, Toast.LENGTH_LONG).show();
                 }
             }
@@ -172,27 +172,23 @@ public class Registration extends Activity implements OnClickListener {
 				// TODO Auto-generated method stub
 				
 			}
-
-			@Override
-			public void onProcessDoneEvent(int Code, String token) {
-				// TODO Auto-generated method stub
-				
-			}
         });
     }
 
-    private void SetFinish(String thisuserid, String thisuid) {
+    private void SetFinish(String thisuserid, String thisuid, String token) {
         Intent resultdata = new Intent();
         Bundle bundle = new Bundle();
         bundle.putInt("ResultType", 1);
         bundle.putString("userid", thisuserid);
         bundle.putString("userpwd", thisuid);
+        bundle.putString("token", token);
         resultdata.putExtras(bundle);
-        // this.setResult(Activity.RESULT_OK, resultdata); //�RESULT_OK
-        // this.finish();
+      
         if (getParent() == null) {
+        	Log.i("SetFinish", "in if conditon");
             setResult(Activity.RESULT_OK, resultdata);
         } else {
+        	Log.i("SetFinish", "in else conditon");
             getParent().setResult(Activity.RESULT_OK, resultdata);
         }
         finish();

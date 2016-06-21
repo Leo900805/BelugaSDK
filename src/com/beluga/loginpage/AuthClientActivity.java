@@ -194,7 +194,13 @@ public class AuthClientActivity extends Activity implements OnClickListener,
             if(screenInches > CONSTANT_INCHES){
             	this.setContentView(R.layout.login_page_large_size);
             }else{
-            	this.setContentView(R.layout.login_page_v2);
+            	try{
+            		this.setContentView(R.layout.login_page_v2);
+            	}catch(java.lang.NoClassDefFoundError noClass){
+            		Log.i("NoClassDefFoundError noClass", "in line 200");
+
+            	}
+            	
             }
             
         }
@@ -464,6 +470,7 @@ public class AuthClientActivity extends Activity implements OnClickListener,
             	//receive general correlation information
             	//Implement onProcessDoneEvent() method 
                 public void onProcessDoneEvent(int Code, String Message, Long uid, String Account, String token) {
+                	//private void SetFinish(String thisuserid,String thisuid,String token,String thispwd, String accountBound)
                     String CodeStr = UsedString.getLoginstring(getApplicationContext(), Code);
                     if (CodeStr.compareTo("") == 0) {
                         Toast.makeText(AuthClientActivity.this, Message, Toast.LENGTH_SHORT).show();
@@ -471,7 +478,7 @@ public class AuthClientActivity extends Activity implements OnClickListener,
                         Toast.makeText(AuthClientActivity.this, CodeStr, Toast.LENGTH_LONG).show();
                         SaveAccountPassword(inputaccount.getText().toString(), inputpassword.getText().toString());
                         InformationProcess.saveUserUid(Long.toString(uid), AuthClientActivity.this);
-                        SetFinish(inputaccount.getText().toString(), uid.toString(), token, inputpassword.getText().toString(), null);
+                        SetFinish(inputaccount.getText().toString(), uid.toString(), token, inputpassword.getText().toString(), "");
                     } else {
                         Toast.makeText(AuthClientActivity.this, CodeStr, Toast.LENGTH_LONG).show();
                     }
@@ -494,16 +501,6 @@ public class AuthClientActivity extends Activity implements OnClickListener,
                     } else {
                         Toast.makeText(AuthClientActivity.this, CodeStr, Toast.LENGTH_LONG).show();
                     }
-				}
-
-				@Override
-				public void onProcessDoneEvent(int Code, String token) {
-					// TODO Auto-generated method stub
-					if (Code == 1){
-						SetFinish(null, null, token, null, null);
-					}else{
-						Toast.makeText(AuthClientActivity.this, "Auth false...", Toast.LENGTH_LONG).show();
-					}
 				}
             });
     }
