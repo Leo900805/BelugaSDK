@@ -502,6 +502,29 @@ public class AuthClientActivity extends Activity implements OnClickListener,
                         Toast.makeText(AuthClientActivity.this, CodeStr, Toast.LENGTH_LONG).show();
                     }
 				}
+
+				@Override
+				public void onProcessDoneEvent(Bundle bundle) {
+					// TODO Auto-generated method stub
+					int Code = bundle.getInt(Keys.Code.toString());
+					
+					String Message = bundle.getString(Keys.Message.toString());
+                    String uid = bundle.getString(Keys.UID.toString());
+                    String token = bundle.getString(Keys.Token.toString());
+                    //String thirdPartnerId = bundle.getString("accountBound");
+                    //String token = bundle.getString("token");
+					String CodeStr = UsedString.getLoginstring(getApplicationContext(), Code);
+                    if (CodeStr.compareTo("") == 0) {
+                        Toast.makeText(AuthClientActivity.this, Message, Toast.LENGTH_SHORT).show();
+                    } else if (Code == 1) {
+                        Toast.makeText(AuthClientActivity.this, CodeStr, Toast.LENGTH_LONG).show();
+                        SaveAccountPassword(inputaccount.getText().toString(), inputpassword.getText().toString());
+                        InformationProcess.saveUserUid(uid, AuthClientActivity.this);
+                        SetFinish(inputaccount.getText().toString(), uid.toString(), token, inputpassword.getText().toString(), "");
+                    } else {
+                        Toast.makeText(AuthClientActivity.this, CodeStr, Toast.LENGTH_LONG).show();
+                    }
+				}
             });
     }
     

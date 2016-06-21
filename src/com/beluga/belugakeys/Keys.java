@@ -14,6 +14,13 @@ public enum Keys {
     GameLogoForByteArray,
     GameBackground,
     GameBackgroundForByteArray,
-    AuthChannel
+    AuthChannel,
+    UID,
+    Code,
+    Message,
+    Token,
+    Timestamp,
+    ExpirationTime,
+    FunctionName
 }
 

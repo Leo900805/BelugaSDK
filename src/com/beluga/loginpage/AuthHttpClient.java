@@ -15,6 +15,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.beluga.R;
+import com.beluga.belugakeys.Keys;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -85,6 +86,7 @@ public class AuthHttpClient {
 
     //Create OnAuthEventListener interface 
     protected interface OnAuthEventListener {
+    	public void onProcessDoneEvent(Bundle bundle);
         public void onProcessDoneEvent(int Code, String Message, Long uid, String Account, String token);
         public void onProcessDoneEvent(int Code, String Message, Long uid, String Account, String Pwd, String accountBound);
         //public void onProcessDoneEvent(int Code, String token, int uid, String Account, String Pwd);
@@ -103,13 +105,13 @@ public class AuthHttpClient {
         }
     }
     //For the Strong Auth Event
-    /*
-    private void OnAuthEvent(int Code, String token) {
+    
+    private void OnAuthEvent(Bundle bundle) {
         if (AuthEventListener != null) {
-            AuthEventListener.onProcessDoneEvent(Code, token);
+            AuthEventListener.onProcessDoneEvent(bundle);
         }
     }
-    */
+    
     //Method AuthEventListener(); 
     protected void AuthEventListener(OnAuthEventListener onAuthEventListener) {
 
@@ -704,6 +706,7 @@ public class AuthHttpClient {
             JSONObject jObj = new JSONObject(Data);
             
             //here add token...
+            /*
             if(AuthChannel == AuthHttpClient.LOW_AUTH){
             	
             	String code = jObj.getString("Code");
@@ -720,6 +723,13 @@ public class AuthHttpClient {
             	OnAuthEvent(Integer.parseInt(code), msg, Long.parseLong(uid), "",token);
             	
             }
+            */
+            Bundle bundleForLogin = new Bundle();
+            bundleForLogin.putInt(Keys.Code.toString(), jObj.getInt("code") );
+            bundleForLogin.putString(Keys.Token.toString(), jObj.getString("token") );
+            bundleForLogin.putString(Keys.Message.toString(), jObj.getString("message") );
+            bundleForLogin.putString(Keys.UID.toString(), jObj.getString("uid") );
+            OnAuthEvent(bundleForLogin);
             
         } catch (Exception e) {
         	Log.i(" AuthBackDataProc_Login", "Data_Parse_Error_Type :"+MainActivity.getString(R.string.Data_Parse_Error_Type));

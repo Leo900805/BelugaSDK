@@ -119,6 +119,12 @@ public class Fastregistration extends Activity implements OnClickListener{
 				// TODO Auto-generated method stub
 				
 			}
+
+			@Override
+			public void onProcessDoneEvent(Bundle bundle) {
+				// TODO Auto-generated method stub
+				
+			}
         });
     }
 
@@ -166,6 +172,12 @@ public class Fastregistration extends Activity implements OnClickListener{
 			@Override
 			public void onProcessDoneEvent(int Code, String Message, Long uid, String Account, String Pwd,
 					String accountBound) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onProcessDoneEvent(Bundle bundle) {
 				// TODO Auto-generated method stub
 				
 			}
