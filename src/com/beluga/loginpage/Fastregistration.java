@@ -97,31 +97,16 @@ public class Fastregistration extends Activity implements OnClickListener{
         authhttpclient = new AuthHttpClient(this);
       
         authhttpclient.AuthEventListener(new OnAuthEventListener() {
-            public void onProcessDoneEvent(int Code, String Message, Long uid, String Account, String Pwd) {
+            public void onProcessDoneEvent(int Code, String Message) {
                 String CodeStr = UsedString.getFastRegistrationGenerateString(getApplicationContext(), Code);
                 if (CodeStr.compareTo("") == 0 && Code != 1) {
                     //Looper.prepare();
                     Toast.makeText(Fastregistration.this, Message, Toast.LENGTH_SHORT).show();
                     //Looper.loop();
-                } else if (Code == 1) {
-                    Log.i("FastResg","CrateHttpClient got Account value is:"+Account);
-                    inputaccount.setText(Account);
-                    Log.i("FastResg", "CrateHttpClient got password value is:" + Pwd);
-                    inputpassword.setText(Pwd);
-                } else {
+                }else {
                     Toast.makeText(Fastregistration.this, CodeStr, Toast.LENGTH_LONG).show();
                 }
-
-            
-                System.out.println("Code " + Code + "  message   " + Message + "  uid " + uid + "  Account " + Account + " pwd  " + Pwd);
             }
-
-			@Override
-			public void onProcessDoneEvent(int Code, String Message, Long uid, String Account, String Pwd,
-					String accountBound) {
-				// TODO Auto-generated method stub
-				
-			}
 
 			@Override
 			public void onProcessDoneEvent(Bundle bundle) {

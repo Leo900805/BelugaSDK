@@ -139,44 +139,20 @@ public class Registration extends Activity implements OnClickListener {
         authhttpclient = new AuthHttpClient(this);
        
         authhttpclient.AuthEventListener(new OnAuthEventListener() {
-            public void onProcessDoneEvent(int Code, String Message, Long uid, String Account, String token) {
+            public void onProcessDoneEvent(int Code, String Message) {
             	
-            	final String regisToken = token;
+            	
                 String CodeStr = UsedString.getFastRegistrationGenerateString(getApplicationContext(), Code);
                 if(CodeStr.compareTo("") == 0 && Code != 1){
                     //Looper.prepare();
                     Toast.makeText(Registration.this, Message, Toast.LENGTH_SHORT).show();
                     //Looper.loop();
-                }else if(Code == 1){
-                    InformationProcess.saveAccountPassword(inputaccount.getText().toString(), inputpassword.getText().toString(), Registration.this);
-                    InformationProcess.saveUserUid(Long.toString(uid), Registration.this);
-                    
-                    signUpComfirmBtn.startAnimation(selectedMoveLeft);
-                    signUpReturnBtn.startAnimation(scaleHide);
-                	
-                	final Handler handler = new Handler();
-               	 	handler.postDelayed(new Runnable() {
-               	 	
-               	     @Override
-               	     public void run() {
-               	         // Do something after 700ms
-               	    	//unlock can't edit and click
-               	    	SetFinish(inputaccount.getText().toString(), inputpassword.getText().toString(), regisToken);
-               	     }
-               	 	}, DELAY_TIME);
-                    
                 }else{
                 	Log.i("Regis", "CodeStr is "+CodeStr );
                     Toast.makeText(Registration.this, CodeStr, Toast.LENGTH_LONG).show();
                 }
             }
 
-			@Override
-			public void onProcessDoneEvent(int Code, String Message, Long uid, String Account, String Pwd,
-					String accountBound) {
-				// TODO Auto-generated method stub
-				
-			}
 
 			@Override
 			public void onProcessDoneEvent(Bundle bundle) {

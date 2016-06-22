@@ -87,21 +87,13 @@ public class AuthHttpClient {
     //Create OnAuthEventListener interface 
     protected interface OnAuthEventListener {
     	public void onProcessDoneEvent(Bundle bundle);
-        public void onProcessDoneEvent(int Code, String Message, Long uid, String Account, String token);
-        public void onProcessDoneEvent(int Code, String Message, Long uid, String Account, String Pwd, String accountBound);
-        //public void onProcessDoneEvent(int Code, String token, int uid, String Account, String Pwd);
+        public void onProcessDoneEvent(int Code, String Message);
     }
 
     //For general Auth Event
-    private void OnAuthEvent(int Code, String Message, long i, String Account,String Pwd) {
+    private void OnAuthEvent(int Code, String Message) {
         if (AuthEventListener != null) {
-            AuthEventListener.onProcessDoneEvent(Code, Message, i, Account, Pwd);
-        }
-    }
-    //For the third party Auth Event
-    private void OnAuthEvent(int Code, String Message, long i, String Account,String Pwd, String accountBound) {
-        if (AuthEventListener != null) {
-            AuthEventListener.onProcessDoneEvent(Code, Message, i, Account, Pwd, accountBound);
+            AuthEventListener.onProcessDoneEvent(Code, Message);
         }
     }
     //For the Strong Auth Event
@@ -208,11 +200,11 @@ public class AuthHttpClient {
             } else {
             	
                 OnAuthEvent(-101, "ServerHttpStatusError"
-                        + httpResponse.getStatusLine().getStatusCode(), -1, "", "");
+                        + httpResponse.getStatusLine().getStatusCode());
             }
         } catch (Exception e) {
             e.printStackTrace();
-            OnAuthEvent(-100, "HttpPostError", -1, "", "");
+            OnAuthEvent(-100, "HttpPostError");
         }
     }
     
@@ -355,31 +347,31 @@ public class AuthHttpClient {
         
         UserPassword = UserPassword.trim();
         if (!isAccountRuleLength(UserID)) {
-            OnAuthEvent(-2, MainActivity.getString(R.string.Ac_Length_Err_Type), -1, "", "");
+            OnAuthEvent(-2, MainActivity.getString(R.string.Ac_Length_Err_Type));
             return;
         }
         if (!isAccountRuleLength(UserPassword)) {
-            OnAuthEvent(-2, MainActivity.getString(R.string.Pwd_Length_Err_Type) , -1, "", "");
+            OnAuthEvent(-2, MainActivity.getString(R.string.Pwd_Length_Err_Type));
             return;
         }
         if (!isAccountRuleString(UserID)) {
             
-            OnAuthEvent(-2, MainActivity.getString(R.string.Ac_Only_Char_And_Num_Type), -1, "", "");
+            OnAuthEvent(-2, MainActivity.getString(R.string.Ac_Only_Char_And_Num_Type));
             return;
         }
         if (!isAccountRuleString(UserPassword)) {
            
-            OnAuthEvent(-2, MainActivity.getString(R.string.Pwd_Only_Char_And_Num_Type), -1, "", "");
+            OnAuthEvent(-2, MainActivity.getString(R.string.Pwd_Only_Char_And_Num_Type));
             return;
         }
         if (!isApiInfoExists()) {
             
-            OnAuthEvent(-2, MainActivity.getString(R.string.Appid_Or_Apikey_Err_Type), -1, "", "");
+            OnAuthEvent(-2, MainActivity.getString(R.string.Appid_Or_Apikey_Err_Type));
             return;
         }
         if (!isInternetAvailable()) {
             
-            OnAuthEvent(-2, MainActivity.getString(R.string.Network_Connection_Failure_Type), -1, "", "");
+            OnAuthEvent(-2, MainActivity.getString(R.string.Network_Connection_Failure_Type));
             return;
         }
         
@@ -477,12 +469,12 @@ public class AuthHttpClient {
 
         if (!isApiInfoExists()) {
             
-            OnAuthEvent(-501, MainActivity.getString(R.string.Appid_Or_Apikey_Err_Type), -1, "", "");
+            OnAuthEvent(-501, MainActivity.getString(R.string.Appid_Or_Apikey_Err_Type));
             return;
         }
         if (!isInternetAvailable()) {
             
-            OnAuthEvent(-500, MainActivity.getString(R.string.Network_Connection_Failure_Type), -1, "", "");
+            OnAuthEvent(-500, MainActivity.getString(R.string.Network_Connection_Failure_Type));
             return;
         }
         
@@ -535,32 +527,32 @@ public class AuthHttpClient {
 
         if (!isAccountRuleLength(UserID)) {
 
-            OnAuthEvent(-2, MainActivity.getString(R.string.Ac_Length_Err_Type), -1, "", "");
+            OnAuthEvent(-2, MainActivity.getString(R.string.Ac_Length_Err_Type));
             return;
         }
         if (!isAccountRuleLength(UserPassword)) {
 
-            OnAuthEvent(-2, MainActivity.getString(R.string.Pwd_Length_Err_Type), -1, "", "");
+            OnAuthEvent(-2, MainActivity.getString(R.string.Pwd_Length_Err_Type));
             return;
         }
         if (!isAccountRuleString(UserID)) {
 
-            OnAuthEvent(-2, MainActivity.getString(R.string.Ac_Only_Char_And_Num_Type), -1, "", "");
+            OnAuthEvent(-2, MainActivity.getString(R.string.Ac_Only_Char_And_Num_Type));
             return;
         }
         if (!isAccountRuleString(UserPassword)) {
 
-            OnAuthEvent(-2, MainActivity.getString(R.string.Pwd_Only_Char_And_Num_Type), -1, "", "");
+            OnAuthEvent(-2, MainActivity.getString(R.string.Pwd_Only_Char_And_Num_Type));
             return;
         }
         if (!isApiInfoExists()) {
 
-            OnAuthEvent(-501, MainActivity.getString(R.string.Appid_Or_Apikey_Err_Type), -1, "", "");
+            OnAuthEvent(-501, MainActivity.getString(R.string.Appid_Or_Apikey_Err_Type));
             return;
         }
         if (!isInternetAvailable()) {
 
-            OnAuthEvent(-500, MainActivity.getString(R.string.Network_Connection_Failure_Type), -1, "", "");
+            OnAuthEvent(-500, MainActivity.getString(R.string.Network_Connection_Failure_Type));
             return;
         }
 
@@ -616,39 +608,39 @@ public class AuthHttpClient {
         NewPassword = NewPassword.trim();
         Log.i("Auth_ChangePassword","UserID "+UserID + " OldPassword "+OldPassword +" NewPassword "+NewPassword);
         if (!isAccountRuleLength(UserID)) {
-            OnAuthEvent(-2, MainActivity.getString(R.string.Ac_Length_Err_Type), -1, "", "");
+            OnAuthEvent(-2, MainActivity.getString(R.string.Ac_Length_Err_Type));
             return;
         }
         if (!isAccountRuleLength(OldPassword)) {
-            OnAuthEvent(-2, MainActivity.getString(R.string.Old_Password_Length_Err_Type), -1, "", "");
+            OnAuthEvent(-2, MainActivity.getString(R.string.Old_Password_Length_Err_Type));
             return;
         }
         if (!isAccountRuleLength(NewPassword)) {
-            OnAuthEvent(-2, MainActivity.getString(R.string.New_Pwd_Length_Err_Type), -1, "", "");
+            OnAuthEvent(-2, MainActivity.getString(R.string.New_Pwd_Length_Err_Type));
             return;
         }
         if (!isAccountRuleString(UserID)) {
-            OnAuthEvent(-2, MainActivity.getString(R.string.Ac_Only_Char_And_Num_Type), -1, "", "");
+            OnAuthEvent(-2, MainActivity.getString(R.string.Ac_Only_Char_And_Num_Type));
             return;
         }
         if (!isAccountRuleString(OldPassword)) {
-            OnAuthEvent(-2, MainActivity.getString(R.string.Old_Password_Only_Char_And_Num_Type), -1, "", "");
+            OnAuthEvent(-2, MainActivity.getString(R.string.Old_Password_Only_Char_And_Num_Type));
             return;
         }
         if (!isAccountRuleString(NewPassword)) {
-            OnAuthEvent(-2, MainActivity.getString(R.string.New_Password_Only_Char_And_Num_Type), -1, "", "");
+            OnAuthEvent(-2, MainActivity.getString(R.string.New_Password_Only_Char_And_Num_Type));
             return;
         }
         if (!isApiInfoExists()) {
-            OnAuthEvent(-501, MainActivity.getString(R.string.Appid_Or_Apikey_Err_Type), -1, "", "");
+            OnAuthEvent(-501, MainActivity.getString(R.string.Appid_Or_Apikey_Err_Type));
             return;
         }
         if (!isInternetAvailable()) {
-            OnAuthEvent(-500, MainActivity.getString(R.string.Network_Connection_Failure_Type), -1, "", "");
+            OnAuthEvent(-500, MainActivity.getString(R.string.Network_Connection_Failure_Type));
             return;
         }
         if (!isApiInfoExists()) {
-            OnAuthEvent(-501, MainActivity.getString(R.string.Appid_Or_Apikey_Err_Type), -1, "", "");
+            OnAuthEvent(-501, MainActivity.getString(R.string.Appid_Or_Apikey_Err_Type));
             return;
         }
         
@@ -709,7 +701,7 @@ public class AuthHttpClient {
             
         } catch (Exception e) {
         	Log.i(" AuthBackDataProc_Login", "Data_Parse_Error_Type :"+MainActivity.getString(R.string.Data_Parse_Error_Type));
-            OnAuthEvent(-102,  MainActivity.getString(R.string.Data_Parse_Error_Type), -1, "", "");
+            OnAuthEvent(-102,  MainActivity.getString(R.string.Data_Parse_Error_Type));
         }
 
     }
@@ -722,7 +714,7 @@ public class AuthHttpClient {
             OnAuthEvent(bundle);
         } catch (Exception e) {
         	Log.i(" AuthBackDataProc_QuickAccount", "Data_Parse_Error_Type :"+MainActivity.getString(R.string.Data_Parse_Error_Type));
-            OnAuthEvent(-102,  MainActivity.getString(R.string.Data_Parse_Error_Type), -1, "", "");
+            OnAuthEvent(-102,  MainActivity.getString(R.string.Data_Parse_Error_Type));
         }
     }
 
@@ -734,7 +726,7 @@ public class AuthHttpClient {
             
         } catch (Exception e) {
         	Log.i(" AuthBackDataProc_RegisterAccount", "Data_Parse_Error_Type :"+MainActivity.getString(R.string.Data_Parse_Error_Type));
-            OnAuthEvent(-102,  MainActivity.getString(R.string.Data_Parse_Error_Type), -1, "", "");
+            OnAuthEvent(-102,  MainActivity.getString(R.string.Data_Parse_Error_Type));
         }
     }
 
@@ -745,7 +737,7 @@ public class AuthHttpClient {
             OnAuthEvent(bundle);
         } catch (Exception e) {
         	
-            OnAuthEvent(-102,  MainActivity.getString(R.string.Data_Parse_Error_Type), -1, "", "");
+            OnAuthEvent(-102,  MainActivity.getString(R.string.Data_Parse_Error_Type));
         }
     }
 
@@ -757,7 +749,7 @@ public class AuthHttpClient {
             OnAuthEvent(bundle);
         } catch (Exception e) {
         	Log.i("AuthBackDataProc_FacebookLoginRegister", "Data_Parse_Error_Type");
-            OnAuthEvent(-102,  MainActivity.getString(R.string.Data_Parse_Error_Type), -1, "", "", "");
+            OnAuthEvent(-102,  MainActivity.getString(R.string.Data_Parse_Error_Type));
         }
         Log.i("AuthBackDataProc_FacebookLoginRegister", "end...");
     }
@@ -770,14 +762,14 @@ public class AuthHttpClient {
             OnAuthEvent(bundle);
         } catch (Exception e) {
         	Log.i("AuthBackDataProc_GoogleLoginRegister", "Data_Parse_Error_Type");
-            OnAuthEvent(-102,  MainActivity.getString(R.string.Data_Parse_Error_Type), -1, "", "", "");
+            OnAuthEvent(-102,  MainActivity.getString(R.string.Data_Parse_Error_Type));
         }
         Log.i("AuthBackDataProc_GoogleLoginRegister", "end...");
     }
 
     private void AuthBackDataProc_UnknowType() {
     	Log.i("AuthBackDataProc_UnknowType", "Unknow");
-        OnAuthEvent(-102,  MainActivity.getString(R.string.Data_Parse_Error_Type), -1, "", "");
+        OnAuthEvent(-102,  MainActivity.getString(R.string.Data_Parse_Error_Type));
     }
 
 }

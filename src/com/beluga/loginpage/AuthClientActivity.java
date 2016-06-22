@@ -472,39 +472,16 @@ public class AuthClientActivity extends Activity implements OnClickListener,
             authhttpclient.AuthEventListener(new AuthHttpClient.OnAuthEventListener() {
             	//receive general correlation information
             	//Implement onProcessDoneEvent() method 
-                public void onProcessDoneEvent(int Code, String Message, Long uid, String Account, String token) {
+                public void onProcessDoneEvent(int Code, String Message) {
                 	//private void SetFinish(String thisuserid,String thisuid,String token,String thispwd, String accountBound)
                     String CodeStr = UsedString.getLoginstring(getApplicationContext(), Code);
                     if (CodeStr.compareTo("") == 0) {
                         Toast.makeText(AuthClientActivity.this, Message, Toast.LENGTH_SHORT).show();
-                    } else if (Code == 1) {
-                        Toast.makeText(AuthClientActivity.this, CodeStr, Toast.LENGTH_LONG).show();
-                        SaveAccountPassword(inputaccount.getText().toString(), inputpassword.getText().toString());
-                        InformationProcess.saveUserUid(Long.toString(uid), AuthClientActivity.this);
-                        SetFinish(inputaccount.getText().toString(), uid.toString(), token, inputpassword.getText().toString(), "");
                     } else {
                         Toast.makeText(AuthClientActivity.this, CodeStr, Toast.LENGTH_LONG).show();
                     }
                 }
                 
-                //receive Facebook and google correlation information
-                //Implement onProcessDoneEvent() method 
-				@Override
-				public void onProcessDoneEvent(int Code, String Message, Long uid, String Account, String Pwd,
-						String accountBound) {
-					// TODO Auto-generated method stub
-                    String CodeStr = UsedString.getThirdPartnerLoginStatusString(getApplicationContext(), Code);
-                    if (CodeStr.compareTo("") == 0) {
-                        Toast.makeText(AuthClientActivity.this, Message, Toast.LENGTH_SHORT).show();
-                    } else if (Code == 1) {
-                    	Log.i("info", "Uid:"+ uid +", Account:"+ Account);
-                        Toast.makeText(AuthClientActivity.this, CodeStr, Toast.LENGTH_LONG).show();
-                        InformationProcess.saveUserUid(Long.toString(uid), AuthClientActivity.this);
-                        SetFinish(Account, uid.toString(), "", Pwd, accountBound);
-                    } else {
-                        Toast.makeText(AuthClientActivity.this, CodeStr, Toast.LENGTH_LONG).show();
-                    }
-				}
 
 				@Override
 				public void onProcessDoneEvent(Bundle bundle) {

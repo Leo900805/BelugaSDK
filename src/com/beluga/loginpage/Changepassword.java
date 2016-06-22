@@ -110,38 +110,18 @@ public class Changepassword extends Activity implements OnClickListener{
         authhttpclient = new AuthHttpClient(this);
        
         authhttpclient.AuthEventListener(new OnAuthEventListener(){
-            public void onProcessDoneEvent(int Code,String Message,Long uid,String Account,String Pwd)
+            public void onProcessDoneEvent(int Code,String Message)
             {
                 String CodeStr = UsedString.getChangePasswordString(getApplicationContext(), Code);
                 if(CodeStr.compareTo("")==0){
                     Toast.makeText(Changepassword.this, Message, Toast.LENGTH_LONG).show();
-                }else if(Code == 1){
-                    Toast.makeText(Changepassword.this, CodeStr, Toast.LENGTH_LONG).show();
-                    modComirmBtn.startAnimation(selectedMoveLeft);
-                    modReturnBtn.startAnimation(scaleHide);
-                	
-                	final Handler handler = new Handler();
-               	 	handler.postDelayed(new Runnable() {
-               	     @Override
-               	     public void run() {
-               	         // Do something after 700ms
-               	    	//unlock can't edit and click
-               	    	SetFinish(inputaccount.getText().toString(),inputnewpassword.getText().toString());
-               	     }
-               	 	}, DELAY_TIME);
-                    
                 }else{
                     Toast.makeText(Changepassword.this, CodeStr, Toast.LENGTH_LONG).show();
                 }
 
             }
 
-			@Override
-			public void onProcessDoneEvent(int Code, String Message, Long uid, String Account, String Pwd,
-					String accountBound) {
-				// TODO Auto-generated method stub
-				
-			}
+			
 
 			@Override
 			public void onProcessDoneEvent(Bundle bundle) {
