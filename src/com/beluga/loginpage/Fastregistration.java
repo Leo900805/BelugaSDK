@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -24,7 +23,12 @@ import com.beluga.loginpage.AuthHttpClient.OnAuthEventListener;
 import com.beluga.loginpage.datacontrol.GameBackground;
 import com.beluga.loginpage.datacontrol.InformationProcess;
 import com.beluga.loginpage.datacontrol.UsedString;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.beluga.R;
+import com.beluga.belugakeys.Keys;
 /**
  * Created by Leo on 2015/10/5.
  */
@@ -34,12 +38,12 @@ public class Fastregistration extends Activity implements OnClickListener{
 	private static final float CONSTANT_INCHES = 7;
 	
     private EditText inputaccount,inputpassword;
-    private AuthHttpClient authhttpclient,authhttpclient_confirm;
+    private AuthHttpClient authhttpclient;
     private ImageButton qsReturnBtn, qsComfirmBtn;
-    private Button qsModpwdBtn;
     private CheckBox checkBox;
     private Animation selectedMoveLeft, selectedMoveRight,scaleHide;
     private RelativeLayout qSignUpRelativeLayout;
+    private String uid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,8 +77,7 @@ public class Fastregistration extends Activity implements OnClickListener{
         this.qsComfirmBtn.setOnClickListener(this);
         this.qsReturnBtn = (ImageButton)this.findViewById(R.id.qsreturnbtn);
         this.qsReturnBtn.setOnClickListener(this);
-        this.qsModpwdBtn = (Button)this.findViewById(R.id.qsmodbtn);
-        this.qsModpwdBtn.setOnClickListener(this);
+        
         inputpassword = (EditText)this.findViewById(R.id.qspwdeditText);
         inputaccount = (EditText)this.findViewById(R.id.qsacceditText);
         this.checkBox = (CheckBox)this.findViewById(R.id.qscheckBox);
@@ -124,65 +127,42 @@ public class Fastregistration extends Activity implements OnClickListener{
 			public void onProcessDoneEvent(Bundle bundle) {
 				// TODO Auto-generated method stub
 				
+					String jsonData = bundle.getString(Keys.JsonData.toString());
+					JSONObject jObj;
+					try {
+						jObj = new JSONObject( jsonData );
+						
+						Log.i("Fast regis page", "Fast regis page got json:"+jObj.toString());
+						
+						int Code = jObj.getInt("code");
+						uid = jObj.getString("uid");
+						String Account = jObj.getString("userid");
+						String Pwd = jObj.getString("pwd");
+						String Message = jObj.getString("message");
+						String CodeStr = UsedString.getFastRegistrationGenerateString(getApplicationContext(), Code);
+		                if (CodeStr.compareTo("") == 0 && Code != 1) {
+		                    //Looper.prepare();
+		                    Toast.makeText(Fastregistration.this, Message, Toast.LENGTH_SHORT).show();
+		                    //Looper.loop();
+		                } else if (Code == 1) {
+		                    Log.i("FastResg","CrateHttpClient got Account value is:"+Account);
+		                    inputaccount.setText(Account);
+		                    Log.i("FastResg", "CrateHttpClient got password value is:" + Pwd);
+		                    inputpassword.setText(Pwd);
+		                } else {
+		                    Toast.makeText(Fastregistration.this, CodeStr, Toast.LENGTH_LONG).show();
+		                }
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
 			}
         });
     }
 
-    private void AccountConfirm()
-    {
-        CreateHttpClientConfirm();
-        Log.i("Fast regis", "line 128");
-        authhttpclient_confirm.Auth_RegisterAccount(inputaccount.getText().toString(), inputpassword.getText().toString());
-    }
 
-    private void CreateHttpClientConfirm()
-    {
-      
-        authhttpclient_confirm = new AuthHttpClient(this);
-      
-        authhttpclient_confirm.AuthEventListener(new OnAuthEventListener() {
-            public void onProcessDoneEvent(int Code, String Message, Long uid, String Account, String Pwd) {
-                String CodeStr = UsedString.getFastRegistrationGenerateString(getApplicationContext(), Code);
-                if (CodeStr.compareTo("") == 0 && Code != 1) {
-                    //Looper.prepare();
-                    Toast.makeText(Fastregistration.this, Message, Toast.LENGTH_SHORT).show();
-                    //Looper.loop();
-                } else if (Code == 1) {
-                    Toast.makeText(Fastregistration.this, CodeStr, Toast.LENGTH_LONG).show();
-                    InformationProcess.saveUserUid(Long.toString(uid), Fastregistration.this);
-                    
-                    qsComfirmBtn.startAnimation(selectedMoveLeft);
-                	qsReturnBtn.startAnimation(scaleHide);
-                	
-                	final Handler handler = new Handler();
-               	 	handler.postDelayed(new Runnable() {
-               	     @Override
-               	     public void run() {
-               	         // Do something after 700ms
-               	    	//unlock can't edit and click
-               	    	SetFinish(inputaccount.getText().toString(), inputpassword.getText().toString());
-               	     }
-               	 	}, DELAY_TIME);
-                    
-                } else {
-                    Toast.makeText(Fastregistration.this, CodeStr, Toast.LENGTH_LONG).show();
-                }
-            }
 
-			@Override
-			public void onProcessDoneEvent(int Code, String Message, Long uid, String Account, String Pwd,
-					String accountBound) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void onProcessDoneEvent(Bundle bundle) {
-				// TODO Auto-generated method stub
-				
-			}
-        });
-    }
 
     @Override
     public void onClick(View v) {
@@ -195,8 +175,22 @@ public class Fastregistration extends Activity implements OnClickListener{
             startActivity(intent);
 
         } else if (i == R.id.qscomfirmbtn) {
-        	Log.i("fast regis", "comfirm clicked...");
-        	AccountConfirm();
+        	//Log.i("fast regis", "comfirm clicked...");
+        	
+            InformationProcess.saveUserUid(uid, Fastregistration.this);
+            
+            qsComfirmBtn.startAnimation(selectedMoveLeft);
+        	qsReturnBtn.startAnimation(scaleHide);
+        	
+        	final Handler handler = new Handler();
+       	 	handler.postDelayed(new Runnable() {
+       	     @Override
+       	     public void run() {
+       	         // Do something after 700ms
+       	    	//unlock can't edit and click
+       	    	SetFinish(inputaccount.getText().toString(), inputpassword.getText().toString());
+       	     }
+       	 	}, DELAY_TIME);
         	
         } else if (i == R.id.qsreturnbtn) {
         	
@@ -215,31 +209,23 @@ public class Fastregistration extends Activity implements OnClickListener{
        	     }
        	 	}, DELAY_TIME);
             
-            
-            
             Log.i("fastReg return", "finish() end");
 
-        } else if (i == R.id.qsmodbtn) {
-            inputpassword.setEnabled(true);
-            inputpassword.setText("");
-            inputpassword.requestFocus();
-
-        }
+        } 
     }
 
     private void SetFinish(String thisuserid,String thisuid)
     {
-    	Log.i("fastReg sset finish", "start...");
+    	Log.i("fastReg set finish", "start...");
         Intent resultdata = new Intent();
         Bundle bundle = new Bundle();
         bundle.putInt("ResultType",1);
-        Log.i("fastReg sset finish", "userid："+ thisuserid);
-        Log.i("fastReg sset finish", "userpwd："+ thisuid);
+        Log.i("fastReg set finish", "userid："+ thisuserid);
+        Log.i("fastReg set finish", "userpwd："+ thisuid);
         bundle.putString("userid", thisuserid);
         bundle.putString("userpwd", thisuid);
         resultdata.putExtras(bundle);
-        //this.setResult(Activity.RESULT_OK, resultdata); //�RESULT_OK
-        //this.finish();
+
         if (getParent() == null) {
             setResult(Activity.RESULT_OK, resultdata);
             Log.d("tag", "F resultdata: "+resultdata);

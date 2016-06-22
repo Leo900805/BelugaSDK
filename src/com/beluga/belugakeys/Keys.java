@@ -21,6 +21,7 @@ public enum Keys {
     Token,
     Timestamp,
     ExpirationTime,
-    FunctionName
+    FunctionName,
+    JsonData
 }
 

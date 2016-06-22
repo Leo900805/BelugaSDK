@@ -50,8 +50,8 @@ import javax.net.ssl.HttpsURLConnection;
 @SuppressWarnings("deprecation")
 public class AuthHttpClient {
 	//channel
-	public final static int LOW_AUTH = 1;
-	public final static int STRONG_AUTH = 2;
+	//public final static int LOW_AUTH = 1;
+	//public final static int STRONG_AUTH = 2;
 	
 	//Global variable
     private Activity MainActivity;
@@ -384,11 +384,11 @@ public class AuthHttpClient {
         }
         
         String url = null;
-        if(AuthChannel == AuthHttpClient.LOW_AUTH){
-        	url = "MemberLogin";
-        }else if (AuthChannel == AuthHttpClient.STRONG_AUTH){
+        //if(AuthChannel == AuthHttpClient.LOW_AUTH){
+        	//url = "MemberLogin";
+        //}else if (AuthChannel == AuthHttpClient.STRONG_AUTH){
         	url = "MemberLogin/?";
-        }
+        //}
         
         final String UrlAction = url;
         final List<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -494,7 +494,7 @@ public class AuthHttpClient {
         	//url = "MemberMake/?";
         //}
         //default
-        final String UrlAction = "http://api.belugame.com/api/MemberMake";
+        final String UrlAction = "MemberMake/?";
 
         String devid = Secure.getString(MainActivity.getContentResolver(),
                 Secure.ANDROID_ID);
@@ -521,7 +521,7 @@ public class AuthHttpClient {
             @Override
             public void run() {
 
-                httpPOST(AuthCommandType.QuickAccount, UrlAction,
+                httpPOST(AuthCommandType.QuickAccount, ApiUrl + UrlAction,
                         params);
             }
         };
@@ -567,11 +567,11 @@ public class AuthHttpClient {
         
         
         String url = null;
-        if(AuthChannel == AuthHttpClient.LOW_AUTH){
-        	url = "MemberCreate";
-        }else if (AuthChannel == AuthHttpClient.STRONG_AUTH){
+        //if(AuthChannel == AuthHttpClient.LOW_AUTH){
+        	//url = "MemberCreate";
+        //}else if (AuthChannel == AuthHttpClient.STRONG_AUTH){
         	url = "MemberCreate/?";
-        }
+        //}
         
         final String UrlAction = url;
         String devid = Secure.getString(MainActivity.getContentResolver(),
@@ -652,7 +652,7 @@ public class AuthHttpClient {
             return;
         }
         
-        final String UrlAction = "MemberModPwd";
+        final String UrlAction = "MemberModPwd/?";
 
         String devid = Secure.getString(MainActivity.getContentResolver(),
                 Secure.ANDROID_ID);
@@ -663,7 +663,6 @@ public class AuthHttpClient {
         params.add(new BasicNameValuePair("pwd", OldPassword));
         params.add(new BasicNameValuePair("newpwd", NewPassword));
         params.add(new BasicNameValuePair("devid", devid));
-        params.add(new BasicNameValuePair("packageid", PackageID));
         params.add(new BasicNameValuePair("sign", sign));
         Runnable runnable = new Runnable() {
             @Override
@@ -703,33 +702,10 @@ public class AuthHttpClient {
 
     private void AuthBackDataProc_Login(String Data) {
         try {
-            JSONObject jObj = new JSONObject(Data);
-            
-            //here add token...
-            /*
-            if(AuthChannel == AuthHttpClient.LOW_AUTH){
-            	
-            	String code = jObj.getString("Code");
-                String msg = jObj.getString("Message");
-                String uid = jObj.getString("uid");
-            	OnAuthEvent(Integer.parseInt(code), msg, Long.parseLong(uid), "","");
-            	
-            }else if(AuthChannel == AuthHttpClient.STRONG_AUTH){
-            	
-            	String code = jObj.getString("Code");
-                String token = jObj.getString("Token");
-                String msg = jObj.getString("Message");
-                String uid = jObj.getString("UID");
-            	OnAuthEvent(Integer.parseInt(code), msg, Long.parseLong(uid), "",token);
-            	
-            }
-            */
-            Bundle bundleForLogin = new Bundle();
-            bundleForLogin.putInt(Keys.Code.toString(), jObj.getInt("code") );
-            bundleForLogin.putString(Keys.Token.toString(), jObj.getString("token") );
-            bundleForLogin.putString(Keys.Message.toString(), jObj.getString("message") );
-            bundleForLogin.putString(Keys.UID.toString(), jObj.getString("uid") );
-            OnAuthEvent(bundleForLogin);
+              
+            Bundle bundle = new Bundle();
+            bundle.putString(Keys.JsonData.toString(), Data);
+            OnAuthEvent(bundle);
             
         } catch (Exception e) {
         	Log.i(" AuthBackDataProc_Login", "Data_Parse_Error_Type :"+MainActivity.getString(R.string.Data_Parse_Error_Type));
@@ -740,15 +716,10 @@ public class AuthHttpClient {
 
     private void AuthBackDataProc_QuickAccount(String Data) {
         try {
-            JSONObject jObj = new JSONObject(Data);
-            
-            String code = jObj.getString("Code");
-            String msg = jObj.getString("Message");
-            String uid = jObj.getString("useruid");
-            String userid = jObj.getString("userid");
-            String userpwd = jObj.getString("upd");
-            OnAuthEvent(Integer.parseInt(code), msg, Long.parseLong(uid), userid, userpwd);
-            
+        	
+        	Bundle bundle = new Bundle();
+            bundle.putString(Keys.JsonData.toString(), Data);
+            OnAuthEvent(bundle);
         } catch (Exception e) {
         	Log.i(" AuthBackDataProc_QuickAccount", "Data_Parse_Error_Type :"+MainActivity.getString(R.string.Data_Parse_Error_Type));
             OnAuthEvent(-102,  MainActivity.getString(R.string.Data_Parse_Error_Type), -1, "", "");
@@ -757,25 +728,9 @@ public class AuthHttpClient {
 
     private void AuthBackDataProc_RegisterAccount(String Data) {
         try {
-            JSONObject jObj = new JSONObject(Data);
-            
-            
-			if(AuthChannel == AuthHttpClient.LOW_AUTH){
-			            	
-				String code = jObj.getString("Code");
-			    String msg = jObj.getString("Message");
-			    String uid = jObj.getString("uid");
-			    OnAuthEvent(Integer.parseInt(code), msg, Long.parseLong(uid), "", "");
-            	
-            }else if(AuthChannel == AuthHttpClient.STRONG_AUTH){
-            	
-            	String code = jObj.getString("Code");
-    		    String msg = jObj.getString("Message");
-    		    String uid = jObj.getString("UID");
-                String token = jObj.getString("Token");
-            	OnAuthEvent(Integer.parseInt(code), msg, Long.parseLong(uid), "", token);
-            	
-            }
+        	Bundle bundle = new Bundle();
+            bundle.putString(Keys.JsonData.toString(), Data);
+            OnAuthEvent(bundle);
             
         } catch (Exception e) {
         	Log.i(" AuthBackDataProc_RegisterAccount", "Data_Parse_Error_Type :"+MainActivity.getString(R.string.Data_Parse_Error_Type));
@@ -785,10 +740,9 @@ public class AuthHttpClient {
 
     private void AuthBackDataProc_ChangePassword(String Data) {
         try {
-            JSONObject jObj = new JSONObject(Data);
-            String code = jObj.getString("Code");
-            String msg = jObj.getString("Message");
-            OnAuthEvent(Integer.parseInt(code), msg, 0, "", "");
+        	Bundle bundle = new Bundle();
+            bundle.putString(Keys.JsonData.toString(), Data);
+            OnAuthEvent(bundle);
         } catch (Exception e) {
         	
             OnAuthEvent(-102,  MainActivity.getString(R.string.Data_Parse_Error_Type), -1, "", "");
@@ -798,14 +752,9 @@ public class AuthHttpClient {
     private void AuthBackDataProc_FacebookLoginRegister(String Data) {
     	Log.i("AuthBackDataProc_FacebookLoginRegister", "Start...");
         try {
-            JSONObject jObj = new JSONObject(Data);
-            String code = jObj.getString("code");
-            String msg = jObj.getString("message");
-            String uid = jObj.getString("uid");
-            String userid = jObj.getString("QuickReg");
-            String userpwd = jObj.getString("Quickpw");
-            String fbId = jObj.getString("sid");
-            OnAuthEvent(Integer.parseInt(code), msg, Long.parseLong(uid), userid, userpwd, fbId);
+        	Bundle bundle = new Bundle();
+            bundle.putString(Keys.JsonData.toString(), Data);
+            OnAuthEvent(bundle);
         } catch (Exception e) {
         	Log.i("AuthBackDataProc_FacebookLoginRegister", "Data_Parse_Error_Type");
             OnAuthEvent(-102,  MainActivity.getString(R.string.Data_Parse_Error_Type), -1, "", "", "");
@@ -816,14 +765,9 @@ public class AuthHttpClient {
     private void AuthBackDataProc_GoogleLoginRegister(String Data) {
     	Log.i("AuthBackDataProc_GoogleLoginRegister", "Start...");
         try {
-            JSONObject jObj = new JSONObject(Data);
-            String code = jObj.getString("code");
-            String msg = jObj.getString("message");
-            String uid = jObj.getString("uid");
-            String userid = jObj.getString("QuickReg");
-            String userpwd = jObj.getString("Quickpw");
-            String googleId = jObj.getString("sid");
-            OnAuthEvent(Integer.parseInt(code), msg, Long.parseLong(uid), userid, userpwd, googleId);
+        	Bundle bundle = new Bundle();
+            bundle.putString(Keys.JsonData.toString(), Data);
+            OnAuthEvent(bundle);
         } catch (Exception e) {
         	Log.i("AuthBackDataProc_GoogleLoginRegister", "Data_Parse_Error_Type");
             OnAuthEvent(-102,  MainActivity.getString(R.string.Data_Parse_Error_Type), -1, "", "", "");

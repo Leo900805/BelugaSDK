@@ -48,6 +48,9 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.beluga.R;
 
 /**
@@ -387,13 +390,13 @@ public class AuthClientActivity extends Activity implements OnClickListener,
         
         AuthHttpClient.AuthChannel = intent.getIntExtra(Keys.AuthChannel.toString(),0);
         //assign Api Url into AuthHttpClient.ApiUrl
-        if(AuthHttpClient.AuthChannel == AuthHttpClient.LOW_AUTH){
-        	AuthHttpClient.ApiUrl = "http://api.belugame.com/api/";
-        }else if(AuthHttpClient.AuthChannel == AuthHttpClient.STRONG_AUTH){
+        //if(AuthHttpClient.AuthChannel == AuthHttpClient.LOW_AUTH){
+        	//AuthHttpClient.ApiUrl = "http://api.belugame.com/api/";
+        //}else if(AuthHttpClient.AuthChannel == AuthHttpClient.STRONG_AUTH){
         	AuthHttpClient.ApiUrl = "https://games.belugame.com/api/";
-        }else{
-        	Log.d("TAG", "AuthChannel is " + AuthHttpClient.AuthChannel+". This auth channel does not exist.");
-        }
+        //}else{
+        	//Log.d("TAG", "AuthChannel is " + AuthHttpClient.AuthChannel+". This auth channel does not exist.");
+        //}
 
         
         //get App ID assign into AuthHttpClient.AppID
@@ -506,24 +509,31 @@ public class AuthClientActivity extends Activity implements OnClickListener,
 				@Override
 				public void onProcessDoneEvent(Bundle bundle) {
 					// TODO Auto-generated method stub
-					int Code = bundle.getInt(Keys.Code.toString());
 					
-					String Message = bundle.getString(Keys.Message.toString());
-                    String uid = bundle.getString(Keys.UID.toString());
-                    String token = bundle.getString(Keys.Token.toString());
-                    //String thirdPartnerId = bundle.getString("accountBound");
-                    //String token = bundle.getString("token");
-					String CodeStr = UsedString.getLoginstring(getApplicationContext(), Code);
-                    if (CodeStr.compareTo("") == 0) {
-                        Toast.makeText(AuthClientActivity.this, Message, Toast.LENGTH_SHORT).show();
-                    } else if (Code == 1) {
-                        Toast.makeText(AuthClientActivity.this, CodeStr, Toast.LENGTH_LONG).show();
-                        SaveAccountPassword(inputaccount.getText().toString(), inputpassword.getText().toString());
-                        InformationProcess.saveUserUid(uid, AuthClientActivity.this);
-                        SetFinish(inputaccount.getText().toString(), uid.toString(), token, inputpassword.getText().toString(), "");
-                    } else {
-                        Toast.makeText(AuthClientActivity.this, CodeStr, Toast.LENGTH_LONG).show();
-                    }
+                    try {
+                    	String jsonData = bundle.getString(Keys.JsonData.toString());
+						JSONObject jObj = new JSONObject( jsonData );
+						Log.i(TAG, "Login Page got json:"+jObj.toString());
+						
+						int Code = jObj.getInt("code");
+						String uid = jObj.getString("uid");
+						String Message = jObj.getString("message");
+						
+						String CodeStr = UsedString.getLoginstring(getApplicationContext(), Code);
+	                    if (CodeStr.compareTo("") == 0) {
+	                        Toast.makeText(AuthClientActivity.this, Message, Toast.LENGTH_SHORT).show();
+	                    } else if (Code == 1) {
+	                        Toast.makeText(AuthClientActivity.this, CodeStr, Toast.LENGTH_LONG).show();
+	                        SaveAccountPassword(inputaccount.getText().toString(), inputpassword.getText().toString());
+	                        InformationProcess.saveUserUid(uid, AuthClientActivity.this);
+	                        SetFinish(jsonData);
+	                    } else {
+	                        Toast.makeText(AuthClientActivity.this, CodeStr, Toast.LENGTH_LONG).show();
+	                    }
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
             });
     }
@@ -689,6 +699,26 @@ public class AuthClientActivity extends Activity implements OnClickListener,
             }
         };
         handler.postDelayed(delayRunnable, 700);
+    }
+    
+    private void SetFinish(String Data){
+    	 Intent resultdata = new Intent();
+         Bundle bundle = new Bundle();
+         bundle.putString("type", "LOGIN");
+         bundle.putString(Keys.JsonData.toString(), Data);
+         
+         resultdata.putExtras(bundle);
+         setResult(Activity.RESULT_OK, resultdata); //回傳RESULT_OK
+
+         Handler handler = new Handler();
+         Runnable delayRunnable =  new Runnable() {
+             @Override
+             public void run() {
+                 // TODO Auto-generated method stub
+                 finish();
+             }
+         };
+         handler.postDelayed(delayRunnable, 700);	
     }
 
     @Override

@@ -23,7 +23,12 @@ import com.beluga.loginpage.AuthHttpClient.OnAuthEventListener;
 import com.beluga.loginpage.datacontrol.InformationProcess;
 import com.beluga.loginpage.datacontrol.UsedString;
 import com.beluga.loginpage.datacontrol.GameBackground;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.beluga.R;
+import com.beluga.belugakeys.Keys;
 /**
  * Created by Leo on 2015/10/5.
  */
@@ -176,18 +181,66 @@ public class Registration extends Activity implements OnClickListener {
 			@Override
 			public void onProcessDoneEvent(Bundle bundle) {
 				// TODO Auto-generated method stub
+
+				
+				try {
+					final String jsonData = bundle.getString(Keys.JsonData.toString());
+					JSONObject jObj;
+					
+					jObj = new JSONObject( jsonData );
+					
+					int Code = jObj.getInt("code");
+					String uid = jObj.getString("uid");
+					String Message = jObj.getString("message");
+					
+					Log.i("regis Page", "regis Page got json:"+jObj.toString());
+					
+					
+	            	//final String regisToken = token;
+	                String CodeStr = UsedString.getFastRegistrationGenerateString(getApplicationContext(), Code);
+	                if(CodeStr.compareTo("") == 0 && Code != 1){
+	                    //Looper.prepare();
+	                    Toast.makeText(Registration.this, Message, Toast.LENGTH_SHORT).show();
+	                    //Looper.loop();
+	                }else if(Code == 1){
+	                    InformationProcess.saveAccountPassword(inputaccount.getText().toString(), inputpassword.getText().toString(), Registration.this);
+	                    InformationProcess.saveUserUid(uid, Registration.this);
+	                    
+	                    signUpComfirmBtn.startAnimation(selectedMoveLeft);
+	                    signUpReturnBtn.startAnimation(scaleHide);
+	                	
+	                	final Handler handler = new Handler();
+	               	 	handler.postDelayed(new Runnable() {
+	               	 	
+	               	     @Override
+	               	     public void run() {
+	               	         // Do something after 700ms
+	               	    	//unlock can't edit and click
+	               	    	SetFinish(inputaccount.getText().toString(), inputpassword.getText().toString(), jsonData);
+	               	     }
+	               	 	}, DELAY_TIME);
+	                    
+	                }else{
+	                	Log.i("Regis", "CodeStr is "+CodeStr );
+	                    Toast.makeText(Registration.this, CodeStr, Toast.LENGTH_LONG).show();
+	                }
+					
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				
 			}
         });
     }
 
-    private void SetFinish(String thisuserid, String thisuid, String token) {
+    private void SetFinish(String thisuserid, String thisuid, String jsonData) {
         Intent resultdata = new Intent();
         Bundle bundle = new Bundle();
         bundle.putInt("ResultType", 1);
         bundle.putString("userid", thisuserid);
         bundle.putString("userpwd", thisuid);
-        bundle.putString("token", token);
+        bundle.putString(Keys.JsonData.toString(), jsonData);
         resultdata.putExtras(bundle);
       
         if (getParent() == null) {

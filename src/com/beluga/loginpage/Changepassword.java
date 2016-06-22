@@ -21,7 +21,12 @@ import com.beluga.loginpage.AuthHttpClient.OnAuthEventListener;
 import com.beluga.loginpage.datacontrol.InformationProcess;
 import com.beluga.loginpage.datacontrol.UsedString;
 import com.beluga.loginpage.datacontrol.GameBackground;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.beluga.R;
+import com.beluga.belugakeys.Keys;
 /**
  * Created by Leo on 2015/10/5.
  */
@@ -141,6 +146,42 @@ public class Changepassword extends Activity implements OnClickListener{
 			@Override
 			public void onProcessDoneEvent(Bundle bundle) {
 				// TODO Auto-generated method stub
+				
+				String jsonData = bundle.getString(Keys.JsonData.toString());
+				JSONObject jObj;
+				try {
+					jObj = new JSONObject( jsonData );
+					
+					Log.i("Change pwd page", "Change pwd page got json:"+jObj.toString());
+					
+					int Code = jObj.getInt("code");
+					String Message = jObj.getString("message");
+					String CodeStr = UsedString.getChangePasswordString(getApplicationContext(), Code);
+	                if(CodeStr.compareTo("")==0){
+	                    Toast.makeText(Changepassword.this, Message, Toast.LENGTH_LONG).show();
+	                }else if(Code == 1){
+	                    Toast.makeText(Changepassword.this, CodeStr, Toast.LENGTH_LONG).show();
+	                    modComirmBtn.startAnimation(selectedMoveLeft);
+	                    modReturnBtn.startAnimation(scaleHide);
+	                	
+	                	final Handler handler = new Handler();
+	               	 	handler.postDelayed(new Runnable() {
+	               	     @Override
+	               	     public void run() {
+	               	         // Do something after 700ms
+	               	    	//unlock can't edit and click
+	               	    	SetFinish(inputaccount.getText().toString(),inputnewpassword.getText().toString());
+	               	     }
+	               	 	}, DELAY_TIME);
+	                    
+	                }else{
+	                    Toast.makeText(Changepassword.this, CodeStr, Toast.LENGTH_LONG).show();
+	                }
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
 				
 			}
         });
