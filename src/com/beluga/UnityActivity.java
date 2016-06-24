@@ -1,5 +1,7 @@
 package com.beluga;
 
+//import org.json.JSONObject;
+
 import com.beluga.belugakeys.Keys;
 import com.beluga.payment.iab.InAppBillingActivity;
 import com.beluga.payment.mol.MOLActivity;
@@ -37,7 +39,7 @@ public class UnityActivity extends UnityPlayerActivity{
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
+        
         Log.i("Main Demo", "onActivityResult start...");
         Log.i("Main Demo", "requestCode:" + requestCode);
         Log.i("Main Demo", "resultCode:" + Activity.RESULT_OK);
@@ -47,34 +49,28 @@ public class UnityActivity extends UnityPlayerActivity{
             	
                 Bundle bundle = data.getExtras();
                 String type = bundle.getString("type");
+                String sendUnityStr;
                 Log.i("Main Demo", "type is "+ type);
                 if(type.equals("LOGIN") ){
                 	Log.i("Main Demo", "Is "+ type + "do if condition...");
-                	String uid = bundle.getString("uid");
-                    String useruid = bundle.getString("userid");
-                    String userpwd = bundle.getString("pwd");
-                    String thirdPartnerId = bundle.getString("token");
-                    
-                    Log.i("sent to unity Login", "UID:" + uid + "\nuseruid: " + useruid + "\n"+ "\nthirdPartnerId: " + thirdPartnerId + "\n");
+                	String jsonData = bundle.getString(Keys.JsonData.toString());
+					//JSONObject jObj = new JSONObject( jsonData );
+					//String token = jObj.getString("token");
+                	sendUnityStr = "json Data:" + jsonData +"\n";
+                    Log.i("sent to unity Login", sendUnityStr);
                    
-                    UnityPlayer.UnitySendMessage(unityGameObjName,unityMethod
-                    		,"Login info :\nLogin User UID:"+uid +"\nuseruid: "+useruid+"\npwd:"+userpwd+"\nthirdPartnerId:"+thirdPartnerId);
+                    UnityPlayer.UnitySendMessage(unityGameObjName,unityMethod,sendUnityStr);
 
                     
                 }else if(type.equals("PAYMENT") ){
                 	Log.i("Main Demo", "Is "+ type + "do else if condition...");
     	           
     	            
-    	            String tid = bundle.getString("tradeid");
-                	int code = bundle.getInt("code");
-                	String m = bundle.getString("message");
-                	Log.i("sent to unity payment","trade id: \n"+ tid +"\n"+
-    	            			"code: \n"+ code +"\n"+
-    	            			"message:\n"+m+"\n" );
-    	            UnityPlayer.UnitySendMessage(unityGameObjName,unityMethod
-                    		,"Receipt info :\ntrade id: \n"+ tid +"\n"+
-    	            			"code: \n"+ code +"\n"+
-    	            			"message:\n"+m+"\n"); 
+                	String order = bundle.getString("order");
+    	            String sign = bundle.getString("sign");
+    	            sendUnityStr = "json order: \n"+ order +"\n"+"sign:\n"+sign+"\n";
+                	Log.i("sent to unity payment", sendUnityStr);
+    	            UnityPlayer.UnitySendMessage(unityGameObjName,unityMethod ,sendUnityStr ); 
                 }
                 
             }

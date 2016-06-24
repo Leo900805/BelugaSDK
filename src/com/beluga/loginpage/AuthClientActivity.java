@@ -143,8 +143,8 @@ public class AuthClientActivity extends Activity implements OnClickListener,
     @Override
     protected void onStart() {
         super.onStart();
-        Log.i("AuthAct", "onStart ...");
-        setButtonEnable(true);
+        Log.i("AuthAct", "onStart ..." );
+        
         mGoogleApiClient.connect();
         
         
@@ -165,6 +165,7 @@ public class AuthClientActivity extends Activity implements OnClickListener,
 			mGoogleApiClient.disconnect();
 		}
     }
+   
     
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -347,10 +348,10 @@ public class AuthClientActivity extends Activity implements OnClickListener,
         if (AccessToken.getCurrentAccessToken() == null) {
         //if (fbInfoManager.getAccessToken().getCurrentAccessToken() == null) {
         	Log.i("Check fb login status", "already logged out");
-        	setButtonEnable(true);
+        	//setButtonEnable(true);
         }else{
         	Log.i("Check fb login status", "already logged in");
-        	setButtonEnable(false);
+        	//setButtonEnable(false);
         	//developer Facebook logout setting
         	//LoginManager.getInstance().logOut();
         	//get facebook ID
@@ -394,6 +395,7 @@ public class AuthClientActivity extends Activity implements OnClickListener,
         	//AuthHttpClient.ApiUrl = "http://api.belugame.com/api/";
         //}else if(AuthHttpClient.AuthChannel == AuthHttpClient.STRONG_AUTH){
         	AuthHttpClient.ApiUrl = "https://games.belugame.com/api/";
+        	//AuthHttpClient.ApiUrl = "http://games.belugame.com/api/";
         //}else{
         	//Log.d("TAG", "AuthChannel is " + AuthHttpClient.AuthChannel+". This auth channel does not exist.");
         //}
@@ -711,9 +713,9 @@ public class AuthClientActivity extends Activity implements OnClickListener,
     			if (AccessToken.getCurrentAccessToken() == null) {
     		        //if (fbInfoManager.getAccessToken().getCurrentAccessToken() == null) {
     		        	Log.i("Check fb login status", "already logged out");
-    		        	setButtonEnable(true);
+    		        	//setButtonEnable(true);
     		     }else{
-    		    	 setButtonEnable(false);
+    		    	 //setButtonEnable(false);
     		     }	
     		}
     	/* Developer by Leo Ling   Facebook login end */
@@ -902,7 +904,7 @@ public class AuthClientActivity extends Activity implements OnClickListener,
         
         
     }
-	
+	/*
 	private void setButtonEnable(Boolean enabled){
 		quickSignUpBtn.setEnabled(enabled);
 		signUpBtn.setEnabled(enabled);
@@ -911,7 +913,7 @@ public class AuthClientActivity extends Activity implements OnClickListener,
 		modPwdBtn.setEnabled(enabled);
 		signinButton.setEnabled(enabled);
 	}
-    
+    */
     private void signIn() {
     	 Log.d(TAG, "Signin start ....");
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
@@ -932,7 +934,7 @@ public class AuthClientActivity extends Activity implements OnClickListener,
 			Log.i("google info", "not google info, Please Login google account");
 		}else{
 			if(this.cancelLogin != RESULT_CANCELED){
-				setButtonEnable(false);
+				//setButtonEnable(false);
 				signIn();
 			}else{
 				Log.i("google login status", "canccel login");

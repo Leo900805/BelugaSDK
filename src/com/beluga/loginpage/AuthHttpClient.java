@@ -31,8 +31,6 @@ import org.apache.http.impl.conn.SingleClientConnManager;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
-import org.json.JSONObject;
-
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.security.MessageDigest;
@@ -152,10 +150,13 @@ public class AuthHttpClient {
         
         
         HttpPost post = new HttpPost(url);
+        Log.i("httpClient", "url:" + url);
         try {
         	
-            DefaultHttpClient httpClient;
-            
+            //DefaultHttpClient httpClient = new DefaultHttpClient();
+        	DefaultHttpClient httpClient;
+        	Log.i("httpClient", "in if condition:" + url.indexOf("https"));
+        	
             if (url.indexOf("https") == 0) {
             	Log.i("httpClient", "in if condition:" + url.indexOf("https"));
                 SchemeRegistry registry = new SchemeRegistry();
@@ -169,21 +170,25 @@ public class AuthHttpClient {
                 httpClient = new DefaultHttpClient(mgr, client.getParams());
                 // Set verifier
                 HttpsURLConnection.setDefaultHostnameVerifier(hostnameVerifier);
+                
             } else {
-            	
+            	Log.i("httpClient", "in else condition:" + url.indexOf("https"));
                 httpClient = new DefaultHttpClient();
             }
+            
           
             for(int i=0;i<list.size();i++){
                 Log.d("list:", list.get(i).toString());
             }
-            post.setEntity(new UrlEncodedFormEntity(list, HTTP.UTF_8));
+            Log.i("httpClient", "post entity...");
+            //post.setEntity(new UrlEncodedFormEntity(list, HTTP.UTF_8));
+            post.setEntity(new UrlEncodedFormEntity(list));
 
-            
+            Log.i("httpClient", "httpResponse= httpClient.execute(post)");
             HttpResponse httpResponse = httpClient.execute(post);
             
             
-            
+            Log.i("httpClient", "httpResponse.getStatusLine().getStatusCode() is " +httpResponse.getStatusLine().getStatusCode());
             if (httpResponse.getStatusLine().getStatusCode() == 200) {
             	
                 String strResult = EntityUtils.toString(httpResponse.getEntity());

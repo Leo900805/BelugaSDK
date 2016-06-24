@@ -1,10 +1,12 @@
 package com.beluga.payment.iab;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.android.vending.billing.IInAppBillingService;
 import com.beluga.payment.iab.util.IabHelper;
 import com.beluga.payment.iab.util.IabResult;
 import com.beluga.payment.iab.util.Inventory;
@@ -12,21 +14,26 @@ import com.beluga.payment.iab.util.Purchase;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.os.RemoteException;
 import android.util.Log;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.RelativeLayout;
 
-public class InAppBillingActivity extends Activity {
+public class InAppBillingActivity extends Activity{
 	
 	private String base64 = "";
 	private String mTradeid;
-	//private String mReceipt;
-	//private String mOrder;
-	//private String mOrdersign;
+	private String mReceipt;
+	private String mOrder;
+	private String mOrdersign;
 	private IabHelper mHelper;
 	private String mItemId;
 	private String mUserId;
@@ -48,11 +55,34 @@ public class InAppBillingActivity extends Activity {
 	public static String ApiUrl = "api_url";
 	
 	
+	IInAppBillingService mService ;
+
+	ServiceConnection mServiceConn = new ServiceConnection() {
+	   
+		@Override
+		public void onServiceConnected(ComponentName arg0, IBinder service) {
+			// TODO Auto-generated method stub
+			 //mService = null;
+			mService = IInAppBillingService.Stub.asInterface(service);
+		}
+	
+		@Override
+		public void onServiceDisconnected(ComponentName name) {
+			// TODO Auto-generated method stub
+			mService = null;
+		}
+	};
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		Log.i(TAG,"GBilling 20160126");
+		
+		Intent serviceIntent = new Intent("com.android.vending.billing.InAppBillingService.BIND");
+		serviceIntent.setPackage("com.android.vending");
+		bindService(serviceIntent, mServiceConn, Context.BIND_AUTO_CREATE);
+		
 		SetUi();
 		
 		String base64 = getIntent().getExtras().getString(base64EncodedPublicKey);
@@ -157,12 +187,12 @@ public class InAppBillingActivity extends Activity {
 					
 					int code = jObj.getInt("code");
 					String message = jObj.getString("message");
-					//Log.d(TAG,"tradeInfoCreateInNP code = "+code+" ; MESSAGE = "+ message + " ; tradeid is "+mTradeid );
+					Log.d(TAG,"tradeInfoCreateInNP code = "+code+" ; MESSAGE = "+ message + " ; tradeid is "+mTradeid );
 					if(code != 1){
 						//Log.d(TAG,"flag line 159");
 						sendOnTradeGoogleFinished(-2,"create trade id from server failed : "+message);
 					}else{
-						//Log.d(TAG,"flag line 162");
+						Log.d(TAG,"flag line :"+Thread.currentThread().getStackTrace()[2].getLineNumber());
 						PayAppBill();
 					}
 					//Log.d(TAG,"flag line 165");
@@ -252,9 +282,9 @@ public class InAppBillingActivity extends Activity {
             // Check for gas delivery -- if we own gas, we should fill up the tank immediately
             Log.d(TAG, "Purchase item "+mItemId);
             List<String> Purchaselist = inventory.getAllOwnedSkus();
-            Log.d(TAG, "show all item "+Purchaselist);
+            Log.d(TAG, "show all item ："+Purchaselist);
             Purchase gasPurchase = inventory.getPurchase(mItemId);
-            
+            Log.d(TAG, "gasPurchase ："+gasPurchase);
             if (gasPurchase != null && verifyDeveloperPayload(gasPurchase)) {
                 Log.d(TAG, "We have this item. Consuming it.");
                 mHelper.consumeAsync(inventory.getPurchase(mItemId), mConsumeFinishedListener);
@@ -262,8 +292,12 @@ public class InAppBillingActivity extends Activity {
             }else{
             	Log.d(TAG, "gasPurchase == NULL or verifyDeveloperPayload(gasPurchase) is false");
             	if(!afterPurchase){
-            		if(dialog != null)	dialog.dismiss();
+            		if(dialog != null){
+            			Log.d(TAG, "dialog.dismiss");
+            			dialog.dismiss();
+            		}
             		String payload = "";
+            		Log.d(TAG, "line 300 launchPurchaseFlow()....");
                     mHelper.launchPurchaseFlow(InAppBillingActivity.this, mItemId, RC_REQUEST, mPurchaseFinishedListener, payload);
                 
             	}
@@ -300,7 +334,7 @@ public class InAppBillingActivity extends Activity {
             }
 
             Log.d(TAG, "Purchase successful.");
-
+            Log.d(TAG, purchase.getSku()+".equals "+mItemId+":"+ purchase.getSku().equals(mItemId));
             if (purchase.getSku().equals(mItemId)) {
                 // bought 1/4 tank of gas. So consume it.
                 Log.d(TAG, "Purchase is gas. Starting gas consumption.");
@@ -324,11 +358,54 @@ public class InAppBillingActivity extends Activity {
                 //setWaitScreen(false);
             }*/
             afterPurchase = true;
-            verifyReceipt(purchase);
+            
+            ArrayList<String> skuList = new ArrayList<String> ();
+            skuList.add("premiumUpgrade");
+            skuList.add("gas");
+            Log.v(TAG,"Line 365 add  premiumUpgrade and gas"); 
+            Bundle querySkus = new Bundle();
+            querySkus.putStringArrayList(mItemId, skuList);
+            try {
+				Bundle skuDetails = mService.getSkuDetails(3,getPackageName(), "inapp", querySkus);
+				
+				Log.v(TAG,"Line 371 skuDetails.isEmpty():"+skuDetails.isEmpty());
+				int response = skuDetails.getInt("RESPONSE_CODE");
+				Log.v(TAG,"Line 373 response code is:"+response);
+				if (response == 0) {
+				   //ArrayList ownedSkus = skuDetails.getStringArrayList("INAPP_PURCHASE_ITEM_LIST");
+				   ArrayList<String> purchaseDataList = skuDetails.getStringArrayList("INAPP_PURCHASE_DATA_LIST");
+				   //ArrayList signatureList = skuDetails.getStringArrayList("INAPP_DATA_SIGNATURE");
+				   //String continuationToken = skuDetails.getString("INAPP_CONTINUATION_TOKEN");
+				   Log.v(TAG,"Line 379 purchaseDataList.isEmpty():"+purchaseDataList.isEmpty());
+				   for (int i = 0; i < purchaseDataList.size(); ++i) {
+				       String purchaseData = purchaseDataList.get(i);
+				       JSONObject jpurchase;
+					try {
+						jpurchase = new JSONObject(purchaseData);
+						String orderid = jpurchase.getString("orderId");
+					       Log.v(TAG,"Line 383 ORDER ID :"+orderid ); 
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				       
+				   }
+				}
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+            //bug
+            //Log.d(TAG, "Line 331 exe verifyReceipt()...");
+            //verifyReceipt(purchase);
+            Log.d(TAG, "Line 398 exe sendOnTradeGoogleFinished()...");
+            sendOnTradeGoogleFinished(purchase);
+            
             
         }
     };
 	private static boolean verifyDeveloperPayload(Purchase p) {
+		Log.d("Beluga IAB", "Line 405 verifyDeveloperPayload start...");
         String payload = p.getDeveloperPayload();
 
         /*
@@ -353,7 +430,7 @@ public class InAppBillingActivity extends Activity {
          * Using your own server to store and verify developer payloads across app
          * installations is recommended.
          */
-
+        Log.d("Beluga IAB", "Line 430 verifyDeveloperPayload end return true...");
         return true;
     }
 	private IabHelper.OnConsumeFinishedListener mConsumeFinishedListener = new IabHelper.OnConsumeFinishedListener() {
@@ -372,8 +449,10 @@ public class InAppBillingActivity extends Activity {
                 if(!afterPurchase){
                 	if(dialog != null)	dialog.dismiss();
                 	String payload = "";
+                	Log.d(TAG, "Line 449 launchPurchaseFlow()...");
                     mHelper.launchPurchaseFlow(InAppBillingActivity.this, mItemId, RC_REQUEST, mPurchaseFinishedListener, payload);
                 }else{
+                	Log.d(TAG, "exe verifyReceipt()...");
                 	verifyReceipt(purchase);
                 	//here add notice
                 }
@@ -388,30 +467,35 @@ public class InAppBillingActivity extends Activity {
     
     private void verifyReceipt(Purchase purchase) {
     	Bundle b = new Bundle();
-    	//mReceipt =purchase.getOrderId();
-    	//mOrder = purchase.getOriginalJson();
-    	//mOrdersign = purchase.getSignature();
+    	mReceipt ="GPA.1369-6784-3344-09799";
+    	//purchase.getOrderId();
+    	Log.i("IAB", "mReceipt:"+mReceipt);
+    	mOrder = purchase.getOriginalJson();
+    	Log.i("IAB", "mOrder:"+mOrder);
+    	mOrdersign = purchase.getSignature();
+    	Log.i("IAB", "mOrdersign:"+mOrdersign);
     	if(mTradeid == null){
     		Log.e(TAG,"Trade id is null");
     		sendOnTradeGoogleFinished(-3, "Trade id is null");
     		return;
     	}
     	//Log.d(TAG,"Trade id is "+mTradeid);
-        //b.putString("tradeid", mTradeid);
-        //b.putString("receipt", mReceipt);
-        //b.putString("order", mOrder);
-        //b.putString("ordersign", mOrdersign);
+        b.putString("tradeid", mTradeid);
+        b.putString("receipt", mReceipt);
+        b.putString("order", mOrder);
+        b.putString("ordersign", mOrdersign);
+        //bug
         verifyReceiptToServer(b);
     }
 	private void verifyReceiptToServer(final Bundle b) {
-
+		Log.i(TAG, "verifyReceiptToServer start...");
 		new AsyncTask<Void, Void, JSONObject>() {
 
 			@Override
 			protected JSONObject doInBackground(Void... params) {
-
+				Log.i(TAG, "ServerUtilities.getTradeInfoWithGet exe...");
 				JSONObject jObj = ServerUtilities.getTradeInfoWithGet(InAppBillingActivity.this,b, ServerUtilities.VerifyReceiptUrl);
-
+				Log.i(TAG, "return jObj is "+ jObj);
 				return jObj;
 			}
 
@@ -458,6 +542,7 @@ public class InAppBillingActivity extends Activity {
             // not handled, so handle it ourselves (here's where you'd
             // perform any handling of activity results not related to in-app
             // billing...
+        	Log.d(TAG, "In if condition");
             super.onActivityResult(requestCode, resultCode, data);
         }
         else {
@@ -478,6 +563,10 @@ public class InAppBillingActivity extends Activity {
             mHelper.dispose();
             mHelper = null;
         }
+        
+        if (mService != null) {
+            unbindService(mServiceConn);
+        }
 	}
 
 	@Override
@@ -491,10 +580,10 @@ public class InAppBillingActivity extends Activity {
 		Intent intent = getIntent();	
 		Bundle b = new Bundle();
 		Log.i(TAG,"seted code and message " + code +"  "+ message);
+		b.putString("type", "PAYMENT");
 		b.putInt("code", code);
 		b.putString("message", message);
 		if(code == 1){
-			b.putString("type", "PAYMENT");
 			//b.putString(Tradeid, mTradeid);
 			b.putString("tradeid", mTradeid);
 			//b.putString("receipt", mReceipt);
@@ -508,6 +597,20 @@ public class InAppBillingActivity extends Activity {
 		this.finish();
 	}
 	
+	private void sendOnTradeGoogleFinished(Purchase purchase){
+		Intent intent = getIntent();	
+		Bundle b = new Bundle();
+		//Log.i(TAG,"seted code and message " + code +"  "+ message);
+		b.putString("type", "PAYMENT");
+		b.putString("order", purchase.getOriginalJson());
+		b.putString("sign", purchase.getSignature());
+		intent.putExtras(b);
+		setResult(Activity.RESULT_OK, intent); 
+		//mItemId = null;
+		//mUserId = null;
+		this.finish();
+	}
+	
 	private boolean CheckAllItemsAvailable(){
 		if( mItemId != null && mUserId != null && base64 != null){	
 			return true;
@@ -516,4 +619,5 @@ public class InAppBillingActivity extends Activity {
 			return false;
 		}
 	}
+
 }
