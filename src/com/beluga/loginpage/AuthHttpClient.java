@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,8 +18,13 @@ import android.util.Log;
 import com.beluga.R;
 import com.beluga.belugakeys.Keys;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpVersion;
 import org.apache.http.NameValuePair;
+import org.apache.http.StatusLine;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.scheme.Scheme;
@@ -26,20 +32,78 @@ import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.conn.ssl.X509HostnameVerifier;
 import org.apache.http.conn.util.InetAddressUtils;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.SingleClientConnManager;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpParams;
+import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONException;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
 import java.net.InetAddress;
+import java.net.MalformedURLException;
 import java.net.NetworkInterface;
+import java.net.URL;
+import java.security.KeyManagementException;
+import java.security.KeyStore;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.Certificate;
+import java.security.cert.CertificateException;
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+
+import java.io.IOException; 
+import java.net.Socket;
+import java.net.SocketException;
+import java.net.UnknownHostException; 
+import java.security.KeyManagementException; 
+import java.security.KeyStore; 
+import java.security.KeyStoreException; 
+import java.security.NoSuchAlgorithmException; 
+import java.security.UnrecoverableKeyException; 
+import java.security.cert.CertificateException; 
+import java.security.cert.X509Certificate;
+
+
+import javax.net.ssl.SSLContext; 
+import javax.net.ssl.TrustManager; 
+import javax.net.ssl.X509TrustManager;
+
+import org.apache.http.HttpVersion; 
+import org.apache.http.client.HttpClient; 
+import org.apache.http.conn.ClientConnectionManager;
+import org.apache.http.conn.ConnectTimeoutException;
+import org.apache.http.conn.scheme.PlainSocketFactory; 
+import org.apache.http.conn.scheme.Scheme; 
+import org.apache.http.conn.scheme.SchemeRegistry; 
+import org.apache.http.conn.ssl.SSLSocketFactory; 
+import org.apache.http.impl.client.DefaultHttpClient; 
+import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager; 
+import org.apache.http.params.BasicHttpParams; 
+import org.apache.http.params.HttpParams; 
+import org.apache.http.params.HttpProtocolParams; 
+import org.apache.http.protocol.HTTP;
 
 /**
  * Created by Leo on 2015/10/6.
@@ -62,10 +126,12 @@ public class AuthHttpClient {
     protected static String version="10405121054";
 
     private ProgressDialog loadingProgress;
+    //private httpPostAsyncTask postAsyncTask;
     
     //AuthHttpClient Constructor
     protected AuthHttpClient(Activity act) {
         MainActivity = act;
+       
     }
     
     //Check API whether exists 
@@ -135,6 +201,10 @@ public class AuthHttpClient {
     }
 
     private void httpPOST(AuthCommandType t, String url, List<NameValuePair> list) {
+    	
+    	//postAsyncTask = new httpPostAsyncTask(t,list);
+    	//postAsyncTask.execute(url);
+    	
         MainActivity.runOnUiThread(new Runnable() {
 
             @Override
@@ -150,11 +220,13 @@ public class AuthHttpClient {
         
         
         HttpPost post = new HttpPost(url);
+       
         Log.i("httpClient", "url:" + url);
         try {
         	
             //DefaultHttpClient httpClient = new DefaultHttpClient();
-        	DefaultHttpClient httpClient;
+        	DefaultHttpClient httpClient = null;
+        	//HttpClient client = null;
         	Log.i("httpClient", "in if condition:" + url.indexOf("https"));
         	
             if (url.indexOf("https") == 0) {
@@ -170,7 +242,7 @@ public class AuthHttpClient {
                 httpClient = new DefaultHttpClient(mgr, client.getParams());
                 // Set verifier
                 HttpsURLConnection.setDefaultHostnameVerifier(hostnameVerifier);
-                
+            	
             } else {
             	Log.i("httpClient", "in else condition:" + url.indexOf("https"));
                 httpClient = new DefaultHttpClient();
@@ -181,11 +253,12 @@ public class AuthHttpClient {
                 Log.d("list:", list.get(i).toString());
             }
             Log.i("httpClient", "post entity...");
-            //post.setEntity(new UrlEncodedFormEntity(list, HTTP.UTF_8));
-            post.setEntity(new UrlEncodedFormEntity(list));
+            post.setEntity(new UrlEncodedFormEntity(list, HTTP.UTF_8));
+            //post.setEntity(new UrlEncodedFormEntity(list));
 
             Log.i("httpClient", "httpResponse= httpClient.execute(post)");
             HttpResponse httpResponse = httpClient.execute(post);
+            //HttpResponse httpResponse = client.execute(post);
             
             
             Log.i("httpClient", "httpResponse.getStatusLine().getStatusCode() is " +httpResponse.getStatusLine().getStatusCode());
@@ -211,7 +284,56 @@ public class AuthHttpClient {
             e.printStackTrace();
             OnAuthEvent(-100, "HttpPostError");
         }
+    	/*
+    	String resutString="";
+    	StringBuilder builder = new StringBuilder();
+    	HttpClient client = getHttpsClient(new DefaultHttpClient());
+    	HttpParams params = new BasicHttpParams();
+            HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
+            HttpProtocolParams.setContentCharset(params, HTTP.UTF_8);
+
+    		try {
+    			
+
+    			
+    			HttpPost httpPost = new HttpPost(url);
+    			httpPost.setParams(params);
+    			httpPost.setEntity(new UrlEncodedFormEntity(list, HTTP.UTF_8));
+    			HttpResponse response = client.execute(httpPost);
+    			StatusLine statusLine = response.getStatusLine();
+    			int statusCode = statusLine.getStatusCode();
+    			Log.i("httpPost", "line 308 statusCode:"+statusCode);
+    			
+    			
+
+    			if (statusCode == 200) {
+    				HttpEntity entityResponse = response.getEntity();
+    				InputStream content = entityResponse.getContent();
+    				BufferedReader reader = new BufferedReader(new InputStreamReader(content));
+    				String line=null;
+    				while ((line = reader.readLine()) != null) {
+    					builder.append(line+"\n");
+    				}
+    				reader.close();
+    				resutString=builder.toString();
+    				Log.d("httpspost","Successfuly :"+resutString);
+    			} else {
+    				Log.d("httpspost","Error seding data");
+    			}
+    		} catch (ConnectTimeoutException e) {
+    			Log.w("Connection Tome Out", e);
+    		} catch (ClientProtocolException e) {
+    			Log.w("ClientProtocolException", e);
+    		} catch (SocketException e) {
+    			Log.w("SocketException", e);
+    		} catch (IOException e) {
+    			Log.w("IOException", e);
+    		}
+    	
+        */
     }
+    
+   
     
     Handler HttpPostHandler = new Handler() {
         @Override
@@ -381,11 +503,8 @@ public class AuthHttpClient {
         }
         
         String url = null;
-        //if(AuthChannel == AuthHttpClient.LOW_AUTH){
-        	//url = "MemberLogin";
-        //}else if (AuthChannel == AuthHttpClient.STRONG_AUTH){
-        	url = "MemberLogin/?";
-        //}
+        url = "MemberLogin/?";
+        
         
         final String UrlAction = url;
         final List<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -483,14 +602,6 @@ public class AuthHttpClient {
             return;
         }
         
-       // String url = null;
-        //if(AuthChannel == AuthHttpClient.LOW_AUTH){
-      
-        	//url = "http://api.belugame.com/api/MemberMake";
-        //}else if (AuthChannel == AuthHttpClient.STRONG_AUTH){
-        	//url = "MemberMake/?";
-        //}
-        //default
         final String UrlAction = "MemberMake/?";
 
         String devid = Secure.getString(MainActivity.getContentResolver(),
@@ -776,5 +887,40 @@ public class AuthHttpClient {
     	Log.i("AuthBackDataProc_UnknowType", "Unknow");
         OnAuthEvent(-102,  MainActivity.getString(R.string.Data_Parse_Error_Type));
     }
+    
+    
+    
+    
+    public static HttpClient getHttpsClient(HttpClient client) {
+        try{
+   		   X509TrustManager x509TrustManager = new X509TrustManager() { 	           
+   				@Override
+   				public void checkClientTrusted(X509Certificate[] chain,
+   						String authType) throws CertificateException {
+   				}
 
+   				@Override
+   				public void checkServerTrusted(X509Certificate[] chain,
+   						String authType) throws CertificateException {
+   				}
+
+   				@Override
+   				public X509Certificate[] getAcceptedIssuers() {
+   					return null;
+   				}
+   	        };
+   	        
+   	        SSLContext sslContext = SSLContext.getInstance("TLS");
+   	        sslContext.init(null, new TrustManager[]{x509TrustManager}, null);
+   	        SSLSocketFactory sslSocketFactory = new ExSSLSocketFactory(sslContext);
+   	        sslSocketFactory.setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+   	        ClientConnectionManager clientConnectionManager = client.getConnectionManager();
+   	        SchemeRegistry schemeRegistry = clientConnectionManager.getSchemeRegistry();
+   	        schemeRegistry.register(new Scheme("https", sslSocketFactory, 443));
+   	        return new DefaultHttpClient(clientConnectionManager, client.getParams());
+   	    } catch (Exception ex) {
+   	        return null;
+   	    }
+   	}
 }
+

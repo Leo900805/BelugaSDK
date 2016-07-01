@@ -393,8 +393,8 @@ public class AuthClientActivity extends Activity implements OnClickListener,
         //assign Api Url into AuthHttpClient.ApiUrl
         //if(AuthHttpClient.AuthChannel == AuthHttpClient.LOW_AUTH){
         	//AuthHttpClient.ApiUrl = "http://api.belugame.com/api/";
-        //}else if(AuthHttpClient.AuthChannel == AuthHttpClient.STRONG_AUTH){
-        	AuthHttpClient.ApiUrl = "https://games.belugame.com/api/";
+        //}else if(AuthHttpClient.AuthChannel == AuthHttpt.STRONG_AUTH){
+        	AuthHttpClient.ApiUrl = "http://games.belugame.com/api/";
         	//AuthHttpClient.ApiUrl = "http://games.belugame.com/api/";
         //}else{
         	//Log.d("TAG", "AuthChannel is " + AuthHttpClient.AuthChannel+". This auth channel does not exist.");
@@ -786,13 +786,11 @@ public class AuthClientActivity extends Activity implements OnClickListener,
             GoogleSignInAccount acct = result.getSignInAccount();
             this.gId = acct.getId();
             this.gmail = acct.getEmail();
-            this.gname = acct.getDisplayName();
-            this.gPhotoUrl = acct.getPhotoUrl().toString();
-            Log.i(TAG, "gid:"+ this.gId + " gmail:"+ this.gmail + " gname:"+ this.gname+
-            		"photo URL:"+ this.gPhotoUrl);
+            
+            Log.i(TAG, "gid:"+ this.gId + " gmail:"+ this.gmail);
             InformationProcess.saveGoogleThirdPartyInfo(acct.getId(), AuthClientActivity.this);
             authhttpclient.Auth_GoogleLoignRegister(acct.getId(), acct.getEmail(),
-            		acct.getDisplayName(), acct.getPhotoUrl().toString());
+            		null, null);
             //this.googleLoginStatus = true;
         } else {
         	Log.d(TAG, "handleSignInResult: in else condition." );

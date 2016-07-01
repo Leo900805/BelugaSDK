@@ -2,6 +2,7 @@ package com.beluga.payment.iab;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -13,10 +14,12 @@ import com.beluga.payment.iab.util.Inventory;
 import com.beluga.payment.iab.util.Purchase;
 
 import android.app.Activity;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentSender.SendIntentException;
 import android.content.ServiceConnection;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -55,23 +58,7 @@ public class InAppBillingActivity extends Activity{
 	public static String ApiUrl = "api_url";
 	
 	
-	IInAppBillingService mService ;
-
-	ServiceConnection mServiceConn = new ServiceConnection() {
-	   
-		@Override
-		public void onServiceConnected(ComponentName arg0, IBinder service) {
-			// TODO Auto-generated method stub
-			 //mService = null;
-			mService = IInAppBillingService.Stub.asInterface(service);
-		}
 	
-		@Override
-		public void onServiceDisconnected(ComponentName name) {
-			// TODO Auto-generated method stub
-			mService = null;
-		}
-	};
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -79,9 +66,6 @@ public class InAppBillingActivity extends Activity{
 		super.onCreate(savedInstanceState);
 		Log.i(TAG,"GBilling 20160126");
 		
-		Intent serviceIntent = new Intent("com.android.vending.billing.InAppBillingService.BIND");
-		serviceIntent.setPackage("com.android.vending");
-		bindService(serviceIntent, mServiceConn, Context.BIND_AUTO_CREATE);
 		
 		SetUi();
 		
@@ -359,46 +343,11 @@ public class InAppBillingActivity extends Activity{
             }*/
             afterPurchase = true;
             
-            ArrayList<String> skuList = new ArrayList<String> ();
-            skuList.add("premiumUpgrade");
-            skuList.add("gas");
-            Log.v(TAG,"Line 365 add  premiumUpgrade and gas"); 
-            Bundle querySkus = new Bundle();
-            querySkus.putStringArrayList(mItemId, skuList);
-            try {
-				Bundle skuDetails = mService.getSkuDetails(3,getPackageName(), "inapp", querySkus);
-				
-				Log.v(TAG,"Line 371 skuDetails.isEmpty():"+skuDetails.isEmpty());
-				int response = skuDetails.getInt("RESPONSE_CODE");
-				Log.v(TAG,"Line 373 response code is:"+response);
-				if (response == 0) {
-				   //ArrayList ownedSkus = skuDetails.getStringArrayList("INAPP_PURCHASE_ITEM_LIST");
-				   ArrayList<String> purchaseDataList = skuDetails.getStringArrayList("INAPP_PURCHASE_DATA_LIST");
-				   //ArrayList signatureList = skuDetails.getStringArrayList("INAPP_DATA_SIGNATURE");
-				   //String continuationToken = skuDetails.getString("INAPP_CONTINUATION_TOKEN");
-				   Log.v(TAG,"Line 379 purchaseDataList.isEmpty():"+purchaseDataList.isEmpty());
-				   for (int i = 0; i < purchaseDataList.size(); ++i) {
-				       String purchaseData = purchaseDataList.get(i);
-				       JSONObject jpurchase;
-					try {
-						jpurchase = new JSONObject(purchaseData);
-						String orderid = jpurchase.getString("orderId");
-					       Log.v(TAG,"Line 383 ORDER ID :"+orderid ); 
-					} catch (JSONException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				       
-				   }
-				}
-			} catch (RemoteException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+            
             //bug
             //Log.d(TAG, "Line 331 exe verifyReceipt()...");
             //verifyReceipt(purchase);
-            Log.d(TAG, "Line 398 exe sendOnTradeGoogleFinished()...");
+            Log.d(TAG, "Line 386 exe sendOnTradeGoogleFinished()...");
             sendOnTradeGoogleFinished(purchase);
             
             
@@ -548,6 +497,8 @@ public class InAppBillingActivity extends Activity{
         else {
             Log.d(TAG, "onActivityResult handled by IABUtil.");
         }
+        
+        
 	}
 
 	@Override
@@ -564,9 +515,7 @@ public class InAppBillingActivity extends Activity{
             mHelper = null;
         }
         
-        if (mService != null) {
-            unbindService(mServiceConn);
-        }
+        
 	}
 
 	@Override
@@ -598,6 +547,30 @@ public class InAppBillingActivity extends Activity{
 	}
 	
 	private void sendOnTradeGoogleFinished(Purchase purchase){
+		/*
+		try {
+        	Log.d(TAG, "flag line 589 ...");
+        	Log.d(TAG, "flag line 590 getPackageName()..."+ getPackageName() );
+        	Log.d(TAG, "flag line 591 purchase.getSku()..."+ purchase.getSku() );
+        	String payload = UUID.randomUUID().toString();
+        	Log.d(TAG, "flag line 593 payload..."+ payload );
+			Bundle buyIntentBundle = mService.getBuyIntent(3, getPackageName(), purchase.getSku(), "inapp", payload);
+			Log.d(TAG, "flag line 595 ...");
+			PendingIntent pendingIntent = buyIntentBundle.getParcelable("BUY_INTENT");
+			Log.d(TAG, "flag line 597 ...");
+			startIntentSenderForResult(pendingIntent.getIntentSender(),
+				    1001, new Intent(), Integer.valueOf(0), Integer.valueOf(0),
+				    Integer.valueOf(0));
+			Log.d(TAG, "flag line 601...");
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SendIntentException e) {
+			// TODO Auto-generated catch block
+			Log.d(TAG, "flag line 607 ...");
+			e.printStackTrace();
+		}
+		*/
 		Intent intent = getIntent();	
 		Bundle b = new Bundle();
 		//Log.i(TAG,"seted code and message " + code +"  "+ message);
@@ -619,5 +592,6 @@ public class InAppBillingActivity extends Activity{
 			return false;
 		}
 	}
+	
 
 }
