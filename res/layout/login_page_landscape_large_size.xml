@@ -108,138 +108,87 @@
                android:layout_height="match_parent"
                android:background="@drawable/white_alpha" >
 
-            	<TextView
-	                android:id="@+id/modify_tv"
-	                android:layout_width="wrap_content"
-	                android:layout_height="wrap_content"
-	                android:text="@string/Modify_Button_Text"
-	                android:textAlignment="gravity"
-	                android:textSize="15sp" 
-	                android:layout_alignParentBottom="true"
-	      	    	android:layout_alignParentRight="true"
-	      	    	android:layout_marginBottom="365dp"
-	      	    	android:layout_marginRight="120dp"
-	      	    	android:textColor="@color/secondary_text"
-            	     android:background="@drawable/label_bg"/>
-                 
-                <ImageButton
-                    android:id="@+id/modify_btn"
-                    android:layout_width="66dp"
-                    android:layout_height="66dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginBottom="350dp"
-                    android:layout_marginRight="35dp"
-                    android:background="@drawable/mod_circle_bg"
-                    android:src="@drawable/w_mod"
-                    android:textColor="#FFFFFF" />
+                <TableLayout 
+                   android:id="@+id/table_layout"
+               	   android:layout_width="match_parent"
+                   android:layout_height="match_parent"
+                   android:layout_centerInParent="true"
+                   android:layout_gravity="center">
                 
-                
-                <TextView
-	                android:id="@+id/fblogin_tv"
-	                android:layout_width="wrap_content"
-	                android:layout_height="wrap_content"
-	                android:text="Login with Facebook"
-	                android:textAlignment="gravity"
-	                android:textSize="15sp" 
-	                android:layout_alignParentBottom="true"
-	      	    	android:layout_alignParentRight="true"
-	      	    	android:layout_marginBottom="305dp"
-	      	    	android:layout_marginRight="120dp"
-	      	    	android:textColor="@color/secondary_text"
-	            	android:background="@drawable/label_bg"/>
-            
-            <com.facebook.login.widget.LoginButton
-                android:id="@+id/fblogin_button"
-	            android:layout_width="66dp"
-      	    	android:layout_height="66dp"
-	            android:background="@drawable/fb_circle_bg"
-	            android:layout_alignParentBottom="true"
-      	    	android:layout_alignParentRight="true"
-      	    	android:layout_marginBottom="290dp"
-      	    	android:layout_marginRight="35dp"/>
-                
-                <TextView
-	                android:id="@+id/google_sign_in_tv"
-	                android:layout_width="wrap_content"
-	                android:layout_height="wrap_content"
-	                android:text="Login with Google"
-	                android:textAlignment="gravity"
-	                android:textSize="15sp" 
-	                android:layout_alignParentBottom="true"
-	      	    	android:layout_alignParentRight="true"
-	      	    	android:layout_marginBottom="245dp"
-	      	    	android:layout_marginRight="120dp"
-	      	    	android:textColor="@color/secondary_text"
-            	     android:background="@drawable/label_bg"/>
-            
-           	<ImageButton
-           	    android:id="@+id/google_sign_in_button"
-           	    android:layout_width="66dp"
-           	    android:layout_height="66dp"
-           	    android:layout_alignParentBottom="true"
-           	    android:layout_alignParentRight="true"
-           	    android:layout_marginBottom="230dp"
-           	    android:layout_marginRight="35dp"
-           	    android:background="@drawable/gg_circle_bg"
-           	    android:src="@drawable/w_gg" />
-
-           	  
-            
-            <TextView
-            	     android:id="@+id/quick_sign_up_tv"
-            	     style="@drawable/label_bg"
-            	     android:layout_width="wrap_content"
-            	     android:layout_height="wrap_content"
-            	     android:layout_alignParentBottom="true"
-            	     android:layout_alignParentRight="true"
-            	     android:layout_marginBottom="185dp"
-            	     android:layout_marginRight="120dp"
-            	     android:background="@drawable/label_bg"
-            	     android:text="@string/Quick_Sign_Up_Button_Text"
-            	     android:textAlignment="gravity"
-            	     android:textColor="@color/secondary_text"
-            	     android:textSize="15sp" />
-            
-               <ImageButton
-                   android:id="@+id/quick_sign_up_btn"
-                   android:layout_width="66dp"
-                   android:layout_height="66dp"
-                   android:layout_alignParentBottom="true"
-                   android:layout_alignParentRight="true"
-                   android:layout_marginBottom="170dp"
-                   android:layout_marginRight="35dp"
-                   android:background="@drawable/q_sign_up_circle_bg"
-                   android:src="@drawable/w_qregis"
-                   android:textAlignment="gravity"
-                   android:textColor="#FFFFFF" />
-                
-                 <TextView
-	                android:id="@+id/sign_up_tv"
-	                android:layout_width="wrap_content"
-	                android:layout_height="wrap_content"
-	                android:text="@string/Sign_Up_Button_Text"
-	                android:textAlignment="gravity"
-	                android:textSize="15sp" 
-	                android:layout_alignParentBottom="true"
-	       	    	android:layout_alignParentRight="true"
-	      	    	android:layout_marginBottom="125dp"
-	      	    	android:layout_marginRight="120dp"
-	      	    	android:textColor="@color/secondary_text"
-            	     android:background="@drawable/label_bg"/>
-               
-                <ImageButton
-                    android:id="@+id/sign_up_btn"
-                    style="?android:attr/buttonStyleSmall"
-                    android:layout_width="66dp"
-                    android:layout_height="66dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginBottom="110dp"
-                    android:layout_marginRight="35dp"
-                    android:background="@drawable/sign_up_circle_bg"
-                    android:src="@drawable/w_regis"
-                    android:textColor="#FFFFFF" />
+                   <TableRow
+                       android:id="@+id/tableRow1"
+                       android:layout_width="match_parent"
+                       android:layout_height="match_parent"
+                       android:layout_gravity="center"
+                       android:layout_marginTop="100dp"
+                       android:gravity="center" >
+                    
+                        <Button
+	                     android:id="@+id/sign_up_btn"
+	                     android:layout_width="270dp"
+	                     android:layout_height="64dp"
+	                     android:background="@drawable/sign_up_circle_bg"
+	                     android:drawableLeft="@drawable/w_regis"
+	                     android:text="@string/Sign_Up_Button_Text"
+	                     android:textColor="#FFFFFF" />
+                        
+                        <com.facebook.login.widget.LoginButton
+	                     android:id="@+id/fblogin_button"
+	                     android:layout_width="270dp"
+	                     android:layout_height="44dp" />
+                       
+                   </TableRow>
+                   
+                   <TableRow
+                       android:id="@+id/tableRow2"
+                       android:layout_width="match_parent"
+                       android:layout_height="match_parent"
+                       android:layout_gravity="center"
+                       android:layout_marginTop="10dp"
+                       android:gravity="center" >
+                    
+                        <Button
+	                     android:id="@+id/quick_sign_up_btn"
+	                     android:layout_width="270dp"
+	                     android:layout_height="64dp"
+	                     android:background="@drawable/q_sign_up_circle_bg"
+	                     android:drawableLeft="@drawable/w_qregis"
+	                     android:text="@string/Quick_Sign_Up_Button_Text"
+	                     android:textAlignment="gravity"
+	                     android:textColor="#FFFFFF" />
+                        
+                        <Button
+	                      android:id="@+id/google_sign_in_button"
+	                      android:layout_width="270dp"
+	                      android:layout_height="64dp"
+	                      android:drawableLeft="@drawable/w_gg"
+	                      android:background="@drawable/gg_circle_bg" 
+	                      android:text="@string/GG_BUTTON_LABEL_TEXT"
+	                      android:textColor="#FFFFFF" />
+                       
+                   </TableRow>
+                   
+                   <TableRow
+                       android:id="@+id/tableRow3"
+                       android:layout_width="match_parent"
+                       android:layout_height="match_parent"
+                       android:layout_gravity="center"
+                       android:layout_marginTop="10dp"
+                       android:gravity="center" >
+                    
+                        <Button
+		                   android:id="@+id/modify_btn"
+		                   android:layout_width="270dp"
+		                   android:layout_height="64dp"
+		                   android:background="@drawable/mod_circle_bg"
+		                   android:drawableLeft="@drawable/w_mod"
+		                   android:text="@string/Modify_Button_Text"
+		                   android:textColor="#FFFFFF" />
+                       
+                   </TableRow>
+                   
+                   
+               </TableLayout>
             
             
             <TextView

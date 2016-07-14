@@ -105,8 +105,8 @@ public class UnityActivity extends UnityPlayerActivity{
 	        //act.startActivityForResult(intent, 100);
 	        //startActivity(intent);
 	}
-	
 	/*
+	
 	public static void StartAuthClient(String UnityGameObj, String UnityMethod, int authChannel,String appid, String apikey,  
 			byte[] gameLogo, String packageID,  boolean inMaintain, String dialogTitle, String dialogMessage) {
 				Log.i("UnityActivity", "StartAuthClient...");

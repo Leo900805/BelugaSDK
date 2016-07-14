@@ -9,6 +9,7 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings.Secure;
@@ -43,12 +44,6 @@ import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
@@ -58,6 +53,7 @@ import java.security.KeyManagementException;
 import java.security.KeyStore;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
@@ -71,9 +67,9 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
+import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 
-import java.io.IOException; 
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException; 
@@ -97,13 +93,18 @@ import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.conn.scheme.PlainSocketFactory; 
 import org.apache.http.conn.scheme.Scheme; 
 import org.apache.http.conn.scheme.SchemeRegistry; 
-import org.apache.http.conn.ssl.SSLSocketFactory; 
+//import org.apache.http.conn.ssl.SSLSocketFactory; 
+//import javax.net.ssl.SSLSocketFactory;
 import org.apache.http.impl.client.DefaultHttpClient; 
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager; 
 import org.apache.http.params.BasicHttpParams; 
 import org.apache.http.params.HttpParams; 
 import org.apache.http.params.HttpProtocolParams; 
 import org.apache.http.protocol.HTTP;
+
+import java.net.URL;
+import java.io.*;
+import javax.net.ssl.HttpsURLConnection;
 
 /**
  * Created by Leo on 2015/10/6.
@@ -124,6 +125,8 @@ public class AuthHttpClient {
     protected static String ApiUrl = "";
     protected static String PackageID = "";
     protected static String version="10405121054";
+    public static InputStream caInput;
+	
 
     private ProgressDialog loadingProgress;
     //private httpPostAsyncTask postAsyncTask;
@@ -199,8 +202,40 @@ public class AuthHttpClient {
         }
         return false;
     }
+    
+    public static HttpClient getHttpsClient(HttpClient client) {
+        try{
+   		   X509TrustManager x509TrustManager = new X509TrustManager() { 	           
+   				@Override
+   				public void checkClientTrusted(X509Certificate[] chain,
+   						String authType) throws CertificateException {
+   				}
 
-    private void httpPOST(AuthCommandType t, String url, List<NameValuePair> list) {
+   				@Override
+   				public void checkServerTrusted(X509Certificate[] chain,
+   						String authType) throws CertificateException {
+   				}
+
+   				@Override
+   				public X509Certificate[] getAcceptedIssuers() {
+   					return null;
+   				}
+   	        };
+   	        
+   	        SSLContext sslContext = SSLContext.getInstance("TLS");
+   	        sslContext.init(null, new TrustManager[]{x509TrustManager}, null);
+   	        SSLSocketFactory sslSocketFactory = new ExSSLSocketFactory(sslContext);
+   	        sslSocketFactory.setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+   	        ClientConnectionManager clientConnectionManager = client.getConnectionManager();
+   	        SchemeRegistry schemeRegistry = clientConnectionManager.getSchemeRegistry();
+   	        schemeRegistry.register(new Scheme("https", sslSocketFactory, 443));
+   	        return new DefaultHttpClient(clientConnectionManager, client.getParams());
+   	    } catch (Exception ex) {
+   	        return null;
+   	    }
+   	}
+    
+ private void httpPOST(AuthCommandType t, String url, List<NameValuePair> list) {
     	
     	//postAsyncTask = new httpPostAsyncTask(t,list);
     	//postAsyncTask.execute(url);
@@ -218,31 +253,85 @@ public class AuthHttpClient {
             }
         });
         
+        HostnameVerifier hostnameVerifier = new HostnameVerifier() {
+            @Override
+            public boolean verify(String hostname, SSLSession session) {
+                HostnameVerifier hv =
+                    HttpsURLConnection.getDefaultHostnameVerifier();
+                return hv.verify("www.belugame.com", session);
+            }
+        };
         
+        X509TrustManager x509TrustManager = new X509TrustManager() { 	           
+			@Override
+			public void checkClientTrusted(X509Certificate[] chain,
+					String authType) throws CertificateException {
+			}
+
+			@Override
+			public void checkServerTrusted(X509Certificate[] chain,
+					String authType) throws CertificateException {
+			}
+
+			@Override
+			public X509Certificate[] getAcceptedIssuers() {
+				return null;
+			}
+        };
+     
+        
+      
         HttpPost post = new HttpPost(url);
        
         Log.i("httpClient", "url:" + url);
         try {
         	
-            //DefaultHttpClient httpClient = new DefaultHttpClient();
-        	DefaultHttpClient httpClient = null;
+            DefaultHttpClient httpClient = new DefaultHttpClient();
+        	//DefaultHttpClient httpClient = null;
         	//HttpClient client = null;
         	Log.i("httpClient", "in if condition:" + url.indexOf("https"));
         	
             if (url.indexOf("https") == 0) {
             	Log.i("httpClient", "in if condition:" + url.indexOf("https"));
+            	
+            	SSLContext sslContext = SSLContext.getInstance("TLSv1");
+            	if(Build.VERSION.SDK_INT<23){
+                	Log.i("SSLSocketFactory", "Build.VERSION in if"+ Build.VERSION.SDK_INT);
+                    sslContext = SSLContext.getInstance("TLSv1.2");
+                    sslContext.init(null, new TrustManager[]{x509TrustManager}, null);
+                }
+                else{
+                	Log.i("SSLSocketFactory", "Build.VERSION in else"+ Build.VERSION.SDK_INT);
+                	sslContext = SSLContext.getInstance("TLSv1.2");
+                	sslContext.init(null, new TrustManager[]{x509TrustManager}, null);
+                }
+            	 //sslcontext.init(null,null,null);
+            	 //SSLSocketFactory sslSocketFactory = new NoSSLv3SocketFactory(sslcontext.getSocketFactory());
+            	 //SSLContext sslContext = SSLContext.getInstance("TLS");
+     	         //sslContext.init(null, new TrustManager[]{x509TrustManager}, null);
+     	        //SSLSocketFactory sslSocketFactory = new NoSSLv3SocketFactory(sslcontext.getSocketFactory());
+     	        SSLSocketFactory sslSocketFactory = new ExSSLSocketFactory(sslContext);
+       	        sslSocketFactory.setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+       	        ClientConnectionManager clientConnectionManager = httpClient.getConnectionManager();
+    	        SchemeRegistry schemeRegistry = clientConnectionManager.getSchemeRegistry();
+    	        schemeRegistry.register(new Scheme("https", sslSocketFactory, 443));
+    	        httpClient=new DefaultHttpClient(clientConnectionManager, httpClient.getParams());
+    	        HttpsURLConnection.setDefaultHostnameVerifier(hostnameVerifier);    	        
+    	        /*
                 SchemeRegistry registry = new SchemeRegistry();
-                // SSL All Allow
-                HostnameVerifier hostnameVerifier = org.apache.http.conn.ssl.SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER;
+                // SSL All Allow.
+                //HostnameVerifier hostnameVerifier = org.apache.http.conn.ssl.SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER;
+                
                 DefaultHttpClient client = new DefaultHttpClient();
                 SSLSocketFactory socketFactory = SSLSocketFactory.getSocketFactory();
-                socketFactory.setHostnameVerifier((X509HostnameVerifier) hostnameVerifier);
+                //socketFactory.setHostnameVerifier((X509HostnameVerifier) hostnameVerifier);
+                //socketFactory.setHostnameVerifier((X509HostnameVerifier) hostnameVerifier);
                 registry.register(new Scheme("https", socketFactory, 443));
                 SingleClientConnManager mgr = new SingleClientConnManager(client.getParams(), registry);
                 httpClient = new DefaultHttpClient(mgr, client.getParams());
-                // Set verifier
+                // Set verifierHttpsURLConnection.setDefaultHostnameVerifier(hostnameVerifier);
                 HttpsURLConnection.setDefaultHostnameVerifier(hostnameVerifier);
-            	
+            	*/
             } else {
             	Log.i("httpClient", "in else condition:" + url.indexOf("https"));
                 httpClient = new DefaultHttpClient();
@@ -261,7 +350,7 @@ public class AuthHttpClient {
             //HttpResponse httpResponse = client.execute(post);
             
             
-            Log.i("httpClient", "httpResponse.getStatusLine().getStatusCode() is " +httpResponse.getStatusLine().getStatusCode());
+            Log.i("htthttpClient", "pResponse.getStatusLine().getStatusCode() is " +httpResponse.getStatusLine().getStatusCode());
             if (httpResponse.getStatusLine().getStatusCode() == 200) {
             	
                 String strResult = EntityUtils.toString(httpResponse.getEntity());
@@ -284,53 +373,8 @@ public class AuthHttpClient {
             e.printStackTrace();
             OnAuthEvent(-100, "HttpPostError");
         }
-    	/*
-    	String resutString="";
-    	StringBuilder builder = new StringBuilder();
-    	HttpClient client = getHttpsClient(new DefaultHttpClient());
-    	HttpParams params = new BasicHttpParams();
-            HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
-            HttpProtocolParams.setContentCharset(params, HTTP.UTF_8);
-
-    		try {
-    			
-
-    			
-    			HttpPost httpPost = new HttpPost(url);
-    			httpPost.setParams(params);
-    			httpPost.setEntity(new UrlEncodedFormEntity(list, HTTP.UTF_8));
-    			HttpResponse response = client.execute(httpPost);
-    			StatusLine statusLine = response.getStatusLine();
-    			int statusCode = statusLine.getStatusCode();
-    			Log.i("httpPost", "line 308 statusCode:"+statusCode);
-    			
-    			
-
-    			if (statusCode == 200) {
-    				HttpEntity entityResponse = response.getEntity();
-    				InputStream content = entityResponse.getContent();
-    				BufferedReader reader = new BufferedReader(new InputStreamReader(content));
-    				String line=null;
-    				while ((line = reader.readLine()) != null) {
-    					builder.append(line+"\n");
-    				}
-    				reader.close();
-    				resutString=builder.toString();
-    				Log.d("httpspost","Successfuly :"+resutString);
-    			} else {
-    				Log.d("httpspost","Error seding data");
-    			}
-    		} catch (ConnectTimeoutException e) {
-    			Log.w("Connection Tome Out", e);
-    		} catch (ClientProtocolException e) {
-    			Log.w("ClientProtocolException", e);
-    		} catch (SocketException e) {
-    			Log.w("SocketException", e);
-    		} catch (IOException e) {
-    			Log.w("IOException", e);
-    		}
-    	
-        */
+        
+       
     }
     
    
@@ -888,39 +932,58 @@ public class AuthHttpClient {
         OnAuthEvent(-102,  MainActivity.getString(R.string.Data_Parse_Error_Type));
     }
     
-    
-    
-    
-    public static HttpClient getHttpsClient(HttpClient client) {
-        try{
-   		   X509TrustManager x509TrustManager = new X509TrustManager() { 	           
-   				@Override
-   				public void checkClientTrusted(X509Certificate[] chain,
-   						String authType) throws CertificateException {
-   				}
+    public class EasyX509TrustManager implements X509TrustManager {
 
-   				@Override
-   				public void checkServerTrusted(X509Certificate[] chain,
-   						String authType) throws CertificateException {
-   				}
+    	private X509TrustManager standardTrustManager = null;
 
-   				@Override
-   				public X509Certificate[] getAcceptedIssuers() {
-   					return null;
-   				}
-   	        };
-   	        
-   	        SSLContext sslContext = SSLContext.getInstance("TLS");
-   	        sslContext.init(null, new TrustManager[]{x509TrustManager}, null);
-   	        SSLSocketFactory sslSocketFactory = new ExSSLSocketFactory(sslContext);
-   	        sslSocketFactory.setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
-   	        ClientConnectionManager clientConnectionManager = client.getConnectionManager();
-   	        SchemeRegistry schemeRegistry = clientConnectionManager.getSchemeRegistry();
-   	        schemeRegistry.register(new Scheme("https", sslSocketFactory, 443));
-   	        return new DefaultHttpClient(clientConnectionManager, client.getParams());
-   	    } catch (Exception ex) {
-   	        return null;
-   	    }
-   	}
+    	/**
+    	 * Constructor for EasyX509TrustManager.
+    	 */
+    	public EasyX509TrustManager(KeyStore keystore) throws NoSuchAlgorithmException, KeyStoreException {
+    	    super();
+    	    TrustManagerFactory factory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+    	    factory.init(keystore);
+    	    TrustManager[] trustmanagers = factory.getTrustManagers();
+    	    if (trustmanagers.length == 0) {
+    	        throw new NoSuchAlgorithmException("no trust manager found");
+    	    }
+    	    this.standardTrustManager = (X509TrustManager) trustmanagers[0];
+    	}
+
+    	/**
+    	 * @see javax.net.ssl.X509TrustManager#checkClientTrusted(X509Certificate[],String authType)
+    	 */
+    	public void checkClientTrusted(X509Certificate[] certificates, String authType) throws CertificateException {
+    	    standardTrustManager.checkClientTrusted(certificates, authType);
+    	}
+
+    	/**
+    	 * @see javax.net.ssl.X509TrustManager#checkServerTrusted(X509Certificate[],String authType)
+    	 */
+    	public void checkServerTrusted(X509Certificate[] certificates, String authType) throws CertificateException {
+    	    if ((certificates != null) && (certificates.length == 1)) {
+    	        certificates[0].checkValidity();
+    	    } else {
+    	        standardTrustManager.checkServerTrusted(certificates, authType);
+    	    }
+    	}
+
+    	/**
+    	 * @see javax.net.ssl.X509TrustManager#getAcceptedIssuers()
+    	 */
+    	public X509Certificate[] getAcceptedIssuers() {
+    	    return this.standardTrustManager.getAcceptedIssuers();
+    	}
+    	}
+    
+    
+    
+    
+   
+    
+    
+    
+    
+    
 }
 

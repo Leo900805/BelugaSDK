@@ -1,4 +1,5 @@
 package com.beluga.loginpage;
+
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -18,7 +19,8 @@ import javax.net.ssl.X509TrustManager;
 import org.apache.http.conn.ssl.SSLSocketFactory;
 
 public class ExSSLSocketFactory extends SSLSocketFactory {
-  SSLContext sslContext = SSLContext.getInstance("TLS");
+  //SSLContext sslContext = SSLContext.getInstance("TLS");
+	SSLContext sslContext = SSLContext.getInstance("TLSv1.2");
 
     public ExSSLSocketFactory(KeyStore truststore) throws NoSuchAlgorithmException, KeyManagementException, KeyStoreException, UnrecoverableKeyException {
         super(truststore);

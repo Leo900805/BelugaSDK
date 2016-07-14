@@ -48,6 +48,10 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -75,8 +79,9 @@ public class AuthClientActivity extends Activity implements OnClickListener,
     private Button pwdShowableBtn;
     private View mMenuLayout;
     
-    private ImageButton menuFabBtn, quickSignUpBtn, signUpBtn, 
-    					modPwdBtn, signinButton;  
+    private ImageButton menuFabBtn; 
+    private Button  modPwdBtn,signUpBtn, quickSignUpBtn, signinButton;
+    
     
     private Boolean isSelectedFabBtn = false;
 
@@ -242,11 +247,11 @@ public class AuthClientActivity extends Activity implements OnClickListener,
         this.mMenuLayout = findViewById(R.id.menu_layout);
         
         //Quick register button
-        this.quickSignUpBtn = (ImageButton)this.findViewById(R.id.quick_sign_up_btn);
+        this.quickSignUpBtn = (Button)this.findViewById(R.id.quick_sign_up_btn);
         this.quickSignUpBtn.setOnClickListener(this);
         
         //General register button
-        this.signUpBtn = (ImageButton)this.findViewById(R.id.sign_up_btn);
+        this.signUpBtn = (Button)this.findViewById(R.id.sign_up_btn);
         this.signUpBtn.setOnClickListener(this);
            
         //General login button 
@@ -261,12 +266,12 @@ public class AuthClientActivity extends Activity implements OnClickListener,
         
             
         //Modify password button
-        this.modPwdBtn = (ImageButton)this.findViewById(R.id.modify_btn);
+        this.modPwdBtn = (Button)this.findViewById(R.id.modify_btn);
         Log.i("In login page", "modPwdBtn v is " + this.modPwdBtn);
         this.modPwdBtn.setOnClickListener(this);
               
         //google button 
-        signinButton = (ImageButton) findViewById(R.id.google_sign_in_button);
+        signinButton = (Button) findViewById(R.id.google_sign_in_button);
 		signinButton.setOnClickListener(this);
 		
 		pwdShowableBtn = (Button)this.findViewById(R.id.pwd_button);
@@ -394,7 +399,14 @@ public class AuthClientActivity extends Activity implements OnClickListener,
         //if(AuthHttpClient.AuthChannel == AuthHttpClient.LOW_AUTH){
         	//AuthHttpClient.ApiUrl = "http://api.belugame.com/api/";
         //}else if(AuthHttpClient.AuthChannel == AuthHttpt.STRONG_AUTH){
-        	AuthHttpClient.ApiUrl = "http://games.belugame.com/api/";
+        	AuthHttpClient.ApiUrl = "https://games.belugame.com/api/";
+        	//try {
+				//AuthHttpClient.caInput = new BufferedInputStream(getResources().getAssets().open("cacertificate.crt"));
+				//Log.i("laogin", "Ca :"+getResources().getAssets().open("CA-certificate.crt"));
+			//} catch (IOException e) {
+				// TODO Auto-generated catch block
+				//e.printStackTrace();
+			//}
         	//AuthHttpClient.ApiUrl = "http://games.belugame.com/api/";
         //}else{
         	//Log.d("TAG", "AuthChannel is " + AuthHttpClient.AuthChannel+". This auth channel does not exist.");
