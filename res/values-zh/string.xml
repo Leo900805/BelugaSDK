@@ -57,4 +57,6 @@
     <string name="FAB_LABEL_TEXT">注册方式</string>
     <string name="FB_BUTTON_LABEL_TEXT">Faccebook 登录</string>
     <string name="GG_BUTTON_LABEL_TEXT">Google 登入</string>
+    <string name="GG_DIALOG_CONTENT_TEXT">您使用过Google登入，是否继续使用Google登入？</string>
+    <string name="FB_DIALOG_CONTENT_TEXT">您使用过Facebook登入，是否继续使用Facebook登入？</string>
 </resources>

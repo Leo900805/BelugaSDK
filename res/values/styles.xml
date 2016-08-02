@@ -24,5 +24,22 @@
         <item name="android:background">@color/mb_gray</item>
     </style>
     
+   
+    <style name="Item.service_open_btn">
+        <item name="android:layout_width">50dp</item>
+        <item name="android:layout_height">10dp</item>
+        <item name="android:background">@drawable/service_open_button</item>
+    </style>
+    
+    <style name="Item.service_bar">
+        <item name="android:background">@drawable/select_bar</item>
+    </style>
+    
+    <style name="Item.circle">
+        <item name="android:layout_width">50dp</item>
+        <item name="android:layout_height">10dp</item>
+        <item name="android:background">@drawable/circle</item>
+    </style>
+    
 
 </resources>

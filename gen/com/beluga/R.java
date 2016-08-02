@@ -837,17 +837,20 @@ containing a value of this type.
         public static int register_pic=0x7f020072;
         public static int return_circle_btn=0x7f020073;
         public static int return_pic=0x7f020074;
-        public static int sign_up_circle_bg=0x7f020075;
-        public static int su_btn_bg=0x7f020076;
-        public static int w_add=0x7f020077;
-        public static int w_gg=0x7f020078;
-        public static int w_mod=0x7f020079;
-        public static int w_qregis=0x7f02007a;
-        public static int w_regis=0x7f02007b;
-        public static int white_alpha=0x7f02007c;
-        public static int white_bg=0x7f02007d;
+        public static int select_bar=0x7f020075;
+        public static int service_open_button=0x7f020076;
+        public static int sign_up_circle_bg=0x7f020077;
+        public static int su_btn_bg=0x7f020078;
+        public static int w_add=0x7f020079;
+        public static int w_gg=0x7f02007a;
+        public static int w_mod=0x7f02007b;
+        public static int w_qregis=0x7f02007c;
+        public static int w_regis=0x7f02007d;
+        public static int white_alpha=0x7f02007e;
+        public static int white_bg=0x7f02007f;
     }
     public static final class id {
+        public static int GridLayout1=0x7f090070;
         public static int adjust_height=0x7f090007;
         public static int adjust_width=0x7f090008;
         public static int advertView=0x7f09003f;
@@ -943,17 +946,23 @@ containing a value of this type.
         public static int sandbox=0x7f090011;
         public static int satellite=0x7f09000c;
         public static int selectionDetails=0x7f090015;
+        public static int service_btn1=0x7f090071;
+        public static int service_btn2=0x7f090072;
+        public static int service_btn3=0x7f090073;
+        public static int service_btn4=0x7f090074;
+        public static int service_btn5=0x7f090075;
+        public static int service_frame_layout=0x7f09006f;
         public static int sign_up_btn=0x7f090049;
-        public static int signup_bg_side=0x7f09006f;
-        public static int signupacctextView=0x7f090071;
-        public static int signupacctextViewTextView=0x7f090070;
-        public static int signupcheckBox=0x7f090076;
-        public static int signupcomfirmbtn=0x7f090078;
-        public static int signupnewpwdTextView=0x7f090074;
-        public static int signupnewpwdeditText=0x7f090075;
-        public static int signuppwdTextView=0x7f090072;
-        public static int signuppwdeditText=0x7f090073;
-        public static int signupreturnbtn=0x7f090077;
+        public static int signup_bg_side=0x7f090076;
+        public static int signupacctextView=0x7f090078;
+        public static int signupacctextViewTextView=0x7f090077;
+        public static int signupcheckBox=0x7f09007d;
+        public static int signupcomfirmbtn=0x7f09007f;
+        public static int signupnewpwdTextView=0x7f09007b;
+        public static int signupnewpwdeditText=0x7f09007c;
+        public static int signuppwdTextView=0x7f090079;
+        public static int signuppwdeditText=0x7f09007a;
+        public static int signupreturnbtn=0x7f09007e;
         public static int slide=0x7f090029;
         public static int small=0x7f09002b;
         public static int standard=0x7f090002;
@@ -997,8 +1006,10 @@ containing a value of this type.
         public static int place_autocomplete_progress=0x7f030013;
         public static int quick_sign_up_page_large_size=0x7f030014;
         public static int quick_sign_up_page_v2=0x7f030015;
-        public static int sign_up_large_size=0x7f030016;
-        public static int sign_up_v2=0x7f030017;
+        public static int service_grid_layout=0x7f030016;
+        public static int service_layout=0x7f030017;
+        public static int sign_up_large_size=0x7f030018;
+        public static int sign_up_v2=0x7f030019;
     }
     public static final class raw {
         public static int gtm_analytics=0x7f050000;
@@ -1024,7 +1035,9 @@ containing a value of this type.
         public static int Enter_Pwd_Type=0x7f07003d;
         public static int FAB_LABEL_TEXT=0x7f070072;
         public static int FB_BUTTON_LABEL_TEXT=0x7f070073;
+        public static int FB_DIALOG_CONTENT_TEXT=0x7f070076;
         public static int GG_BUTTON_LABEL_TEXT=0x7f070074;
+        public static int GG_DIALOG_CONTENT_TEXT=0x7f070075;
         public static int I_Agree_and_Read_Type=0x7f070041;
         public static int Login_Button_Text=0x7f070062;
         public static int Login_Page_Passsword_Text=0x7f07006a;
@@ -1059,8 +1072,8 @@ containing a value of this type.
         public static int Write_DB_failed_Type=0x7f07004c;
         public static int Wrong_AppID_Type=0x7f070044;
         public static int accept=0x7f070002;
-        public static int app_id=0x7f070076;
-        public static int app_name=0x7f070075;
+        public static int app_id=0x7f070078;
+        public static int app_name=0x7f070077;
         /**  Brand name for Facebook [DO NOT TRANSLATE] 
          */
         public static int auth_google_play_services_client_facebook_display_name=0x7f070007;
@@ -1192,7 +1205,7 @@ containing a value of this type.
         /**  Long form sign-in button text [CHAR LIMIT=30] 
          */
         public static int common_signin_button_text_long=0x7f070023;
-        public static int content_description=0x7f070077;
+        public static int content_description=0x7f070079;
         public static int create_calendar_message=0x7f070005;
         public static int create_calendar_title=0x7f070004;
         public static int decline=0x7f070003;
@@ -1244,6 +1257,9 @@ containing a value of this type.
         public static int AppTheme=0x7f06001d;
         public static int Item=0x7f06001e;
         public static int Item_FrameLayout=0x7f06001f;
+        public static int Item_circle=0x7f060022;
+        public static int Item_service_bar=0x7f060021;
+        public static int Item_service_open_btn=0x7f060020;
         public static int MessengerButton=0x7f060007;
         public static int MessengerButton_Blue=0x7f060008;
         public static int MessengerButton_Blue_Large=0x7f060009;

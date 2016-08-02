@@ -36,8 +36,7 @@ import com.beluga.loginpage.datacontrol.UsedString;
 import com.facebook.AccessToken;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
-//import com.facebook.login.LoginManager;
-
+import com.facebook.login.LoginManager;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -48,9 +47,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -128,6 +124,7 @@ public class AuthClientActivity extends Activity implements OnClickListener,
     				  scaleShowForFabBtn, translateShow;
     
     private RelativeLayout loginSideRelativeLayout;
+ 
     
     
     @Override
@@ -356,16 +353,52 @@ public class AuthClientActivity extends Activity implements OnClickListener,
         	//setButtonEnable(true);
         }else{
         	Log.i("Check fb login status", "already logged in");
-        	//setButtonEnable(false);
-        	//developer Facebook logout setting
-        	//LoginManager.getInstance().logOut();
-        	//get facebook ID
-        	fbId = InformationProcess.getThirdPartyInfo(this);
-        	Log.i("Check fb login status", "fbID :"+ fbId);
-        	//auto login
-        	authhttpclient.Auth_FacebookLoignRegister(fbId);
+        	showAutoLoginDialog(Keys.Facebook.toString());
         } 
         
+    }
+	
+	//ask auto login Dialog show method
+    private void showAutoLoginDialog(final String str){
+    	
+    	final Activity act = this;
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        
+        if(str.equals(Keys.Facebook.toString())){
+        	builder.setMessage(UsedString.getDialogContentString(getApplicationContext(), Keys.Facebook.toString()));
+    	}else if(str.equals(Keys.Google.toString())){
+    		builder.setMessage(UsedString.getDialogContentString(getApplicationContext(), Keys.Google.toString()));
+    	}
+        
+        
+        //set confirm button in dialog and set button click event
+        builder.setPositiveButton(R.string.Confirm_Button_Text, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            	if(str.equals(Keys.Facebook.toString())){
+            		fbId = InformationProcess.getThirdPartyInfo(act);
+            		authhttpclient.Auth_FacebookLoignRegister(fbId);
+            		dialog.dismiss();
+            	}else if(str.equals(Keys.Google.toString())){
+            		signIn();
+            		dialog.dismiss();
+            	}
+            }
+        });
+        builder.setNegativeButton(R.string.Return_Button_Text, new DialogInterface.OnClickListener(){
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				if(str.equals(Keys.Facebook.toString())){
+					LoginManager.getInstance().logOut();
+				}
+				
+				// TODO Auto-generated method stub
+				dialog.dismiss();
+			}
+        	
+        });
+        builder.create().show();
     }
     
     //Maintain Dialog show method
@@ -399,7 +432,7 @@ public class AuthClientActivity extends Activity implements OnClickListener,
         //if(AuthHttpClient.AuthChannel == AuthHttpClient.LOW_AUTH){
         	//AuthHttpClient.ApiUrl = "http://api.belugame.com/api/";
         //}else if(AuthHttpClient.AuthChannel == AuthHttpt.STRONG_AUTH){
-        	AuthHttpClient.ApiUrl = "https://games.belugame.com/api/";
+        	AuthHttpClient.ApiUrl = "http://games.belugame.com/api/";
         	//try {
 				//AuthHttpClient.caInput = new BufferedInputStream(getResources().getAssets().open("cacertificate.crt"));
 				//Log.i("laogin", "Ca :"+getResources().getAssets().open("CA-certificate.crt"));
@@ -666,31 +699,7 @@ public class AuthClientActivity extends Activity implements OnClickListener,
         }
     }
     
-    //回到遊戲 並回傳帳號與uid
-    private void SetFinish(String thisuserid,String thisuid,String token,String thispwd, String accountBound)
-    {
-        Intent resultdata = new Intent();
-        Bundle bundle = new Bundle();
-        bundle.putString("type", "LOGIN");
-        bundle.putString("userid", thisuserid);
-        bundle.putString("uid", thisuid);
-        bundle.putString("pwd", thispwd);
-        bundle.putString("accountBound", accountBound);
-        bundle.putString("token", token);
-        
-        resultdata.putExtras(bundle);
-        setResult(Activity.RESULT_OK, resultdata); //回傳RESULT_OK
-
-        Handler handler = new Handler();
-        Runnable delayRunnable =  new Runnable() {
-            @Override
-            public void run() {
-                // TODO Auto-generated method stub
-                finish();
-            }
-        };
-        handler.postDelayed(delayRunnable, 700);
-    }
+    
     
     private void SetFinish(String Data){
     	 Intent resultdata = new Intent();
@@ -945,7 +954,8 @@ public class AuthClientActivity extends Activity implements OnClickListener,
 		}else{
 			if(this.cancelLogin != RESULT_CANCELED){
 				//setButtonEnable(false);
-				signIn();
+				showAutoLoginDialog(Keys.Google.toString());
+				//signIn();
 			}else{
 				Log.i("google login status", "canccel login");
 			}

@@ -60,4 +60,6 @@
     <string name="FAB_LABEL_TEXT">Login Mode</string>
     <string name="FB_BUTTON_LABEL_TEXT">Login with Facebook</string>
     <string name="GG_BUTTON_LABEL_TEXT">Login with Google</string>
+    <string name="GG_DIALOG_CONTENT_TEXT">You\'ve used Google login before, whether to continue to use Google login?</string>
+    <string name="FB_DIALOG_CONTENT_TEXT">You\'ve used Facebook login before, whether to continue to use Facebook login?</string>
 </resources>

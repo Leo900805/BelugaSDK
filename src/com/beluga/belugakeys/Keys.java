@@ -22,6 +22,10 @@ public enum Keys {
     Timestamp,
     ExpirationTime,
     FunctionName,
-    JsonData
+    JsonData,
+    Google,
+    Facebook,
+    AppLinkUrl,
+    AppLinkPreviewImageUrl
 }
 

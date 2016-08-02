@@ -173,49 +173,53 @@ public class UsedString {
         {
             case -1:
                 Changepwdstr = context.getResources().getString(R.string.Wrong_AppID_Type);
-                //Changepwdstr = "appid�航炊";
                 break;
             case -2:
                 Changepwdstr = context.getResources().getString(R.string.Ac_Or_Pwd_Length_Err_Type);
-                //Changepwdstr =  "撣唾���撖Ⅳ�撖Ⅳ�瑕漲�航炊";
                 break;
             case -3:
                 Changepwdstr = context.getResources().getString(R.string.Ac_Or_Pwd_Err_Type);
-                //Changepwdstr = "撣唾���蝣潮隤�;
                 break;
             case -4:
                 Changepwdstr = context.getResources().getString(R.string.New_Pwd_Length_Err_Type);
-                //Changepwdstr = "�啣�蝣潮摨阡隤�;
                 break;
             case -5:
                 Changepwdstr = context.getResources().getString(R.string.Change_Pwd_Or_Contact_Customer_Service_Type);
-                //Changepwdstr =  "撖Ⅳ�航炊,隢���乩�甈∩誑敺�靽格撖Ⅳ�晾摰Ｘ�撠";
                 break;
             case -6:
                 Changepwdstr = context.getResources().getString(R.string.Ac_With_Illegal_Char_Type);
-                //Changepwdstr = "撣唾���瘜���;
                 break;
             case -7:
                 Changepwdstr = context.getResources().getString(R.string.Pwd_With_Illegal_Char_Type);
-                //Changepwdstr = "撖Ⅳ��瘜���;
                 break;
             case -8:
                 Changepwdstr = context.getResources().getString(R.string.New_Pwd_With_Illegal_Char_Type);
-                //Changepwdstr =  "�啣�蝣潭���摮�";
                 break;
             case 1:
                 Changepwdstr = context.getResources().getString(R.string.Success_Change_Pwd_Type);
-                //Changepwdstr =  "靽格��";
                 break;
             case -97:
                 Changepwdstr = context.getResources().getString(R.string.Checksum_Err_Type);
-                //Changepwdstr =  "瑼Ｘ蝣潮隤�;
                 break;
             case -98:
                 Changepwdstr = context.getResources().getString(R.string.System_Err_Type);
-                //Changepwdstr =  "蝟餌絞�航炊";
                 break;
         }
         return Changepwdstr;
+    }
+    
+    public static String getDialogContentString(Context context, String str){
+    	String Content ="";
+    	
+    	switch(str){
+    	case "Google":
+    		Content = context.getResources().getString(R.string.GG_DIALOG_CONTENT_TEXT);
+    		break;
+    	case "Facebook":
+    		Content = context.getResources().getString(R.string.FB_DIALOG_CONTENT_TEXT);
+    		break;
+    	}
+    	
+    	return Content;
     }
 }
