@@ -17,7 +17,7 @@ import android.util.Log;
 
 public class FacebookFriendsInviteActivity extends Activity {
 	final String TAG = "FacebookFriendsInviteActivity";
-	
+	CallbackManager sCallbackManager;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -38,7 +38,7 @@ public class FacebookFriendsInviteActivity extends Activity {
 		        
 		        
 		        AppInviteDialog appInviteDialog = new AppInviteDialog(this);
-		        CallbackManager sCallbackManager = CallbackManager.Factory.create();
+		        sCallbackManager = CallbackManager.Factory.create();
 		        appInviteDialog.registerCallback(sCallbackManager, new FacebookCallback<AppInviteDialog.Result>()
 		        {
 		           
@@ -69,10 +69,18 @@ public class FacebookFriendsInviteActivity extends Activity {
 
 		        //AppInviteDialog.show(this, content);
 		        appInviteDialog.show(content);
+		        Log.i("fb invite", "appInviteDialog.getRequestCode():"+appInviteDialog.getRequestCode());
 		        finish();
 		    }
 		
 		
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		super.onActivityResult(requestCode, resultCode, data);
+		 sCallbackManager.onActivityResult(requestCode, resultCode,data);
 	}
 	
 	

@@ -77,6 +77,77 @@ containing a value of this type.
 </table>
          */
         public static int appTheme=0x7f01001a;
+        /** <p>Must be a floating point value, such as "<code>1.2</code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static int arc_angle=0x7f01003b;
+        /** <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
+Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
+in (inches), mm (millimeters).
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static int arc_axisRadius=0x7f010038;
+        /** <p>Must be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
+"<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static int arc_color=0x7f010036;
+        /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static int arc_freeAngle=0x7f010039;
+        /** <p>Must be one or more (separated by '|') of the following constant values.</p>
+<table>
+<colgroup align="left" />
+<colgroup align="left" />
+<colgroup align="left" />
+<tr><th>Constant</th><th>Value</th><th>Description</th></tr>
+<tr><td><code>top</code></td><td>0x30</td><td> Value same as the android:gravity </td></tr>
+<tr><td><code>bottom</code></td><td>0x50</td><td></td></tr>
+<tr><td><code>left</code></td><td>0x03</td><td></td></tr>
+<tr><td><code>right</code></td><td>0x05</td><td></td></tr>
+<tr><td><code>center_vertical</code></td><td>0x10</td><td></td></tr>
+<tr><td><code>center_horizontal</code></td><td>0x01</td><td></td></tr>
+<tr><td><code>center</code></td><td>0x11</td><td></td></tr>
+<tr><td><code>start</code></td><td>0x00800003</td><td></td></tr>
+<tr><td><code>end</code></td><td>0x00800005</td><td></td></tr>
+</table>
+         */
+        public static int arc_origin=0x7f010035;
+        /** <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
+Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
+in (inches), mm (millimeters).
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static int arc_radius=0x7f010037;
+        /** <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static int arc_reverseAngle=0x7f01003a;
         /** <p>Must be one of the following constant values.</p>
 <table>
 <colgroup align="left" />
@@ -590,36 +661,40 @@ containing a value of this type.
         public static int com_facebook_likeview_text_color=0x7f080025;
         public static int com_facebook_share_button_text_color=0x7f080028;
         public static int common_action_bar_splitter=0x7f080008;
-        public static int common_google_signin_btn_text_dark=0x7f080054;
+        public static int common_google_signin_btn_text_dark=0x7f080067;
         /**  Google Sign-in Button Colors 
          */
         public static int common_google_signin_btn_text_dark_default=0x7f080009;
         public static int common_google_signin_btn_text_dark_disabled=0x7f08000b;
         public static int common_google_signin_btn_text_dark_focused=0x7f08000c;
         public static int common_google_signin_btn_text_dark_pressed=0x7f08000a;
-        public static int common_google_signin_btn_text_light=0x7f080055;
+        public static int common_google_signin_btn_text_light=0x7f080068;
         public static int common_google_signin_btn_text_light_default=0x7f08000d;
         public static int common_google_signin_btn_text_light_disabled=0x7f08000f;
         public static int common_google_signin_btn_text_light_focused=0x7f080010;
         public static int common_google_signin_btn_text_light_pressed=0x7f08000e;
-        public static int common_plus_signin_btn_text_dark=0x7f080056;
+        public static int common_plus_signin_btn_text_dark=0x7f080069;
         /**  Google Plus Sign-in Button Colors 
          */
         public static int common_plus_signin_btn_text_dark_default=0x7f080000;
         public static int common_plus_signin_btn_text_dark_disabled=0x7f080002;
         public static int common_plus_signin_btn_text_dark_focused=0x7f080003;
         public static int common_plus_signin_btn_text_dark_pressed=0x7f080001;
-        public static int common_plus_signin_btn_text_light=0x7f080057;
+        public static int common_plus_signin_btn_text_light=0x7f08006a;
         public static int common_plus_signin_btn_text_light_default=0x7f080004;
         public static int common_plus_signin_btn_text_light_disabled=0x7f080006;
         public static int common_plus_signin_btn_text_light_focused=0x7f080007;
         public static int common_plus_signin_btn_text_light_pressed=0x7f080005;
+        public static int cyan_500=0x7f080056;
         public static int divider=0x7f08004c;
+        public static int green_500=0x7f080058;
         public static int green_light=0x7f080040;
         public static int holo_blue_bright=0x7f08003f;
         public static int holo_orange_light=0x7f080041;
         public static int holo_red_light=0x7f080042;
         public static int icons=0x7f08004b;
+        public static int light_blue_500=0x7f080055;
+        public static int light_green_500=0x7f080059;
         public static int mb_blue=0x7f080035;
         public static int mb_blue_dark=0x7f080036;
         public static int mb_gray=0x7f08003e;
@@ -632,6 +707,12 @@ containing a value of this type.
         public static int mb_red_dark=0x7f08003d;
         public static int mb_white=0x7f080034;
         public static int orange_dark=0x7f080053;
+        public static int path_black=0x7f080064;
+        public static int path_blue=0x7f080063;
+        public static int path_green=0x7f080065;
+        public static int path_orange=0x7f080062;
+        public static int path_primary=0x7f080061;
+        public static int path_purple=0x7f080066;
         public static int pink=0x7f08004f;
         public static int place_autocomplete_prediction_primary_text=0x7f080013;
         public static int place_autocomplete_prediction_primary_text_highlight=0x7f080014;
@@ -639,6 +720,7 @@ containing a value of this type.
         public static int place_autocomplete_search_hint=0x7f080012;
         public static int place_autocomplete_search_text=0x7f080011;
         public static int place_autocomplete_separator=0x7f080016;
+        public static int pressed=0x7f080054;
         public static int primary=0x7f080046;
         public static int primary_dark=0x7f080047;
         public static int primary_light=0x7f080048;
@@ -647,6 +729,14 @@ containing a value of this type.
         public static int red=0x7f080052;
         public static int scrim=0x7f080043;
         public static int secondary_text=0x7f08004a;
+        public static int teal_500=0x7f080057;
+        public static int tumblr_blue=0x7f08005f;
+        public static int tumblr_green=0x7f08005c;
+        public static int tumblr_grey=0x7f08005e;
+        public static int tumblr_orange=0x7f08005b;
+        public static int tumblr_primary=0x7f08005a;
+        public static int tumblr_red=0x7f080060;
+        public static int tumblr_white=0x7f08005d;
         public static int wallet_bright_foreground_disabled_holo_light=0x7f08001c;
         /** 
          Wallet colors to support consistent Wallet fragment holo dark UI in client application
@@ -665,8 +755,8 @@ containing a value of this type.
         public static int wallet_hint_foreground_holo_light=0x7f08001e;
         public static int wallet_holo_blue_light=0x7f080022;
         public static int wallet_link_text_light=0x7f080023;
-        public static int wallet_primary_text_holo_light=0x7f080058;
-        public static int wallet_secondary_text_holo_dark=0x7f080059;
+        public static int wallet_primary_text_holo_light=0x7f08006b;
+        public static int wallet_secondary_text_holo_dark=0x7f08006c;
         public static int white=0x7f080044;
         public static int white_smoke=0x7f080045;
     }
@@ -695,6 +785,26 @@ containing a value of this type.
         public static int com_facebook_share_button_text_size=0x7f0a001b;
         public static int com_facebook_tooltip_horizontal_padding=0x7f0a001c;
         public static int fab_margin=0x7f0a001f;
+        public static int item_circle_size_large=0x7f0a0037;
+        public static int item_circle_size_medium=0x7f0a0038;
+        public static int item_circle_size_path=0x7f0a003b;
+        public static int item_circle_size_small=0x7f0a0039;
+        public static int item_circle_size_tumblr=0x7f0a003a;
+        public static int item_font_size_large=0x7f0a003c;
+        public static int item_font_size_medium=0x7f0a003d;
+        public static int item_font_size_path=0x7f0a0040;
+        public static int item_font_size_small=0x7f0a003e;
+        public static int item_font_size_tumblr=0x7f0a003f;
+        public static int layout_child_offset_large=0x7f0a0032;
+        public static int layout_child_offset_medium=0x7f0a0033;
+        public static int layout_child_offset_path=0x7f0a0036;
+        public static int layout_child_offset_small=0x7f0a0034;
+        public static int layout_child_offset_tumblr=0x7f0a0035;
+        public static int layout_radius_large=0x7f0a002d;
+        public static int layout_radius_medium=0x7f0a002e;
+        public static int layout_radius_path=0x7f0a0031;
+        public static int layout_radius_small=0x7f0a002f;
+        public static int layout_radius_tumblr=0x7f0a0030;
         public static int mb_corner_radius_2=0x7f0a0020;
         public static int mb_corner_radius_4=0x7f0a0021;
         public static int mb_height_30=0x7f0a002a;
@@ -794,70 +904,85 @@ containing a value of this type.
         public static int common_plus_signin_btn_text_light_normal=0x7f020047;
         public static int common_plus_signin_btn_text_light_pressed=0x7f020048;
         public static int custom_btn_genoa=0x7f020049;
-        public static int edit_text_bg=0x7f02004a;
-        public static int edit_text_default_bg2=0x7f02004b;
-        public static int edittext_default_bg=0x7f02004c;
-        public static int fb_btn=0x7f02004d;
-        public static int fb_circle_bg=0x7f02004e;
-        public static int gg_circle_bg=0x7f02004f;
-        public static int gg_icon=0x7f020050;
-        public static int gpassword=0x7f020051;
-        public static int guser=0x7f020052;
-        public static int ic_done=0x7f020053;
-        public static int ic_launcher=0x7f020054;
-        public static int ic_plusone_medium_off_client=0x7f020055;
-        public static int ic_plusone_small_off_client=0x7f020056;
-        public static int ic_plusone_standard_off_client=0x7f020057;
-        public static int ic_plusone_tall_off_client=0x7f020058;
-        public static int label_bg=0x7f020059;
-        public static int login_btn_bg=0x7f02005a;
-        public static int login_btn_bg_v2=0x7f02005b;
-        public static int login_page_landscape=0x7f02005c;
-        public static int messenger_bubble_large_blue=0x7f02005d;
-        public static int messenger_bubble_large_white=0x7f02005e;
-        public static int messenger_bubble_small_blue=0x7f02005f;
-        public static int messenger_bubble_small_white=0x7f020060;
-        public static int messenger_button_blue_bg_round=0x7f020061;
-        public static int messenger_button_blue_bg_selector=0x7f020062;
-        public static int messenger_button_send_round_shadow=0x7f020063;
-        public static int messenger_button_white_bg_round=0x7f020064;
-        public static int messenger_button_white_bg_selector=0x7f020065;
-        public static int mod_circle_bg=0x7f020066;
-        public static int mod_pwd_pic=0x7f020067;
-        public static int mp_btn_bg=0x7f020068;
-        public static int oval_button=0x7f020069;
-        public static int places_ic_clear=0x7f02006a;
-        public static int places_ic_search=0x7f02006b;
-        public static int powered_by_google_dark=0x7f02006c;
-        public static int powered_by_google_light=0x7f02006d;
-        public static int q_regis=0x7f02006e;
-        public static int q_register_pic=0x7f02006f;
-        public static int q_sign_up_circle_bg=0x7f020070;
-        public static int qs_btn_bg=0x7f020071;
-        public static int register_pic=0x7f020072;
-        public static int return_circle_btn=0x7f020073;
-        public static int return_pic=0x7f020074;
-        public static int select_bar=0x7f020075;
-        public static int service_open_button=0x7f020076;
-        public static int sign_up_circle_bg=0x7f020077;
-        public static int su_btn_bg=0x7f020078;
-        public static int w_add=0x7f020079;
-        public static int w_gg=0x7f02007a;
-        public static int w_mod=0x7f02007b;
-        public static int w_qregis=0x7f02007c;
-        public static int w_regis=0x7f02007d;
-        public static int white_alpha=0x7f02007e;
-        public static int white_bg=0x7f02007f;
+        public static int custom_service_icon=0x7f02004a;
+        public static int edit_text_bg=0x7f02004b;
+        public static int edit_text_default_bg2=0x7f02004c;
+        public static int edittext_default_bg=0x7f02004d;
+        public static int fb_btn=0x7f02004e;
+        public static int fb_circle_bg=0x7f02004f;
+        public static int gg_circle_bg=0x7f020050;
+        public static int gg_icon=0x7f020051;
+        public static int gpassword=0x7f020052;
+        public static int guser=0x7f020053;
+        public static int ic_done=0x7f020054;
+        public static int ic_launcher=0x7f020055;
+        public static int ic_plusone_medium_off_client=0x7f020056;
+        public static int ic_plusone_small_off_client=0x7f020057;
+        public static int ic_plusone_standard_off_client=0x7f020058;
+        public static int ic_plusone_tall_off_client=0x7f020059;
+        public static int label_bg=0x7f02005a;
+        public static int layout_underline=0x7f02005b;
+        public static int left=0x7f02005c;
+        public static int login_btn_bg=0x7f02005d;
+        public static int login_btn_bg_v2=0x7f02005e;
+        public static int login_page_landscape=0x7f02005f;
+        public static int messenger_bubble_large_blue=0x7f020060;
+        public static int messenger_bubble_large_white=0x7f020061;
+        public static int messenger_bubble_small_blue=0x7f020062;
+        public static int messenger_bubble_small_white=0x7f020063;
+        public static int messenger_button_blue_bg_round=0x7f020064;
+        public static int messenger_button_blue_bg_selector=0x7f020065;
+        public static int messenger_button_send_round_shadow=0x7f020066;
+        public static int messenger_button_white_bg_round=0x7f020067;
+        public static int messenger_button_white_bg_selector=0x7f020068;
+        public static int mod_circle_bg=0x7f020069;
+        public static int mod_pwd_pic=0x7f02006a;
+        public static int mp_btn_bg=0x7f02006b;
+        public static int oval_button=0x7f02006c;
+        public static int places_ic_clear=0x7f02006d;
+        public static int places_ic_search=0x7f02006e;
+        public static int powered_by_google_dark=0x7f02006f;
+        public static int powered_by_google_light=0x7f020070;
+        public static int q_regis=0x7f020071;
+        public static int q_register_pic=0x7f020072;
+        public static int q_sign_up_circle_bg=0x7f020073;
+        public static int qs_btn_bg=0x7f020074;
+        public static int register_pic=0x7f020075;
+        public static int return_circle_btn=0x7f020076;
+        public static int return_pic=0x7f020077;
+        public static int right=0x7f020078;
+        public static int select_bar=0x7f020079;
+        public static int service_close=0x7f02007a;
+        public static int service_icon=0x7f02007b;
+        public static int service_open_button=0x7f02007c;
+        public static int sign_up_circle_bg=0x7f02007d;
+        public static int su_btn_bg=0x7f02007e;
+        public static int tumblr_blue_oval=0x7f02007f;
+        public static int tumblr_green_oval=0x7f020080;
+        public static int tumblr_grey_oval=0x7f020081;
+        public static int tumblr_menu_oval=0x7f020082;
+        public static int tumblr_orange_oval=0x7f020083;
+        public static int tumblr_red_oval=0x7f020084;
+        public static int tumblr_white_oval=0x7f020085;
+        public static int w_add=0x7f020086;
+        public static int w_gg=0x7f020087;
+        public static int w_mod=0x7f020088;
+        public static int w_qregis=0x7f020089;
+        public static int w_regis=0x7f02008a;
+        public static int white_alpha=0x7f02008b;
+        public static int white_bg=0x7f02008c;
     }
     public static final class id {
-        public static int GridLayout1=0x7f090070;
+        public static int acount_linear_layout=0x7f09007b;
+        public static int acount_text_view=0x7f09007d;
         public static int adjust_height=0x7f090007;
         public static int adjust_width=0x7f090008;
-        public static int advertView=0x7f09003f;
+        public static int advertView=0x7f090043;
         public static int android_pay=0x7f090028;
         public static int android_pay_dark=0x7f09001f;
         public static int android_pay_light=0x7f090020;
         public static int android_pay_light_with_border=0x7f090021;
+        public static int arc_layout=0x7f09007a;
         public static int auto=0x7f090004;
         public static int book_now=0x7f090018;
         public static int bottom=0x7f090031;
@@ -869,23 +994,34 @@ containing a value of this type.
         public static int buy_with_google=0x7f09001b;
         public static int cast_notification_id=0x7f090000;
         public static int center=0x7f090034;
+        public static int center_horizontal=0x7f090037;
+        public static int center_vertical=0x7f090038;
         public static int classic=0x7f090022;
-        public static int close_tv=0x7f090050;
-        public static int com_facebook_body_frame=0x7f090039;
-        public static int com_facebook_button_xout=0x7f09003b;
-        public static int com_facebook_fragment_container=0x7f090037;
-        public static int com_facebook_login_activity_progress_bar=0x7f090038;
-        public static int com_facebook_tooltip_bubble_view_bottom_pointer=0x7f09003d;
-        public static int com_facebook_tooltip_bubble_view_text_body=0x7f09003c;
-        public static int com_facebook_tooltip_bubble_view_top_pointer=0x7f09003a;
-        public static int contextSideLinearLayout=0x7f090055;
+        public static int close_linear_layout=0x7f090081;
+        public static int close_service_btn=0x7f090082;
+        public static int close_service_text_view=0x7f090083;
+        public static int close_tv=0x7f090054;
+        public static int com_facebook_body_frame=0x7f09003d;
+        public static int com_facebook_button_xout=0x7f09003f;
+        public static int com_facebook_fragment_container=0x7f09003b;
+        public static int com_facebook_login_activity_progress_bar=0x7f09003c;
+        public static int com_facebook_tooltip_bubble_view_bottom_pointer=0x7f090041;
+        public static int com_facebook_tooltip_bubble_view_text_body=0x7f090040;
+        public static int com_facebook_tooltip_bubble_view_top_pointer=0x7f09003e;
+        public static int contextSideLinearLayout=0x7f090059;
+        public static int custom_service_btn=0x7f09007f;
+        public static int custom_service_linear_layout=0x7f09007e;
+        public static int custom_service_text_view=0x7f090080;
         public static int dark=0x7f090005;
         public static int donate_with=0x7f09001c;
         public static int donate_with_google=0x7f09001d;
-        public static int fab=0x7f090052;
-        public static int fab_label=0x7f090051;
-        public static int fblogin_button=0x7f09004a;
-        public static int google_sign_in_button=0x7f09004d;
+        public static int emaail_textView=0x7f090078;
+        public static int email_content_textView=0x7f090079;
+        public static int end=0x7f090039;
+        public static int fab=0x7f090056;
+        public static int fab_label=0x7f090055;
+        public static int fblogin_button=0x7f09004e;
+        public static int google_sign_in_button=0x7f090051;
         public static int google_wallet_classic=0x7f090023;
         public static int google_wallet_grayscale=0x7f090024;
         public static int google_wallet_monochrome=0x7f090025;
@@ -894,88 +1030,90 @@ containing a value of this type.
         public static int holo_light=0x7f09000f;
         public static int hybrid=0x7f09000a;
         public static int icon_only=0x7f090001;
+        public static int id_content_textView=0x7f090075;
+        public static int id_textView=0x7f090074;
         public static int inline=0x7f090032;
         public static int large=0x7f09002a;
         public static int left=0x7f090035;
         public static int light=0x7f090006;
-        public static int loginAccEditText=0x7f090040;
-        public static int loginPwdEditText=0x7f090042;
-        public static int loginPwdSideLinearLayout=0x7f090041;
-        public static int loginSideLinearLayout=0x7f09003e;
-        public static int login_btn=0x7f090044;
+        public static int loginAccEditText=0x7f090044;
+        public static int loginPwdEditText=0x7f090046;
+        public static int loginPwdSideLinearLayout=0x7f090045;
+        public static int loginSideLinearLayout=0x7f090042;
+        public static int login_btn=0x7f090048;
         public static int logo_only=0x7f09001e;
         public static int match_parent=0x7f090016;
-        public static int menu_Relative_layout=0x7f090046;
-        public static int menu_layout=0x7f090045;
-        public static int messenger_send_button=0x7f090053;
-        public static int modaccTextView=0x7f090056;
-        public static int modacctextView=0x7f090057;
-        public static int modcomfirmbtn=0x7f09005f;
-        public static int modify_bg_side=0x7f090054;
-        public static int modify_btn=0x7f09004f;
-        public static int modnewpwdTextView=0x7f09005a;
-        public static int modnewpwdeditText=0x7f09005b;
-        public static int modpwdTextView=0x7f090058;
-        public static int modpwdeditText=0x7f090059;
-        public static int modreturnbtn=0x7f09005e;
-        public static int modretypepwdTextView=0x7f09005c;
-        public static int modretypepwdeditText=0x7f09005d;
+        public static int menu_Relative_layout=0x7f09004a;
+        public static int menu_layout=0x7f090049;
+        public static int messenger_send_button=0x7f090057;
+        public static int modaccTextView=0x7f09005a;
+        public static int modacctextView=0x7f09005b;
+        public static int modcomfirmbtn=0x7f090063;
+        public static int modify_bg_side=0x7f090058;
+        public static int modify_btn=0x7f090053;
+        public static int modnewpwdTextView=0x7f09005e;
+        public static int modnewpwdeditText=0x7f09005f;
+        public static int modpwdTextView=0x7f09005c;
+        public static int modpwdeditText=0x7f09005d;
+        public static int modreturnbtn=0x7f090062;
+        public static int modretypepwdTextView=0x7f090060;
+        public static int modretypepwdeditText=0x7f090061;
         public static int monochrome=0x7f090027;
         public static int none=0x7f090009;
         public static int normal=0x7f09000b;
         public static int open_graph=0x7f09002c;
         public static int page=0x7f09002d;
-        public static int place_autocomplete_clear_button=0x7f090063;
-        public static int place_autocomplete_powered_by_google=0x7f090065;
-        public static int place_autocomplete_prediction_primary_text=0x7f090067;
-        public static int place_autocomplete_prediction_secondary_text=0x7f090068;
-        public static int place_autocomplete_progress=0x7f090066;
-        public static int place_autocomplete_search_button=0x7f090061;
-        public static int place_autocomplete_search_input=0x7f090062;
-        public static int place_autocomplete_separator=0x7f090064;
+        public static int place_autocomplete_clear_button=0x7f090067;
+        public static int place_autocomplete_powered_by_google=0x7f090069;
+        public static int place_autocomplete_prediction_primary_text=0x7f09006b;
+        public static int place_autocomplete_prediction_secondary_text=0x7f09006c;
+        public static int place_autocomplete_progress=0x7f09006a;
+        public static int place_autocomplete_search_button=0x7f090065;
+        public static int place_autocomplete_search_input=0x7f090066;
+        public static int place_autocomplete_separator=0x7f090068;
         public static int production=0x7f090010;
-        public static int pwd_button=0x7f090043;
-        public static int qsacceditText=0x7f09006a;
-        public static int qscheckBox=0x7f09006c;
-        public static int qscomfirmbtn=0x7f09006e;
-        public static int qspwdeditText=0x7f09006b;
-        public static int qsreturnbtn=0x7f09006d;
-        public static int quick_sign_up_bg_side=0x7f090069;
-        public static int quick_sign_up_btn=0x7f09004c;
+        public static int pwd_button=0x7f090047;
+        public static int qsacceditText=0x7f09006e;
+        public static int qscheckBox=0x7f090070;
+        public static int qscomfirmbtn=0x7f090072;
+        public static int qspwdeditText=0x7f09006f;
+        public static int qsreturnbtn=0x7f090071;
+        public static int quick_sign_up_bg_side=0x7f09006d;
+        public static int quick_sign_up_btn=0x7f090050;
         public static int right=0x7f090036;
         public static int sandbox=0x7f090011;
         public static int satellite=0x7f09000c;
         public static int selectionDetails=0x7f090015;
-        public static int service_btn1=0x7f090071;
-        public static int service_btn2=0x7f090072;
-        public static int service_btn3=0x7f090073;
-        public static int service_btn4=0x7f090074;
-        public static int service_btn5=0x7f090075;
-        public static int service_frame_layout=0x7f09006f;
-        public static int sign_up_btn=0x7f090049;
-        public static int signup_bg_side=0x7f090076;
-        public static int signupacctextView=0x7f090078;
-        public static int signupacctextViewTextView=0x7f090077;
-        public static int signupcheckBox=0x7f09007d;
-        public static int signupcomfirmbtn=0x7f09007f;
-        public static int signupnewpwdTextView=0x7f09007b;
-        public static int signupnewpwdeditText=0x7f09007c;
-        public static int signuppwdTextView=0x7f090079;
-        public static int signuppwdeditText=0x7f09007a;
-        public static int signupreturnbtn=0x7f09007e;
+        public static int service_acc_frame_layout=0x7f090073;
+        public static int service_account_btn=0x7f09007c;
+        public static int service_frame_layout=0x7f090084;
+        public static int sign_up_btn=0x7f09004d;
+        public static int signup_bg_side=0x7f090085;
+        public static int signupacctextView=0x7f090087;
+        public static int signupacctextViewTextView=0x7f090086;
+        public static int signupcheckBox=0x7f09008c;
+        public static int signupcomfirmbtn=0x7f09008e;
+        public static int signupnewpwdTextView=0x7f09008a;
+        public static int signupnewpwdeditText=0x7f09008b;
+        public static int signuppwdTextView=0x7f090088;
+        public static int signuppwdeditText=0x7f090089;
+        public static int signupreturnbtn=0x7f09008d;
         public static int slide=0x7f090029;
         public static int small=0x7f09002b;
         public static int standard=0x7f090002;
+        public static int start=0x7f09003a;
         public static int strict_sandbox=0x7f090012;
-        public static int tableRow1=0x7f090048;
-        public static int tableRow2=0x7f09004b;
-        public static int tableRow3=0x7f09004e;
-        public static int table_layout=0x7f090047;
+        public static int tableRow1=0x7f09004c;
+        public static int tableRow2=0x7f09004f;
+        public static int tableRow3=0x7f090052;
+        public static int table_layout=0x7f09004b;
         public static int terrain=0x7f09000d;
         public static int test=0x7f090013;
         public static int top=0x7f090033;
         public static int unknown=0x7f09002e;
-        public static int webView=0x7f090060;
+        public static int user_id_content_textView=0x7f090077;
+        public static int user_id_textView=0x7f090076;
+        public static int webView=0x7f090064;
         public static int wide=0x7f090003;
         public static int wrap_content=0x7f090017;
     }
@@ -987,29 +1125,32 @@ containing a value of this type.
         public static int com_facebook_activity_layout=0x7f030000;
         public static int com_facebook_login_fragment=0x7f030001;
         public static int com_facebook_tooltip_bubble=0x7f030002;
-        public static int login_page_landscape=0x7f030003;
-        public static int login_page_landscape_large_size=0x7f030004;
-        public static int login_page_large_size=0x7f030005;
-        public static int login_page_v2=0x7f030006;
-        public static int messenger_button_send_blue_large=0x7f030007;
-        public static int messenger_button_send_blue_round=0x7f030008;
-        public static int messenger_button_send_blue_small=0x7f030009;
-        public static int messenger_button_send_white_large=0x7f03000a;
-        public static int messenger_button_send_white_round=0x7f03000b;
-        public static int messenger_button_send_white_small=0x7f03000c;
-        public static int modify_pwd_page_large_size=0x7f03000d;
-        public static int modify_pwd_page_v2=0x7f03000e;
-        public static int payment_layout=0x7f03000f;
-        public static int place_autocomplete_fragment=0x7f030010;
-        public static int place_autocomplete_item_powered_by_google=0x7f030011;
-        public static int place_autocomplete_item_prediction=0x7f030012;
-        public static int place_autocomplete_progress=0x7f030013;
-        public static int quick_sign_up_page_large_size=0x7f030014;
-        public static int quick_sign_up_page_v2=0x7f030015;
-        public static int service_grid_layout=0x7f030016;
-        public static int service_layout=0x7f030017;
-        public static int sign_up_large_size=0x7f030018;
-        public static int sign_up_v2=0x7f030019;
+        public static int left_point_frame=0x7f030003;
+        public static int login_page_landscape=0x7f030004;
+        public static int login_page_landscape_large_size=0x7f030005;
+        public static int login_page_large_size=0x7f030006;
+        public static int login_page_v2=0x7f030007;
+        public static int messenger_button_send_blue_large=0x7f030008;
+        public static int messenger_button_send_blue_round=0x7f030009;
+        public static int messenger_button_send_blue_small=0x7f03000a;
+        public static int messenger_button_send_white_large=0x7f03000b;
+        public static int messenger_button_send_white_round=0x7f03000c;
+        public static int messenger_button_send_white_small=0x7f03000d;
+        public static int modify_pwd_page_large_size=0x7f03000e;
+        public static int modify_pwd_page_v2=0x7f03000f;
+        public static int payment_layout=0x7f030010;
+        public static int place_autocomplete_fragment=0x7f030011;
+        public static int place_autocomplete_item_powered_by_google=0x7f030012;
+        public static int place_autocomplete_item_prediction=0x7f030013;
+        public static int place_autocomplete_progress=0x7f030014;
+        public static int quick_sign_up_page_large_size=0x7f030015;
+        public static int quick_sign_up_page_v2=0x7f030016;
+        public static int right_point_frame=0x7f030017;
+        public static int service_account_layout=0x7f030018;
+        public static int service_bar_layout=0x7f030019;
+        public static int service_layout=0x7f03001a;
+        public static int sign_up_large_size=0x7f03001b;
+        public static int sign_up_v2=0x7f03001c;
     }
     public static final class raw {
         public static int gtm_analytics=0x7f050000;
@@ -1257,9 +1398,12 @@ containing a value of this type.
         public static int AppTheme=0x7f06001d;
         public static int Item=0x7f06001e;
         public static int Item_FrameLayout=0x7f06001f;
-        public static int Item_circle=0x7f060022;
-        public static int Item_service_bar=0x7f060021;
+        public static int Item_Tumblr=0x7f060025;
+        public static int Item_circle=0x7f060024;
+        public static int Item_service_bar=0x7f060023;
+        public static int Item_service_left_btn=0x7f060021;
         public static int Item_service_open_btn=0x7f060020;
+        public static int Item_service_right_btn=0x7f060022;
         public static int MessengerButton=0x7f060007;
         public static int MessengerButton_Blue=0x7f060008;
         public static int MessengerButton_Blue_Large=0x7f060009;
@@ -2190,6 +2334,182 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
           @attr name com.beluga:maskedWalletDetailsTextAppearance
         */
         public static int WalletFragmentStyle_maskedWalletDetailsTextAppearance = 4;
+        /** Attributes that can be used with a arc_ArcLayout.
+           <p>Includes the following attributes:</p>
+           <table>
+           <colgroup align="left" />
+           <colgroup align="left" />
+           <tr><th>Attribute</th><th>Description</th></tr>
+           <tr><td><code>{@link #arc_ArcLayout_arc_axisRadius com.beluga:arc_axisRadius}</code></td><td></td></tr>
+           <tr><td><code>{@link #arc_ArcLayout_arc_color com.beluga:arc_color}</code></td><td></td></tr>
+           <tr><td><code>{@link #arc_ArcLayout_arc_freeAngle com.beluga:arc_freeAngle}</code></td><td></td></tr>
+           <tr><td><code>{@link #arc_ArcLayout_arc_origin com.beluga:arc_origin}</code></td><td></td></tr>
+           <tr><td><code>{@link #arc_ArcLayout_arc_radius com.beluga:arc_radius}</code></td><td></td></tr>
+           <tr><td><code>{@link #arc_ArcLayout_arc_reverseAngle com.beluga:arc_reverseAngle}</code></td><td></td></tr>
+           </table>
+           @see #arc_ArcLayout_arc_axisRadius
+           @see #arc_ArcLayout_arc_color
+           @see #arc_ArcLayout_arc_freeAngle
+           @see #arc_ArcLayout_arc_origin
+           @see #arc_ArcLayout_arc_radius
+           @see #arc_ArcLayout_arc_reverseAngle
+         */
+        public static final int[] arc_ArcLayout = {
+            0x7f010035, 0x7f010036, 0x7f010037, 0x7f010038,
+            0x7f010039, 0x7f01003a
+        };
+        /**
+          <p>This symbol is the offset where the {@link com.beluga.R.attr#arc_axisRadius}
+          attribute's value can be found in the {@link #arc_ArcLayout} array.
+
+
+          <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
+Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
+in (inches), mm (millimeters).
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name com.beluga:arc_axisRadius
+        */
+        public static int arc_ArcLayout_arc_axisRadius = 3;
+        /**
+          <p>This symbol is the offset where the {@link com.beluga.R.attr#arc_color}
+          attribute's value can be found in the {@link #arc_ArcLayout} array.
+
+
+          <p>Must be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
+"<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name com.beluga:arc_color
+        */
+        public static int arc_ArcLayout_arc_color = 1;
+        /**
+          <p>This symbol is the offset where the {@link com.beluga.R.attr#arc_freeAngle}
+          attribute's value can be found in the {@link #arc_ArcLayout} array.
+
+
+          <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name com.beluga:arc_freeAngle
+        */
+        public static int arc_ArcLayout_arc_freeAngle = 4;
+        /**
+          <p>This symbol is the offset where the {@link com.beluga.R.attr#arc_origin}
+          attribute's value can be found in the {@link #arc_ArcLayout} array.
+
+
+          <p>Must be one or more (separated by '|') of the following constant values.</p>
+<table>
+<colgroup align="left" />
+<colgroup align="left" />
+<colgroup align="left" />
+<tr><th>Constant</th><th>Value</th><th>Description</th></tr>
+<tr><td><code>top</code></td><td>0x30</td><td> Value same as the android:gravity </td></tr>
+<tr><td><code>bottom</code></td><td>0x50</td><td></td></tr>
+<tr><td><code>left</code></td><td>0x03</td><td></td></tr>
+<tr><td><code>right</code></td><td>0x05</td><td></td></tr>
+<tr><td><code>center_vertical</code></td><td>0x10</td><td></td></tr>
+<tr><td><code>center_horizontal</code></td><td>0x01</td><td></td></tr>
+<tr><td><code>center</code></td><td>0x11</td><td></td></tr>
+<tr><td><code>start</code></td><td>0x00800003</td><td></td></tr>
+<tr><td><code>end</code></td><td>0x00800005</td><td></td></tr>
+</table>
+          @attr name com.beluga:arc_origin
+        */
+        public static int arc_ArcLayout_arc_origin = 0;
+        /**
+          <p>This symbol is the offset where the {@link com.beluga.R.attr#arc_radius}
+          attribute's value can be found in the {@link #arc_ArcLayout} array.
+
+
+          <p>Must be a dimension value, which is a floating point number appended with a unit such as "<code>14.5sp</code>".
+Available units are: px (pixels), dp (density-independent pixels), sp (scaled pixels based on preferred font size),
+in (inches), mm (millimeters).
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name com.beluga:arc_radius
+        */
+        public static int arc_ArcLayout_arc_radius = 2;
+        /**
+          <p>This symbol is the offset where the {@link com.beluga.R.attr#arc_reverseAngle}
+          attribute's value can be found in the {@link #arc_ArcLayout} array.
+
+
+          <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name com.beluga:arc_reverseAngle
+        */
+        public static int arc_ArcLayout_arc_reverseAngle = 5;
+        /** Attributes that can be used with a arc_ArcLayout_Layout.
+           <p>Includes the following attributes:</p>
+           <table>
+           <colgroup align="left" />
+           <colgroup align="left" />
+           <tr><th>Attribute</th><th>Description</th></tr>
+           <tr><td><code>{@link #arc_ArcLayout_Layout_arc_angle com.beluga:arc_angle}</code></td><td></td></tr>
+           <tr><td><code>{@link #arc_ArcLayout_Layout_arc_origin com.beluga:arc_origin}</code></td><td></td></tr>
+           </table>
+           @see #arc_ArcLayout_Layout_arc_angle
+           @see #arc_ArcLayout_Layout_arc_origin
+         */
+        public static final int[] arc_ArcLayout_Layout = {
+            0x7f010035, 0x7f01003b
+        };
+        /**
+          <p>This symbol is the offset where the {@link com.beluga.R.attr#arc_angle}
+          attribute's value can be found in the {@link #arc_ArcLayout_Layout} array.
+
+
+          <p>Must be a floating point value, such as "<code>1.2</code>".
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name com.beluga:arc_angle
+        */
+        public static int arc_ArcLayout_Layout_arc_angle = 1;
+        /**
+          <p>This symbol is the offset where the {@link com.beluga.R.attr#arc_origin}
+          attribute's value can be found in the {@link #arc_ArcLayout_Layout} array.
+
+
+          <p>Must be one or more (separated by '|') of the following constant values.</p>
+<table>
+<colgroup align="left" />
+<colgroup align="left" />
+<colgroup align="left" />
+<tr><th>Constant</th><th>Value</th><th>Description</th></tr>
+<tr><td><code>top</code></td><td>0x30</td><td> Value same as the android:gravity </td></tr>
+<tr><td><code>bottom</code></td><td>0x50</td><td></td></tr>
+<tr><td><code>left</code></td><td>0x03</td><td></td></tr>
+<tr><td><code>right</code></td><td>0x05</td><td></td></tr>
+<tr><td><code>center_vertical</code></td><td>0x10</td><td></td></tr>
+<tr><td><code>center_horizontal</code></td><td>0x01</td><td></td></tr>
+<tr><td><code>center</code></td><td>0x11</td><td></td></tr>
+<tr><td><code>start</code></td><td>0x00800003</td><td></td></tr>
+<tr><td><code>end</code></td><td>0x00800005</td><td></td></tr>
+</table>
+          @attr name com.beluga:arc_origin
+        */
+        public static int arc_ArcLayout_Layout_arc_origin = 0;
         /** Attributes that can be used with a com_facebook_like_view.
            <p>Includes the following attributes:</p>
            <table>

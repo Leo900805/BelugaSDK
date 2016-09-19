@@ -15,7 +15,6 @@ import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
-import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 
@@ -26,15 +25,14 @@ import com.beluga.R;
 public class BelugaService extends Service implements OnClickListener {
 	
 	private WindowManager windowManager;
-	private ImageButton serviceBtn, b4;
-	private FrameLayout fl, flBar;
-	private GridLayout gl;
-	WindowManager.LayoutParams params;
+	private ImageButton serviceAccBtn, b4;
+	private FrameLayout fl, flBar, flLeft, flRight;
+	WindowManager.LayoutParams params, flParams;
 	RelativeLayout serviceRelativeLayout;
 	DisplayMetrics dm;
 	int screenWidth;  
     int screenHeight;
-    boolean flFlag = false, glFlag = false;
+    boolean flFlag = false, glFlag = false, flLeftFlag = false, flRightFlag = false;
 	@SuppressLint("RtlHardcoded")
 	@Override
 	public void onCreate() {
@@ -52,21 +50,72 @@ public class BelugaService extends Service implements OnClickListener {
 				WindowManager.LayoutParams.WRAP_CONTENT,
 				WindowManager.LayoutParams.WRAP_CONTENT,
 				WindowManager.LayoutParams.TYPE_PHONE,
+				WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,				
+				PixelFormat.TRANSLUCENT);
+		
+		flParams = new WindowManager.LayoutParams(
+				WindowManager.LayoutParams.MATCH_PARENT,
+				WindowManager.LayoutParams.MATCH_PARENT,
+				WindowManager.LayoutParams.TYPE_PHONE,
 				WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
 				PixelFormat.TRANSLUCENT);
-
-		params.gravity = Gravity.CENTER | Gravity.RIGHT;
+		
+		flParams.gravity = Gravity.CENTER;
+		//params.gravity = Gravity.CENTER | Gravity.RIGHT;
+		params.gravity = Gravity.CENTER | Gravity.LEFT;
 		params.x = 0;
 		params.y = 100;
 		
 		LayoutInflater inflater = LayoutInflater.from(this);
 		fl = (FrameLayout)inflater.inflate(R.layout.service_layout, null);
+		flLeft = (FrameLayout)inflater.inflate(R.layout.left_point_frame, null);
+		flRight = (FrameLayout)inflater.inflate(R.layout.right_point_frame, null);
 		fl.setOnClickListener(this);
+		flLeft.setOnClickListener(this);
+		flRight.setOnClickListener(this);
 		
-		flBar = (FrameLayout)inflater.inflate(R.layout.service_grid_layout, null);
-		b4 = (ImageButton)flBar.findViewById(R.id.service_btn4);
+		flBar = (FrameLayout)inflater.inflate(R.layout.service_bar_layout, null);
+		b4 = (ImageButton)flBar.findViewById(R.id.close_service_btn);
 		b4.setOnClickListener(this);
-		/*
+		
+		serviceAccBtn = (ImageButton)flBar.findViewById(R.id.service_account_btn);
+		serviceAccBtn.setOnClickListener(this);
+		flLeft.setOnTouchListener(new OnTouchListener(){
+
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				// TODO Auto-generated method stub
+				switch (event.getAction()){
+				case MotionEvent.ACTION_DOWN:
+					flFlag = true;
+					windowManager.addView(fl, params);
+					flLeftFlag = false;
+					windowManager.removeView(flLeft);
+					break;	
+				}
+				return false;
+			}
+			
+		});
+		
+		flRight.setOnTouchListener(new OnTouchListener(){
+
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				// TODO Auto-generated method stub
+				switch (event.getAction()){
+				case MotionEvent.ACTION_DOWN:
+					flFlag = true;
+					windowManager.addView(fl, params);
+					flRightFlag = false;
+					windowManager.removeView(flRight);
+					break;	
+				}
+				return false;
+			}
+			
+		});
+		
 		fl.setOnTouchListener(new OnTouchListener(){
 			
 			private int initialX;
@@ -108,6 +157,20 @@ public class BelugaService extends Service implements OnClickListener {
 	                 } else {
 	                	 Log.i("service","move...");
 	                     //showToastDialog("滑动了");
+	                	 if (params.x < (screenWidth / 2)) {
+							 //go left
+	                		 flLeftFlag = true;
+	                		windowManager.addView(flLeft, params);
+	     					windowManager.removeView(fl);
+	     					flFlag = false;
+		                  } else if(params.x > (screenWidth / 2)){
+		                	  //go right
+		                	  flRightFlag = true;
+		                	  windowManager.addView(flRight, params);
+		     				  windowManager.removeView(fl);
+		     				  flFlag = false;
+
+		                  }
 	                    return true ;
 	                }
 					 
@@ -126,9 +189,11 @@ public class BelugaService extends Service implements OnClickListener {
 			}
 			
 		});
-		*/
-		flFlag = true;
-		windowManager.addView(fl, params);
+	
+		//flFlag = true;
+		//windowManager.addView(fl, params);
+		flLeftFlag = true;
+		windowManager.addView(flLeft, params);
 		
 	}
 	
@@ -148,6 +213,12 @@ public class BelugaService extends Service implements OnClickListener {
 		if (glFlag == true){
 			windowManager.removeView(flBar);
 		}
+		if (flLeftFlag == true){
+			windowManager.removeView(flLeft);
+		}
+		if (flRightFlag == true){
+			windowManager.removeView(flRight);
+		}
 	}
 
 	@Override
@@ -159,18 +230,25 @@ public class BelugaService extends Service implements OnClickListener {
 			if (fl != null){
 				windowManager.removeView(fl);
 				flFlag = false; 
-				windowManager.addView(flBar, params);
+				windowManager.addView(flBar, flParams);
 				glFlag = true;
 			}
 			
-		}else if(v.getId() == R.id.service_btn4){
+		}else if(v.getId() == R.id.close_service_btn){
 			if (flBar != null){
 				windowManager.removeView(flBar);
 				glFlag = false;
 				windowManager.addView(fl, params);
 				flFlag = true;
 			}
+		}else if(v.getId() == R.id.service_account_btn){
+			Log.i("service","click service_account_btn");
+			Intent i = new Intent(this, com.beluga.service.BelugaServiceActivity.class); 
+			i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+	        startActivity(i);
+
 		}
+			
 	}
 
 }
